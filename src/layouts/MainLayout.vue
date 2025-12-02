@@ -127,43 +127,7 @@
             </q-item>
           </q-list>
         </q-expansion-item>
-        <!-- <q-item to="/district" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="district" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>জেলা</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/my-profile" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="profile" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>my profile</q-item-label>
-          </q-item-section>
-        </q-item> -->
-
-        <!-- <q-item to="/commissionerate-hierarchy" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="group" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Commissionerate Hierarchy</q-item-label>
-          </q-item-section>
-        </q-item> -->
-        <!-- <q-item
-          :to="profileUrl"
-          active-class="q-item-no-link-highlighting"
-          v-if="userStore.getHighestRole !== 'admin'"
-        >
-          <q-item-section avatar>
-            <q-icon name="emoji_people" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>প্রোফাইল</q-item-label>
-          </q-item-section>
-        </q-item> -->
+  
         <q-expansion-item
           label="কর্মচারী"
           icon="people"
