@@ -1,0 +1,29 @@
+import { defineStore } from "pinia";
+export const useEmployeeStore=defineStore('employee',{
+    state:()=>({
+        employeeId:null,
+        designtionId:null,
+        employeeDetails:null,
+    }),
+    getters:{
+        getEmployeeId:(state)=>state.employeeId,
+        getDesignationId:(state)=>state.designtionId,
+        getEmployeeDetails:(state)=>state.employeeDetails,
+    },
+    actions:{
+        uploadEmployeeDetails(employeeDetails){
+            this.employeeId=employeeDetails.id;
+            this.designtionId=employeeDetails.designation_id;
+            this.employeeDetails=employeeDetails;
+        },
+        removeEmployeeDetails(){
+            this.$reset();
+            this.employeeId=null;
+            this.designtionId=null;
+            this.employeeDetails=null;
+        }
+    },
+    persist:{
+        paths:['employeeId','designtionId','employeeDetails']
+    }
+})
