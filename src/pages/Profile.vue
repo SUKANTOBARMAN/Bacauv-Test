@@ -19,22 +19,13 @@
                 <div class="text-h6 text-center">প্রোফাইল ছবি</div>
                 <div class="flex flex-center q-mt-md">
                   <q-avatar size="200px" class="shadow-3">
-  <img 
-    :src="photoPreview ? photoPreview : userPhotoUrl" 
-    alt="Profile Photo"
-    v-if="userPhotoUrl || photoPreview"
-  >
-  <q-icon v-else name="person" size="xl" />
-</q-avatar>
-
-                  <!-- <q-avatar size="200px" class="shadow-3">
                     <img 
                       v-if="user.photo || photoPreview" 
                       :src="photoPreview || `${baseUrl}/storage/${user.photo}`" 
                       alt="Profile Photo"
                     >
                     <q-icon v-else name="person" size="xl" />
-                  </q-avatar> -->
+                  </q-avatar>
                 </div>
 
                 <div class="q-mt-md">
@@ -68,8 +59,11 @@
             <q-card>
               <q-card-section>
                 <div class="text-h6">ব্যক্তিগত তথ্য</div>
-                
-                <q-form @submit.prevent="updateProfile" class="q-gutter-md q-mt-md">
+
+                <q-form
+                  @submit.prevent="updateProfile"
+                  class="q-gutter-md q-mt-md"
+                >
                   <div class="row q-col-gutter-md">
                     <div class="col-md-6 col-sm-12">
                       <q-input
@@ -115,17 +109,16 @@
                   </div>
 
                   <div class="row q-col-gutter-md">
-                       <q-select
-  outlined
-  v-model="editForm.designation"
-  label="পদবি"
-  :options="designationOptions"
-  option-value="value"
-  option-label="label"
-  emit-value
-  map-options
-/>
-
+                    <q-select
+                      outlined
+                      v-model="editForm.designation"
+                      label="পদবি"
+                      :options="designationOptions"
+                      option-value="value"
+                      option-label="label"
+                      emit-value
+                      map-options
+                    />
 
                     <div class="col-md-6 col-sm-12">
                       <q-input
@@ -199,9 +192,9 @@
                   </div>
 
                   <div class="q-mt-lg">
-                    <q-btn 
-                      label="আপডেট করুন" 
-                      type="submit" 
+                    <q-btn
+                      label="আপডেট করুন"
+                      type="submit"
                       color="primary"
                       :loading="updatingProfile"
                     />
@@ -217,63 +210,66 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useQuasar } from 'quasar'
-import { api } from 'boot/axios'
+import { ref, onMounted } from "vue";
+import { useQuasar } from "quasar";
+import { api } from "boot/axios";
 
-const $q = useQuasar()
-const baseUrl = import.meta.env.VITE_API_BASE_URL
+const $q = useQuasar();
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 // User data
 const user = ref({
-  name: '',
-  name_bangla: '',
-  email: '',
-  mobile: '',
-  designation: '',
-  address: '',
-  dob: '',
-  verified_at: '',
+  name: "",
+  name_bangla: "",
+  email: "",
+  mobile: "",
+  designation: "",
+  address: "",
+  dob: "",
+  verified_at: "",
   photo: null,
   commissionerate: null,
   division: null,
   circle: null,
-  district: null
-})
+  district: null,
+});
 
 // Edit form
 const editForm = ref({
-  name: '',
-  name_bangla: '',
-  email: '',
-  mobile: '',
-  designation: '',
-  address: ''
-})
+  name: "",
+  name_bangla: "",
+  email: "",
+  mobile: "",
+  designation: "",
+  address: "",
+});
 
 // Designation options
 const designationOptions = [
-  { label: 'RO (Revenue Officer)', value: 'RO', icon: 'badge', color: 'blue' },
-  { label: 'ARO (Assistant Revenue Officer)', value: 'ARO', icon: 'assistant', color: 'green' },
+  { label: "RO (Revenue Officer)", value: "RO", icon: "badge", color: "blue" },
+  {
+    label: "ARO (Assistant Revenue Officer)",
+    value: "ARO",
+    icon: "assistant",
+    color: "green",
+  },
 ];
 
-
-
 // Photo upload
-const photoFile = ref(null)
-const photoPreview = ref(null)
-const uploadingPhoto = ref(false)
-const updatingProfile = ref(false)
+const photoFile = ref(null);
+const photoPreview = ref(null);
+const uploadingPhoto = ref(false);
+const updatingProfile = ref(false);
 
 // Fetch user profile
 const fetchUserProfile = async () => {
   try {
-    const { data } = await api.get('/v1/profile', {
+    const { data } = await api.get("/v1/profile", {
       params: {
-        include: 'commissionerate,division,circle,district'
-      }
-    })
-    user.value = data.data
+        include: "commissionerate,division,circle,district",
+      },
+    });
+    user.value = data.data;
     // Initialize edit form with current values
     editForm.value = {
       name: data.data.name,
@@ -281,117 +277,117 @@ const fetchUserProfile = async () => {
       email: data.data.email,
       mobile: data.data.mobile,
       designation: data.data.designation,
-      address: data.data.address
-    }
+      address: data.data.address,
+    };
   } catch (error) {
     $q.notify({
-      type: 'negative',
-      message: 'প্রোফাইল লোড করতে ব্যর্থ হয়েছে',
-      caption: error.message
-    })
+      type: "negative",
+      message: "প্রোফাইল লোড করতে ব্যর্থ হয়েছে",
+      caption: error.message,
+    });
   }
-}
+};
 
 // Handle photo selection
 const handlePhotoSelect = (file) => {
   if (file) {
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = (e) => {
-      photoPreview.value = e.target.result
-    }
-    reader.readAsDataURL(file)
+      photoPreview.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
   } else {
-    photoPreview.value = null
+    photoPreview.value = null;
   }
-}
+};
 
 // Upload photo
 const uploadPhoto = async () => {
-  if (!photoFile.value) return
+  if (!photoFile.value) return;
 
   try {
-    uploadingPhoto.value = true
-    const formData = new FormData()
-    formData.append('photo', photoFile.value)
+    uploadingPhoto.value = true;
+    const formData = new FormData();
+    formData.append("photo", photoFile.value);
 
     await api.post(`/v1/users/${user.value.id}/photo`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     $q.notify({
-      message: 'ছবি সফলভাবে আপলোড করা হয়েছে',
-      color: 'positive',
-      icon: 'check'
-    })
+      message: "ছবি সফলভাবে আপলোড করা হয়েছে",
+      color: "positive",
+      icon: "check",
+    });
 
     // Refresh user data to show new photo
-    await fetchUserProfile()
-    photoFile.value = null
-    photoPreview.value = null
+    await fetchUserProfile();
+    photoFile.value = null;
+    photoPreview.value = null;
   } catch (error) {
     $q.notify({
-      type: 'negative',
-      message: 'ছবি আপলোড করতে ব্যর্থ হয়েছে',
-      caption: error.response?.data?.message || error.message
-    })
+      type: "negative",
+      message: "ছবি আপলোড করতে ব্যর্থ হয়েছে",
+      caption: error.response?.data?.message || error.message,
+    });
   } finally {
-    uploadingPhoto.value = false
+    uploadingPhoto.value = false;
   }
-}
+};
 
 // Update profile
 const updateProfile = async () => {
   try {
-    updatingProfile.value = true
-    
-    const payload = new URLSearchParams()
+    updatingProfile.value = true;
+
+    const payload = new URLSearchParams();
     for (const key in editForm.value) {
       if (editForm.value[key] !== null && editForm.value[key] !== undefined) {
-        payload.append(key, editForm.value[key])
+        payload.append(key, editForm.value[key]);
       }
     }
 
     await api.patch(`/v1/users/${user.value.id}`, payload, {
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
 
     $q.notify({
-      message: 'প্রোফাইল সফলভাবে আপডেট করা হয়েছে',
-      color: 'positive',
-      icon: 'check'
-    })
+      message: "প্রোফাইল সফলভাবে আপডেট করা হয়েছে",
+      color: "positive",
+      icon: "check",
+    });
 
-    await fetchUserProfile()
+    await fetchUserProfile();
   } catch (error) {
     $q.notify({
-      type: 'negative',
-      message: 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে',
-      caption: error.response?.data?.message || error.message
-    })
+      type: "negative",
+      message: "প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে",
+      caption: error.response?.data?.message || error.message,
+    });
   } finally {
-    updatingProfile.value = false
+    updatingProfile.value = false;
   }
-}
+};
 
 // Format date for display
 const formatDate = (dateString) => {
-  if (!dateString) return 'N/A'
-  const date = new Date(dateString)
-  return date.toLocaleDateString('bn-BD', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("bn-BD", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
 
 // Initialize component
 onMounted(() => {
-  fetchUserProfile()
-})
+  fetchUserProfile();
+});
 </script>
 
 <style scoped>
