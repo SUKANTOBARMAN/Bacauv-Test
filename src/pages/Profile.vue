@@ -1,30 +1,36 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-page-container>
-      <q-page class="q-pa-md">
-        <q-card class="no-shadow" bordered>
+      <q-page class="q-pa-md bg-grey-1">
+        <q-card flat class="bg-indigo-8 text-white q-mb-md rounded-borders-md">
           <q-card-section>
-            <div class="text-h4 text-indigo-8">প্রোফাইল</div>
-            <div class="text-subtitle2">ব্যক্তিগত তথ্য</div>
+            <div class="text-h4">
+              <q-icon name="account_circle" class="q-mr-sm" />
+              প্রোফাইল
+            </div>
+            <div class="text-subtitle1">আপনার ব্যক্তিগত এবং প্রশাসনিক তথ্য</div>
           </q-card-section>
         </q-card>
 
-        <q-separator spaced />
-
         <div class="row q-col-gutter-md">
-          <!-- Left Column - Profile Photo -->
-          <div class="col-md-4 col-sm-12">
-            <q-card>
+          
+          <div class="col-md-4 col-sm-12 col-xs-12">
+            <q-card class="shadow-6 rounded-borders-md">
+              <q-card-section class="bg-teal-1">
+                <div class="text-h6 text-teal-8 text-center">
+                  <q-icon name="photo" class="q-mr-sm" />
+                  প্রোফাইল ছবি
+                </div>
+              </q-card-section>
               <q-card-section>
-                <div class="text-h6 text-center">প্রোফাইল ছবি</div>
-                <div class="flex flex-center q-mt-md">
-                  <q-avatar size="200px" class="shadow-3">
+                <div class="flex flex-center q-mt-sm">
+                  <q-avatar size="200px" class="profile-avatar shadow-1">
                     <img 
                       v-if="user.photo || photoPreview" 
                       :src="photoPreview || `${baseUrl}/storage/${user.photo}`" 
-                      alt="Profile Photo"
+                      alt=""
                     >
-                    <q-icon v-else name="person" size="xl" />
+                    <q-icon v-else name="person" size="90px" color="grey-6" />
                   </q-avatar>
                 </div>
 
@@ -34,6 +40,8 @@
                     label="ছবি নির্বাচন করুন"
                     accept=".jpg,.jpeg,.png"
                     outlined
+                    dense
+                    color="teal"
                     @update:model-value="handlePhotoSelect"
                   >
                     <template v-slot:prepend>
@@ -44,163 +52,195 @@
                   <q-btn
                     v-if="photoPreview"
                     label="ছবি আপলোড করুন"
-                    color="primary"
-                    class="full-width q-mt-sm"
+                    color="teal-7"
+                    class="full-width text-white q-mt-sm"
                     :loading="uploadingPhoto"
                     @click="uploadPhoto"
+                    icon="cloud_upload"
                   />
                 </div>
               </q-card-section>
             </q-card>
           </div>
 
-          <!-- Right Column - Profile Information -->
-          <div class="col-md-8 col-sm-12">
-            <q-card>
-              <q-card-section>
-                <div class="text-h6">ব্যক্তিগত তথ্য</div>
+          <div class="col-md-8 col-sm-12 col-xs-12">
+            <q-card class="shadow-6 rounded-borders-md">
+              <q-tabs
+                v-model="tab"
+                dense
+                class="text-grey-7"
+                active-color="indigo-8"
+                indicator-color="indigo-8"
+                align="justify"
+                narrow-indicator
+              >
+                <q-tab name="personal" icon="person_outline" label="ব্যক্তিগত তথ্য" />
+                <q-tab name="admin" icon="account_tree" label="প্রশাসনিক তথ্য" />
+              </q-tabs>
 
-                <q-form
-                  @submit.prevent="updateProfile"
-                  class="q-gutter-md q-mt-md"
-                >
-                  <div class="row q-col-gutter-md">
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        v-model="editForm.name"
-                        label="নাম (ইংরেজি)"
-                        lazy-rules
-                        readonly
+              <q-separator />
+
+              <q-tab-panels v-model="tab" animated>
+                
+                <q-tab-panel name="personal" class="q-pa-md">
+                  <q-form
+                    @submit.prevent="updateProfile"
+                    class="q-gutter-md"
+                  >
+                    <div class="text-h6 text-indigo-8 q-mb-md">আপনার ব্যক্তিগত বিবরণ</div>
+                    
+                    <div class="row q-col-gutter-md">
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          v-model="editForm.name"
+                          label="নাম (ইংরেজি)"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          v-model="editForm.name_bangla"
+                          label="নাম (বাংলা)"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row q-col-gutter-md">
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          v-model="editForm.email"
+                          label="ইমেইল"
+                          type="email"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          v-model="editForm.mobile"
+                          label="মোবাইল নম্বর"
+                          mask="###########"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row q-col-gutter-md">
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-select
+                          outlined
+                          v-model="editForm.designation"
+                          label="পদবি"
+                          :options="designationOptions"
+                          option-value="value"
+                          option-label="label"
+                          emit-value
+                          map-options
+                          color="indigo"
+                        />
+                      </div>
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          v-model="editForm.address"
+                          label="ঠিকানা"
+                          color="indigo"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row q-col-gutter-md">
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          :model-value="formatDate(user.dob)"
+                          label="জন্ম তারিখ"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          :model-value="formatDate(user.verified_at)"
+                          label="যাচাইকরণ তারিখ"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="q-mt-lg text-right">
+                      <q-btn
+                        label="আপডেট করুন"
+                        type="submit"
+                        color="indigo-8"
+                        size="lg"
+                        class="text-white"
+                        :loading="updatingProfile"
+                        icon="save"
                       />
                     </div>
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        v-model="editForm.name_bangla"
-                        label="নাম (বাংলা)"
-                        lazy-rules
-                        readonly
-                      />
+                  </q-form>
+                </q-tab-panel>
+
+                <q-tab-panel name="admin" class="q-pa-md">
+                  <div class="text-h6 text-teal-8 q-mb-md">প্রশাসনিক তথ্য (পরিবর্তনযোগ্য নয়)</div>
+
+                  <div class="q-gutter-md">
+                    <div class="row q-col-gutter-md">
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          :model-value="user.commissionerate?.data?.name || 'N/A'"
+                          label="কমিশনারেট"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          :model-value="user.division?.data?.name || 'N/A'"
+                          label="ডিভিশন"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="row q-col-gutter-md">
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          :model-value="user.circle?.data?.name || 'N/A'"
+                          label="সার্কেল"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
+                      <div class="col-md-6 col-sm-12 col-xs-12">
+                        <q-input
+                          outlined
+                          :model-value="user.district?.data?.name || 'N/A'"
+                          label="জেলা"
+                          readonly
+                          bg-color="grey-2"
+                        />
+                      </div>
                     </div>
                   </div>
+                </q-tab-panel>
 
-                  <div class="row q-col-gutter-md">
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        v-model="editForm.email"
-                        label="ইমেইল"
-                        type="email"
-                        lazy-rules
-                        readonly
-                      />
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        v-model="editForm.mobile"
-                        label="মোবাইল নম্বর"
-                        lazy-rules
-                        mask="###########"
-                        readonly
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row q-col-gutter-md">
-                    <q-select
-                      outlined
-                      v-model="editForm.designation"
-                      label="পদবি"
-                      :options="designationOptions"
-                      option-value="value"
-                      option-label="label"
-                      emit-value
-                      map-options
-                    />
-
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        v-model="editForm.address"
-                        label="ঠিকানা"
-                        lazy-rules
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row q-col-gutter-md">
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        :model-value="formatDate(user.dob)"
-                        label="জন্ম তারিখ"
-                        readonly
-                      />
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        :model-value="formatDate(user.verified_at)"
-                        label="যাচাইকরণ তারিখ"
-                        readonly
-                      />
-                    </div>
-                  </div>
-
-                  <!-- Administrative Information (Readonly) -->
-                  <q-separator spaced />
-                  <div class="text-subtitle1">প্রশাসনিক তথ্য</div>
-
-                  <div class="row q-col-gutter-md">
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        :model-value="user.commissionerate?.data?.name || 'N/A'"
-                        label="কমিশনারেট"
-                        readonly
-                      />
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        :model-value="user.division?.data?.name || 'N/A'"
-                        label="ডিভিশন"
-                        readonly
-                      />
-                    </div>
-                  </div>
-
-                  <div class="row q-col-gutter-md">
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        :model-value="user.circle?.data?.name || 'N/A'"
-                        label="সার্কেল"
-                        readonly
-                      />
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                      <q-input
-                        outlined
-                        :model-value="user.district?.data?.name || 'N/A'"
-                        label="জেলা"
-                        readonly
-                      />
-                    </div>
-                  </div>
-
-                  <div class="q-mt-lg">
-                    <q-btn
-                      label="আপডেট করুন"
-                      type="submit"
-                      color="primary"
-                      :loading="updatingProfile"
-                    />
-                  </div>
-                </q-form>
-              </q-card-section>
+              </q-tab-panels>
             </q-card>
           </div>
         </div>
@@ -216,6 +256,9 @@ import { api } from "boot/axios";
 
 const $q = useQuasar();
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+// New ref for handling tabs
+const tab = ref("personal");
 
 // User data
 const user = ref({
@@ -391,7 +434,21 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.profile-avatar {
+  /* Teal color border for a professional look */
+  border: 5px solid #009688; 
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+}
+
+.rounded-borders-md {
+  border-radius: 8px;
+}
+
 .q-avatar {
   border: 3px solid #e0e0e0;
+} 
+/* Ensure responsiveness on smaller screens */
+.q-tab-panel {
+  padding: 16px;
 }
 </style>
