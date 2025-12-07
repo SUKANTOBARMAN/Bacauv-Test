@@ -16,25 +16,25 @@ const routes = [
     component: () => import('src/pages/MemberList.vue'),
     meta: { requiresAuth: false }
   },
-  {
-    path:'/commissionerate',
-    name:'Commissionerate',
-    component: () => import('src/pages/Commissionerate.vue'),
-    meta: { requiresAuth: false }
+  // {
+  //   path:'/commissionerate',
+  //   name:'Commissionerate',
+  //   component: () => import('src/pages/Commissionerate.vue'),
+  //   meta: { requiresAuth: false }
 
-  },
-  {
-    path:'/commissionerate-hierarchy',
-    name:'CommissionerateHierarchy',
-    component: () => import('src/pages/CommissionerateHierarchy.vue'),
-    meta: { requiresAuth: false }
-  },
-  {
-    path:'/district',
-    name:'District',
-    component: () => import('src/pages/District.vue'),
-    meta: { requiresAuth: false }
-  },
+  // },
+  // {
+  //   path:'/commissionerate-hierarchy',
+  //   name:'CommissionerateHierarchy',
+  //   component: () => import('src/pages/CommissionerateHierarchy.vue'),
+  //   meta: { requiresAuth: false }
+  // },
+  // {
+  //   path:'/district',
+  //   name:'District',
+  //   component: () => import('src/pages/District.vue'),
+  //   meta: { requiresAuth: false }
+  // },
   {
     path:'/my-profile',
     name:'Profile',

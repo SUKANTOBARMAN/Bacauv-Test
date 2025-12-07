@@ -1,7 +1,9 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
+    <!-- Enhanced Header -->
+    <q-header class="bg-gradient-header">
+      <q-toolbar class="glassy-toolbar">
+        <!-- Animated Menu Button -->
         <q-btn
           flat
           dense
@@ -9,13 +11,25 @@
           @click="toggleLeftDrawer"
           icon="menu"
           aria-label="Menu"
-        />
-        <q-toolbar-title>
-          <span class="text-h6">bacuav অ্যাপ</span>
-          <!-- <span class="text-h6">YHSR অ্যাপ</span> --- IGNORE -->
-        </q-toolbar-title>
+          class="q-mr-sm menu-btn"
+        >
+        </q-btn>
+
+        <!-- App Logo & Title -->
+        <div class="row items-center">
+          <div class="app-logo q-mr-sm">
+            <q-icon name="account_circle" size="28px" color="white" />
+          </div>
+          <q-toolbar-title class="app-title">
+            <span class="text-h6 text-weight-bold">bacuav অ্যাপ</span>
+          </q-toolbar-title>
+        </div>
+
         <q-space />
+
+        <!-- Right Side Actions -->
         <div class="q-gutter-sm row items-center no-wrap">
+          <!-- Fullscreen Toggle -->
           <q-btn
             round
             dense
@@ -24,23 +38,78 @@
             :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
             @click="$q.fullscreen.toggle()"
             v-if="$q.screen.gt.sm"
+            class="action-btn"
           >
+            <q-tooltip>
+              {{ $q.fullscreen.isActive ? 'Fullscreen বন্ধ করুন' : 'Fullscreen' }}
+            </q-tooltip>
           </q-btn>
-          <q-btn round flat>
-            <q-avatar size="26px">
+
+          <!-- User Profile Dropdown -->
+          <q-btn round flat class="profile-dropdown">
+            <q-avatar size="32px" class="profile-avatar">
               <img :src="employeePhotoUrl" />
+              <div class="online-indicator"></div>
             </q-avatar>
-            <q-menu>
-              <q-list style="min-width: 150px">
+            
+            <q-menu
+              class="profile-menu"
+              anchor="bottom right"
+              self="top right"
+              :offset="[10, 10]"
+            >
+              <q-list class="rounded-borders" style="min-width: 250px">
+                <!-- User Info Header -->
+                <q-item class="user-info-header">
+                  <q-item-section avatar>
+                    <q-avatar size="48px">
+                      <img :src="employeePhotoUrl" />
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-weight-bold text-body1">
+                      {{ userProfile.name || 'ব্যবহারকারী' }}
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ getDesignationLabel(userProfile.designation) || 'কর্মচারী' }}
+                    </q-item-label>
+                    <q-item-label caption v-if="userProfile.email" class="ellipsis">
+                      <q-icon name="email" size="14px" class="q-mr-xs" />
+                      {{ userProfile.email }}
+                    </q-item-label>
+                    <q-item-label caption v-if="userProfile.mobile">
+                      <q-icon name="phone" size="14px" class="q-mr-xs" />
+                      {{ userProfile.mobile }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-separator />
+
+                <!-- View Profile -->
                 <q-item
                   v-if="userStore.getHighestRole !== 'admin'"
                   clickable
+                  v-ripple
                   @click="viewProfile"
+                  class="menu-item"
                 >
-                  <q-item-section>View Profile</q-item-section>
+                  <q-item-section avatar>
+                    <q-icon name="person" color="primary" />
+                  </q-item-section>
+                  <q-item-section>প্রোফাইল দেখুন</q-item-section>
                 </q-item>
-                <q-item clickable @click="logout">
-                  <q-item-section>লগআউট</q-item-section>
+
+                <q-separator v-if="userStore.getHighestRole !== 'admin'" />
+
+                <!-- Logout -->
+                <q-item clickable v-ripple @click="logout" class="menu-item logout-item">
+                  <q-item-section avatar>
+                    <q-icon name="logout" color="negative" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label class="text-negative">লগআউট</q-item-label>
+                  </q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -49,419 +118,497 @@
       </q-toolbar>
     </q-header>
 
+    <!-- Enhanced Sidebar -->
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-primary text-white"
+      :width="300"
+      class="sidebar"
     >
-      <q-list>
-        <q-item to="/" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="dashboard" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>ড্যাশবোর্ড</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/member-list" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="group" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Member List</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item
-          to="/commissionerate"
-          active-class="q-item-no-link-highlighting"
-        >
-          <q-item-section avatar>
-            <q-icon name="group" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Commissionerate</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item to="/district" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="person" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>জেলা</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-expansion-item icon="person" label="My Profile" expand-separator>
-          <q-list class="q-pl-md">
-            <q-item
-              clickable
-              to="/my-profile"
-              active-class="q-item-no-link-highlighting"
-            >
-              <q-item-section avatar>
-                <q-icon name="info" />
-              </q-item-section>
-              <q-item-section>User Information</q-item-section>
-            </q-item>
+      <!-- Sidebar Header with User Info -->
+      <div class="sidebar-header">
+        <div class="sidebar-avatar">
+          <q-avatar size="64px">
+            <img :src="employeePhotoUrl" />
+          </q-avatar>
+          <div class="sidebar-user-info">
+            <div class="text-weight-bold text-body1">
+              {{ userProfile.name || '' }}
+            </div>
+            <div class="text-caption text-blue-1">
+              {{ getDesignationLabel(userProfile.designation) || '' }}
+            </div>
+            <div v-if="userProfile.email" class="text-caption text-blue-2 ellipsis q-mt-xs">
+              {{ userProfile.email }}
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <q-item
-              clickable
-              to="/my-profile/payment"
-              active-class="q-item-no-link-highlighting"
-            >
-              <q-item-section avatar>
-                <q-icon name="payments" />
-              </q-item-section>
-              <q-item-section>Payment</q-item-section>
-            </q-item>
+      <q-separator class="sidebar-separator" />
 
-            <q-item
-              clickable
-              to="/my-profile/update"
-              active-class="q-item-no-link-highlighting"
-            >
-              <q-item-section avatar>
-                <q-icon name="edit" />
-              </q-item-section>
-              <q-item-section>Update</q-item-section>
-            </q-item>
-          </q-list>
-        </q-expansion-item>
-  
-        <q-expansion-item
-          label="কর্মচারী"
-          icon="people"
-          v-if="
-            userStore.getHighestRole === 'admin' ||
-            userStore.getHighestRole === 'subadmin'
-          "
-        >
-          <q-item
-            to="/employees/add"
-            class="q-ml-xl"
-            v-if="userStore.getHighestRole === 'admin'"
-            active-class="q-item-no-link-highlighting"
+      <!-- Navigation List -->
+      <q-scroll-area class="scroll-area">
+        <q-list padding class="menu-list">
+          <!-- Dashboard -->
+          <q-item 
+            to="/" 
+            exact 
+            clickable 
+            v-ripple
+            class="menu-item"
+            active-class="active-menu-item"
           >
             <q-item-section avatar>
-              <q-icon name="person_add" />
+              <q-icon name="dashboard" class="menu-icon" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>কর্মচারী যোগ করুন</q-item-label>
+              <q-item-label>ড্যাশবোর্ড</q-item-label>
             </q-item-section>
-          </q-item>
-          <q-item
-            to="/office/employees"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-          >
-            <q-item-section avatar>
-              <q-icon name="emoji_people" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>কর্মচারীর তালিকা</q-item-label>
-            </q-item-section>
-          </q-item>
-          <!-- <q-item
-            to="/employees/id-card"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-          >
-            <q-item-section avatar>
-              <q-icon name="badge" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>Employee Id card</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/employees/reset-password"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-          >
-            <q-item-section avatar>
-              <q-icon name="badge" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>Reset password</q-item-label>
-            </q-item-section>
-          </q-item> -->
-        </q-expansion-item>
-        <q-expansion-item
-          v-if="['admin', 'subadmin'].includes(userStore.getHighestRole)"
-          label="কনফিগারেশন "
-          icon="settings"
-        >
-          <q-item
-            to="/offices"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-          >
-            <q-item-section avatar><q-icon name="apartment" /></q-item-section>
-            <q-item-section
-              ><q-item-label>অফিসের তালিকা</q-item-label></q-item-section
-            >
-          </q-item>
-          <q-item
-            to="/designations"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
-          >
-            <q-item-section avatar><q-icon name="work" /></q-item-section>
-            <q-item-section
-              ><q-item-label>পদবির তালিকা</q-item-label></q-item-section
-            >
-          </q-item>
-          <q-item
-            to="/salary"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
-          >
-            <q-item-section avatar><q-icon name="money" /></q-item-section>
-            <q-item-section
-              ><q-item-label>বেতন স্কেল</q-item-label></q-item-section
-            >
-          </q-item>
-          <q-item
-            to="/trainings"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
-          >
-            <q-item-section avatar><q-icon name="school" /></q-item-section>
-            <q-item-section
-              ><q-item-label>প্রশিক্ষণসমূহ</q-item-label></q-item-section
-            >
-          </q-item>
-          <q-item
-            to="/leave-types"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
-          >
-            <q-item-section avatar><q-icon name="event_busy" /></q-item-section>
-            <q-item-section
-              ><q-item-label>Leave Types</q-item-label></q-item-section
-            >
+            <q-tooltip anchor="center right" self="center left">
+              ড্যাশবোর্ড
+            </q-tooltip>
           </q-item>
 
-          <q-item
-            to="/award-types"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
+          <!-- Member List -->
+          <q-item 
+            to="/member-list" 
+            clickable 
+            v-ripple
+            class="menu-item"
+            active-class="active-menu-item"
           >
-            <q-item-section avatar
-              ><q-icon name="military_tech"
-            /></q-item-section>
-            <q-item-section><q-item-label>Awards</q-item-label></q-item-section>
+            <q-item-section avatar>
+              <q-icon name="group" class="menu-icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Member List</q-item-label>
+            </q-item-section>
+            <q-tooltip anchor="center right" self="center left">
+              Member List
+            </q-tooltip>
           </q-item>
 
-          <q-item
-            to="/punishment-types"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
+          <!-- My Profile Expansion -->
+          <q-expansion-item
+            icon="person"
+            label="আমার প্রোফাইল"
+            expand-icon-class="expansion-icon"
+            class="expansion-item"
+            :content-inset-level="0.5"
           >
-            <q-item-section avatar><q-icon name="gavel" /></q-item-section>
-            <q-item-section
-              ><q-item-label>Punishments</q-item-label></q-item-section
-            >
-          </q-item>
-        </q-expansion-item>
-        <!-- <q-item
-          v-if="
-            userStore.getHighestRole === 'admin' ||
-            userStore.getHighestRole === 'subadmin'
-          "
-          to="/field-requisition"
-          active-class="q-item-no-link-highlighting"
-        >
-          <q-item-section avatar>
-            <q-icon name="dashboard" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Field Requisition</q-item-label>
-          </q-item-section>
-        </q-item> -->
-        <q-expansion-item
-          v-if="['admin', 'subadmin'].includes(userStore.getHighestRole)"
-          label="স্টোর ব্যবস্থাপনা"
-          icon="store"
-        >
-          <q-item
-            to="/products"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
+            <q-list class="submenu">
+              <q-item 
+                clickable 
+                to="/my-profile" 
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="info" size="18px" />
+                </q-item-section>
+                <q-item-section>ব্যবহারকারী তথ্য</q-item-section>
+              </q-item>
+            </q-list>
+          </q-expansion-item>
+
+          <!-- Employees Menu -->
+          <q-expansion-item
+            v-if="['admin', 'subadmin'].includes(userStore.getHighestRole)"
+            icon="people"
+            label="কর্মচারী ব্যবস্থাপনা"
+            expand-icon-class="expansion-icon"
+            class="expansion-item"
+            :content-inset-level="0.5"
           >
-            <q-item-section avatar>
-              <q-icon name="category" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>পণ্যসমূহ</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/add-stock"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
+            <q-list class="submenu">
+              <q-item 
+                v-if="userStore.getHighestRole === 'admin'"
+                clickable 
+                to="/employees/add"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="person_add" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>কর্মচারী যোগ করুন</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item 
+                clickable 
+                to="/office/employees"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="emoji_people" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>কর্মচারীর তালিকা</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-expansion-item>
+
+          <!-- Configuration Menu -->
+          <q-expansion-item
+            v-if="['admin', 'subadmin'].includes(userStore.getHighestRole)"
+            icon="settings"
+            label="সিস্টেম কনফিগারেশন"
+            expand-icon-class="expansion-icon"
+            class="expansion-item"
+            :content-inset-level="0.5"
           >
-            <q-item-section avatar>
-              <q-icon name="add_box" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>স্টক যোগ করুন</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/stocks"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
+            <q-list class="submenu">
+              <q-item 
+                clickable 
+                to="/offices"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="apartment" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>অফিসের তালিকা</q-item-label>
+                </q-item-section>
+              </q-item>
+              
+              <template v-if="userStore.getHighestRole === 'admin'">
+                <q-item 
+                  clickable 
+                  to="/designations"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="work" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>পদবির তালিকা</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/salary"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="money" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>বেতন স্কেল</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/trainings"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="school" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>প্রশিক্ষণসমূহ</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/leave-types"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="event_busy" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Leave Types</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/award-types"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="military_tech" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Awards</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/punishment-types"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="gavel" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Punishments</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-list>
+          </q-expansion-item>
+
+          <!-- Store Management Menu -->
+          <q-expansion-item
+            v-if="['admin', 'subadmin'].includes(userStore.getHighestRole)"
+            icon="store"
+            label="স্টোর ব্যবস্থাপনা"
+            expand-icon-class="expansion-icon"
+            class="expansion-item"
+            :content-inset-level="0.5"
           >
-            <q-item-section avatar>
-              <q-icon name="inventory" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>স্টকসমূহ</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/add-allocation"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
+            <q-list class="submenu">
+              <template v-if="userStore.getHighestRole === 'admin'">
+                <q-item 
+                  clickable 
+                  to="/products"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="category" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>পণ্যসমূহ</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/add-stock"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="add_box" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>স্টক যোগ করুন</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/stocks"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="inventory" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>স্টকসমূহ</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/add-allocation"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="assignment" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>বণ্টন যোগ করুন</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+              
+              <q-item 
+                clickable 
+                to="/allocations"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="list_alt" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>বণ্টনসমূহ</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-expansion-item>
+
+          <!-- Notice Menu -->
+          <q-expansion-item
+            icon="assignment"
+            label="নোটিশ ব্যবস্থাপনা"
+            expand-icon-class="expansion-icon"
+            class="expansion-item"
+            :content-inset-level="0.5"
           >
-            <q-item-section avatar>
-              <q-icon name="assignment" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>বণ্টন যোগ করুন</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/allocations"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="
-              userStore.getHighestRole === 'admin' ||
-              userStore.getHighestRole === 'subadmin'
-            "
+            <q-list class="submenu">
+              <template v-if="userStore.getHighestRole === 'admin'">
+                <q-item 
+                  clickable 
+                  to="/notices/add"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="note_add" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>নোটিশ যোগ করুন</q-item-label>
+                  </q-item-section>
+                </q-item>
+                
+                <q-item 
+                  clickable 
+                  to="/notices"
+                  v-ripple
+                  active-class="active-submenu-item"
+                  class="submenu-item"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="list" size="18px" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>নোটিশের তালিকা</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+              
+              <q-item 
+                v-if="userStore.getHighestRole !== 'admin'"
+                clickable 
+                to="/notices/view"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="list" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>নোটিশ দেখুন</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-expansion-item>
+
+          <!-- Reports Menu -->
+          <q-expansion-item
+            v-if="['admin', 'subadmin'].includes(userStore.getHighestRole)"
+            icon="assessment"
+            label="প্রতিবেদন"
+            expand-icon-class="expansion-icon"
+            class="expansion-item"
+            :content-inset-level="0.5"
           >
-            <q-item-section avatar>
-              <q-icon name="list_alt" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>বণ্টনসমূহ</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-expansion-item>
-        <q-expansion-item label="নোটিশ " icon="assignment">
-          <q-item
-            to="/notices/add"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
-          >
-            <q-item-section avatar>
-              <q-icon name="note_add" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>নোটিশ যোগ করুন</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/notices"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
-          >
-            <q-item-section avatar>
-              <q-icon name="list" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>নোটিশের তালিকা</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/notices/view"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole !== 'admin'"
-          >
-            <q-item-section avatar>
-              <q-icon name="list" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>নোটিশ দেখুন</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-expansion-item>
-        <q-expansion-item
-          v-if="
-            userStore.getHighestRole === 'admin' ||
-            userStore.getHighestRole === 'subadmin'
-          "
-          label="প্রতিবেদন"
-          icon="assessment"
-        >
-          <q-item
-            to="/reports/field-requisition"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-          >
-            <q-item-section avatar>
-              <q-icon name="bar_chart" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>ফিল্ড রিকুইজিশন</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/reports/stock-list"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-            v-if="userStore.getHighestRole === 'admin'"
-          >
-            <q-item-section avatar>
-              <q-icon name="bar_chart" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>স্টকের তালিকা</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/reports/employee-list"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-          >
-            <q-item-section avatar>
-              <q-icon name="emoji_people" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>কর্মচারীর তালিকা</q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            to="/reports/salary-details"
-            class="q-ml-xl"
-            active-class="q-item-no-link-highlighting"
-          >
-            <q-item-section avatar>
-              <q-icon name="payments" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>বেতন সংক্রান্ত তথ্য</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-expansion-item>
-      </q-list>
+            <q-list class="submenu">
+              <q-item 
+                clickable 
+                to="/reports/field-requisition"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="bar_chart" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>ফিল্ড রিকুইজিশন</q-item-label>
+                </q-item-section>
+              </q-item>
+              
+              <q-item 
+                v-if="userStore.getHighestRole === 'admin'"
+                clickable 
+                to="/reports/stock-list"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="bar_chart" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>স্টকের তালিকা</q-item-label>
+                </q-item-section>
+              </q-item>
+              
+              <q-item 
+                clickable 
+                to="/reports/employee-list"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="emoji_people" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>কর্মচারীর তালিকা</q-item-label>
+                </q-item-section>
+              </q-item>
+              
+              <q-item 
+                clickable 
+                to="/reports/salary-details"
+                v-ripple
+                active-class="active-submenu-item"
+                class="submenu-item"
+              >
+                <q-item-section avatar>
+                  <q-icon name="payments" size="18px" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>বেতন সংক্রান্ত তথ্য</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-expansion-item>
+        </q-list>
+      </q-scroll-area>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <q-separator class="q-mb-sm" />
+        <div class="text-center text-caption text-grey-6">
+          © {{ currentYear }} bacuav অ্যাপ
+        </div>
+      </div>
     </q-drawer>
 
-    <q-page-container class="bg-grey-2">
+    <!-- Main Content -->
+    <q-page-container class="main-content">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -486,9 +633,25 @@ const employeeStore = useEmployeeStore();
 // Quasar + Router
 const $q = useQuasar();
 const router = useRouter();
-const profileUrl = computed(() => {
-  return `/employees/${employeeStore.getEmployeeId}`;
+
+// User Profile Data
+const userProfile = ref({
+  id: null,
+  name: '',
+  name_bangla: '',
+  email: '',
+  mobile: '',
+  designation: '',
+  address: '',
+  photo: null,
+  commissionerate: null,
+  division: null,
+  circle: null,
+  district: null,
 });
+
+// Current year for footer
+const currentYear = computed(() => new Date().getFullYear());
 
 // Drawer control
 const leftDrawerOpen = ref(false);
@@ -496,49 +659,147 @@ const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 
-// View Profile
+// Fetch User Profile - SAME AS YOUR PROFILE COMPONENT
+const fetchUserProfile = async () => {
+  try {
+    const { data } = await api.get("/v1/profile", {
+      params: {
+        include: "commissionerate,division,circle,district",
+      },
+    });
+    
+    userProfile.value = {
+      ...userProfile.value,
+      ...data.data,
+      commissionerate: data.data.commissionerate || null,
+      division: data.data.division || null,
+      circle: data.data.circle || null,
+      district: data.data.district || null,
+    };
+    
+  } catch (error) {
+    console.error("Failed to load user profile:", error);
+    $q.notify({
+      type: "negative",
+      message: "প্রোফাইল লোড করতে ব্যর্থ হয়েছে",
+      caption: error.message,
+    });
+  }
+};
+
+// Get designation label from value
+const getDesignationLabel = (designationValue) => {
+  const designationOptions = [
+    { label: "RO (Revenue Officer)", value: "RO", icon: "badge", color: "blue" },
+    { label: "ARO (Assistant Revenue Officer)", value: "ARO", icon: "assistant", color: "green" },
+  ];
+  
+  const found = designationOptions.find(opt => opt.value === designationValue);
+  return found ? found.label : designationValue;
+};
+
+// Helper functions to extract names safely
+const getCommissionerateName = () => {
+  if (!userProfile.value.commissionerate) return null;
+  // Handle both object structures
+  if (userProfile.value.commissionerate.data && userProfile.value.commissionerate.data.name) {
+    return userProfile.value.commissionerate.data.name;
+  }
+  if (userProfile.value.commissionerate.name) {
+    return userProfile.value.commissionerate.name;
+  }
+  return null;
+};
+
+const getDivisionName = () => {
+  if (!userProfile.value.division) return null;
+  if (userProfile.value.division.data && userProfile.value.division.data.name) {
+    return userProfile.value.division.data.name;
+  }
+  if (userProfile.value.division.name) {
+    return userProfile.value.division.name;
+  }
+  return null;
+};
+
+const getDistrictName = () => {
+  if (!userProfile.value.district) return null;
+  if (userProfile.value.district.data && userProfile.value.district.data.name) {
+    return userProfile.value.district.data.name;
+  }
+  if (userProfile.value.district.name) {
+    return userProfile.value.district.name;
+  }
+  return null;
+};
+
+// View Profile - Navigate to my-profile route
 const viewProfile = async () => {
   try {
-    const employeeId = employeeStore.getEmployeeId;
-    if (!employeeId) {
-      $q.notify({ type: "negative", message: "Employee ID not found." });
-      return;
-    }
-    await router.push(`/employees/${employeeId}`);
+    await router.push('/my-profile');
   } catch (error) {
     console.error("Error navigating to profile:", error);
     $q.notify({
       type: "negative",
-      message: "Failed to load profile. Try again.",
+      message: "প্রোফাইলে যেতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
     });
   }
 };
 
 // Logout
 const logout = async () => {
-  try {
-    userStore.logout();
-    officeStore.removeOfficeInfo();
-    employeeStore.removeEmployeeDetails();
+  $q.dialog({
+    title: 'লগআউট নিশ্চিতকরণ',
+    message: 'আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?',
+    cancel: true,
+    persistent: true,
+    ok: {
+      label: 'লগআউট',
+      color: 'negative',
+      flat: true
+    },
+    cancel: {
+      label: 'বাতিল',
+      color: 'primary',
+      flat: true
+    }
+  }).onOk(async () => {
+    try {
+      userStore.logout();
+      officeStore.removeOfficeInfo();
+      employeeStore.removeEmployeeDetails();
 
-    $q.notify({ type: "positive", message: "Logged out successfully" });
-    await router.push("/login");
-  } catch (error) {
-    console.error(error);
-    $q.notify({ type: "negative", message: "Logout failed. Try again." });
-  }
+      $q.notify({ 
+        type: "positive", 
+        message: "সফলভাবে লগআউট করা হয়েছে",
+        position: 'top',
+        timeout: 1500
+      });
+      await router.push("/login");
+    } catch (error) {
+      console.error(error);
+      $q.notify({ 
+        type: "negative", 
+        message: "লগআউট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+        position: 'top'
+      });
+    }
+  });
 };
 
-// Add this reactive reference
+// Employee photo - Fix this function
 const employeePhotoUrl = ref("https://cdn.quasar.dev/img/boy-avatar.png");
 
-// Modify your fetchEmployeePhoto function to update the ref
 const fetchEmployeePhoto = async () => {
   try {
-    // Get the employeeId from the store instead of using employeeId.value
-    const employeeId = employeeStore.employeeId;
-
+    // First get employee ID from user profile
+    if (!userProfile.value.id) {
+      await fetchUserProfile();
+    }
+    
+    const employeeId = userProfile.value.id;
     if (!employeeId) {
+      console.log("No employee ID found");
       return;
     }
 
@@ -548,60 +809,279 @@ const fetchEmployeePhoto = async () => {
 
     if (data.data && data.data.length > 0) {
       employeePhotoUrl.value = `https://yshr_app.dyd-govbd.com/storage/${data.data[0].path}`;
+    } else if (userProfile.value.photo) {
+      // If no file record found but user has photo property
+      employeePhotoUrl.value = `https://yshr_app.dyd-govbd.com/storage/${userProfile.value.photo}`;
     }
   } catch (error) {
     console.error("Error fetching employee photo:", error);
   }
 };
 
+// On mounted
 onMounted(async () => {
-  // Only fetch the photo if we have an employee ID
-  if (employeeStore.employeeId) {
-    fetchEmployeePhoto();
+  try {
+    // Fetch user profile first
+    await fetchUserProfile();
+    // Then fetch photo
+    await fetchEmployeePhoto();
+  } catch (error) {
+    console.error("Error in mounted:", error);
   }
 });
 
-// Add a watcher for when the employee ID changes
+// Watch for profile changes to update photo
 watch(
-  () => employeeStore.employeeId,
-  (newId) => {
-    if (newId) {
+  () => userProfile.value,
+  (newProfile) => {
+    if (newProfile.id) {
       fetchEmployeePhoto();
     }
-  }
+  },
+  { deep: true }
 );
 </script>
 
-<style>
-/* FONT AWESOME GENERIC BEAT */
-.fa-beat {
-  animation: fa-beat 5s ease infinite;
+<style scoped>
+/* Header Styles */
+.bg-gradient-header {
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes fa-beat {
-  0% {
-    transform: scale(1);
+.glassy-toolbar {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(25, 118, 210, 0.95);
+}
+
+.app-logo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+}
+
+.user-info-badge {
+  max-width: 150px;
+  text-align: left;
+}
+
+/* Profile Menu Styles */
+.profile-menu {
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.user-info-header {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+  border-radius: 12px 12px 0 0;
+  padding: 20px 16px;
+  margin-bottom: 8px;
+}
+
+.admin-info {
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 8px;
+}
+
+.menu-item {
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin: 4px 8px;
+}
+
+.menu-item:hover {
+  background: rgba(25, 118, 210, 0.08);
+}
+
+.logout-item:hover {
+  background: rgba(244, 67, 54, 0.08);
+}
+
+/* Sidebar Styles */
+.sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  border-right: 1px solid #e0e0e0;
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  color: white;
+}
+
+.sidebar-avatar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sidebar-user-info {
+  flex: 1;
+}
+
+.sidebar-admin-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 12px;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+  margin-top: 8px;
+}
+
+.sidebar-separator {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.scroll-area {
+  height: calc(100vh - 200px);
+}
+
+/* Fix for active route hover issue */
+.menu-item {
+  position: relative;
+}
+
+/* Active menu item - no hover effect when active */
+.menu-item.active-menu-item:hover {
+  background: linear-gradient(90deg, #1976d2 0%, #2196f3 100%) !important;
+  transform: none !important;
+}
+
+/* Regular hover for non-active items */
+.menu-item:not(.active-menu-item):hover {
+  background: linear-gradient(90deg, rgba(25, 118, 210, 0.1) 0%, rgba(25, 118, 210, 0.05) 100%);
+  transform: translateX(4px);
+}
+
+.active-menu-item {
+  background: linear-gradient(90deg, #1976d2 0%, #2196f3 100%);
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+.active-menu-item .menu-icon {
+  color: white !important;
+}
+
+/* Submenu items hover fix */
+.submenu-item.active-submenu-item:hover {
+  background: rgba(25, 118, 210, 0.1) !important;
+}
+
+.submenu-item:not(.active-submenu-item):hover {
+  background: rgba(25, 118, 210, 0.08);
+}
+
+/* Expansion Items */
+.expansion-item :deep(.q-item) {
+  border-radius: 10px;
+  margin: 4px 8px;
+}
+
+.expansion-item :deep(.q-item__section--avatar) {
+  min-width: 40px;
+}
+
+/* Fix expansion item active state */
+.expansion-item :deep(.q-item.q-router-link--active) {
+  background: linear-gradient(90deg, #1976d2 0%, #2196f3 100%);
+  color: white;
+}
+
+.expansion-item :deep(.q-item.q-router-link--active .q-icon) {
+  color: white !important;
+}
+
+/* Submenu */
+.submenu {
+  padding-left: 8px;
+}
+
+.submenu-item {
+  border-radius: 8px;
+  margin: 2px 4px;
+  padding: 8px 16px;
+}
+
+.active-submenu-item {
+  background: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+  font-weight: 500;
+  border-left: 3px solid #1976d2;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
+  background: rgba(248, 249, 250, 0.8);
+  backdrop-filter: blur(5px);
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Main Content */
+.main-content {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  5% {
-    transform: scale(1.25);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  20% {
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(1);
-  }
-  35% {
-    transform: scale(1.25);
-  }
-  50% {
-    transform: scale(1);
-  }
-  55% {
-    transform: scale(1.25);
-  }
-  70% {
-    transform: scale(1);
-  }
+}
+
+.menu-list {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scrollbar Styling */
+:deep(.q-scrollarea__thumb) {
+  background: rgba(0, 0, 0, 0.2);
+  width: 4px;
+  border-radius: 2px;
+}
+
+:deep(.q-scrollarea__thumb:hover) {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Online Indicator */
+.online-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  background: #4CAF50;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+/* Tooltip styling */
+:deep(.q-tooltip) {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 </style>
