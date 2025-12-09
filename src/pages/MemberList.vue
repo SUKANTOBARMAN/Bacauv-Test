@@ -1,37 +1,43 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md member-directory-wrapper">
     <q-card bordered class="desktop-card no-shadow">
-      <q-card-section class="card-header">
+      <q-card-section class="card-header bg-primary-gradient">
         <div class="header-content">
-          <div class="text-h5 text-grey-9 q-mb-xs">Member Directory</div>
-          <div class="text-caption text-grey-6">
+          <div class="text-h4 text-white q-mb-xs q-mt-sm">
+            <q-icon name="group" class="q-mr-sm" /> Member Directory
+          </div>
+          <div class="text-subtitle1 text-white opacity-8">
             Browse and manage all registered members
           </div>
         </div>
         <q-space />
-        <div class="total-members">
-          <q-chip color="primary" text-color="white" icon="people">
-            Total: {{ pagination.rowsNumber }}
+        <div class="total-members q-mt-md">
+          <q-chip
+            color="white"
+            text-color="primary-dark"
+            icon="people_alt"
+            size="lg"
+            class="total-chip shadow-4"
+          >
+            Total Members: {{ pagination.rowsNumber }}
           </q-chip>
         </div>
       </q-card-section>
 
       <q-separator class="header-separator"></q-separator>
 
-      <!-- Search Expansion -->
       <q-expansion-item
         icon="search"
-        label="Search Members"
+        label="Search & Filter"
         default-open
-        class="search-expansion bg-grey-1"
-        expand-icon-class="text-primary"
+        class="search-expansion bg-accent-light"
+        expand-icon-class="text-primary-dark"
       >
         <div class="q-pa-md">
           <SearchMembers @search="onSearch"></SearchMembers>
         </div>
       </q-expansion-item>
 
-      <!-- Desktop Table View -->
       <q-card-section v-if="$q.screen.gt.sm" class="q-pa-none">
         <q-table
           flat
@@ -42,7 +48,7 @@
           :columns="columns"
           :rows="data"
           :wrap-cells="true"
-          class="members-table no-shadow"
+          class="members-table elevation-2"
           row-key="id"
           v-model:pagination="pagination"
           :loading="loading"
@@ -53,24 +59,30 @@
           :rows-per-page-options="[10, 15, 20, 50]"
           binary-state-sort
         >
-          <!-- Top Slot: Custom Header -->
           <template #top>
             <div class="table-top row items-center q-pb-md">
-              <div class="text-h6 text-grey-8">Member List</div>
+              <div class="text-h6 text-primary-dark text-weight-bold">
+                Member List Overview
+              </div>
               <q-space />
+              <q-btn
+                flat
+                round
+                icon="refresh"
+                color="primary"
+                @click="fetchData(pagination.page)"
+              />
             </div>
           </template>
 
-          <!-- Loading State -->
           <template #loading>
-            <q-inner-loading showing color="primary" />
+            <q-inner-loading showing color="accent" />
           </template>
 
-          <!-- Photo Column -->
           <template #body-cell-photo="props">
             <q-td :props="props" class="photo-cell">
-              <div class="photo-container">
-                <q-avatar size="60px" class="member-photo">
+              <div class="photo-container-desktop">
+                <q-avatar size="68px" class="member-photo-desktop shadow-0">
                   <q-img
                     :src="imageURL(props.row.photo, '/src/assets/action.jpg')"
                     :ratio="1"
@@ -81,33 +93,31 @@
             </q-td>
           </template>
 
-          <!-- Name Column -->
           <template #body-cell-name="props">
             <q-td :props="props" class="name-cell">
               <div class="member-name">
-                <div class="english-name text-weight-medium">
+                <div class="english-name text-weight-bolder text-primary-dark">
                   {{ props.row.name }}
                 </div>
-                <div class="bangla-name text-caption text-grey-7">
+                <div class="bangla-name text-caption text-secondary-dark">
                   {{ props.row.name_bangla }}
                 </div>
               </div>
             </q-td>
           </template>
 
-          <!-- Member ID Column -->
           <template #body-cell-MemberID="props">
             <q-td :props="props" class="id-cell">
               <q-chip
-                size="sm"
-                color="blue-grey-1"
-                text-color="blue-grey-9"
-                class="member-id-chip"
+                size="md"
+                color="accent-faded"
+                text-color="accent-dark"
+                class="member-id-chip text-weight-bold"
               >
                 <q-avatar
-                  size="20px"
-                  icon="badge"
-                  color="primary"
+                  size="24px"
+                  icon="vpn_key"
+                  color="accent-dark"
                   text-color="white"
                 />
                 {{ props.row.member_id }}
@@ -115,27 +125,26 @@
             </q-td>
           </template>
 
-          <!-- Contact Column -->
           <template #body-cell-contact="props">
             <q-td :props="props" class="contact-cell">
               <div class="contact-info">
                 <div class="contact-item">
                   <q-icon
-                    name="phone"
-                    size="14px"
-                    class="q-mr-xs text-primary"
+                    name="phone_iphone"
+                    size="16px"
+                    class="q-mr-xs text-accent-dark"
                   />
-                  <span class="text-weight-medium">{{
+                  <span class="text-weight-bold text-dark">{{
                     props.row.mobile || "N/A"
                   }}</span>
                 </div>
                 <div class="contact-item">
                   <q-icon
-                    name="email"
-                    size="14px"
-                    class="q-mr-xs text-primary"
+                    name="alternate_email"
+                    size="16px"
+                    class="q-mr-xs text-accent-dark"
                   />
-                  <span class="text-caption text-grey-8">{{
+                  <span class="text-body2 text-grey-8 text-xxl">{{
                     props.row.email || "N/A"
                   }}</span>
                 </div>
@@ -143,13 +152,12 @@
             </q-td>
           </template>
 
-          <!-- Area Column -->
           <template #body-cell-area="props">
             <q-td :props="props" class="area-cell">
               <div class="area-info">
                 <div class="area-item">
-                  <span class="area-label">Commissionerate:</span>
-                  <span class="area-value">
+                  <span class="area-label">Commissionerate:&nbsp;</span>
+                  <span class="area-value text-weight-medium">
                     {{
                       store.getCommissionerate.find(
                         (item) => item.value === props.row.commissionerate_id
@@ -158,7 +166,7 @@
                   </span>
                 </div>
                 <div class="area-item">
-                  <span class="area-label">Division:</span>
+                  <span class="area-label">Division:&nbsp;</span>
                   <span class="area-value">
                     {{
                       store.getDivision.find(
@@ -168,7 +176,7 @@
                   </span>
                 </div>
                 <div class="area-item">
-                  <span class="area-label">Circle:</span>
+                  <span class="area-label">Circle:&nbsp;</span>
                   <span class="area-value">
                     {{
                       store.getCircle.find(
@@ -178,7 +186,7 @@
                   </span>
                 </div>
                 <div class="area-item">
-                  <span class="area-label">District:</span>
+                  <span class="area-label">District:&nbsp;</span>
                   <span class="area-value">
                     {{
                       store.getDistrict.find(
@@ -191,11 +199,10 @@
             </q-td>
           </template>
 
-          <!-- Bottom Slot: Custom Pagination -->
           <template #bottom>
-            <div class="table-bottom q-pa-sm">
+            <div class="table-bottom q-pa-sm bg-blue-grey-1">
               <div class="row items-center justify-between">
-                <div class="text-caption text-grey-7">
+                <div class="text-body2 text-primary-dark text-weight-medium">
                   Showing
                   {{ (pagination.page - 1) * pagination.rowsPerPage + 1 }} to
                   {{
@@ -217,31 +224,30 @@
                     direction-links
                     boundary-numbers
                     @update:model-value="onPageChange"
-                    color="primary"
+                    color="accent-dark"
+                    active-color="primary-dark"
                     :disable="loading"
                   />
                 </div>
 
                 <div style="width: 200px"></div>
-                <!-- Right spacer for balance -->
-              </div>
+                </div>
             </div>
           </template>
         </q-table>
       </q-card-section>
 
-      <!-- Mobile Card View -->
       <q-card-section v-else class="q-pa-none">
         <div class="mobile-card-container">
           <q-inner-loading :showing="loading">
-            <q-spinner-dots size="50px" color="primary" />
+            <q-spinner-cube size="50px" color="accent" />
           </q-inner-loading>
 
           <div
             v-if="!loading && data.length === 0"
-            class="text-center q-pa-lg text-grey-6"
+            class="text-center q-pa-lg text-h6 text-grey-6"
           >
-            No data available
+            <q-icon name="info" size="24px" class="q-mr-sm" /> No data available
           </div>
 
           <q-card
@@ -251,57 +257,61 @@
             bordered
             flat
           >
-            <!-- Main Content: Photo and Info Side by Side -->
-            <div class="card-main-content">
-              <!-- Left: Rounded Photo -->
-              <div class="photo-container">
+            <div class="card-main-content-mobile">
+              <div class="photo-container-mobile">
                 <q-img
                   :src="imageURL(row.photo, '/src/assets/action.jpg')"
-                  class="card-photo-rounded"
+                  class="card-photo-rounded-mobile"
                   :ratio="1"
                 />
               </div>
 
-              <!-- Right: Name, Contact Info -->
-              <div class="info-container">
-                <!-- English Name -->
-                <div class="name-english">{{ row.name }}</div>
+              <div class="info-container-mobile">
+                <div class="name-english-mobile">
+                  {{ row.name }}
+                </div>
 
-                <!-- Bangla Name with Member ID -->
-                <div class="name-bangla-with-id">
+                <div class="name-bangla-with-id-mobile">
                   {{ row.name_bangla }}
-                  <span class="member-id"
-                    >(Member ID: {{ row.member_id }})</span
+                  <span class="member-id-mobile"
+                    >(ID: {{ row.member_id }})</span
                   >
                 </div>
 
-                <!-- Email -->
-                <div class="contact-item">
-                  <q-icon name="email" size="16px" color="primary" />
-                  <span class="contact-text">{{ row.email || "N/A" }}</span>
-                </div>
+                <div class="contact-details-mobile q-mt-sm">
+                  <div class="contact-item-mobile">
+                    <q-icon
+                      name="alternate_email"
+                      size="16px"
+                      color="primary"
+                    />
+                    <span class="contact-text-mobile text-grey-8">{{
+                      row.email || "N/A"
+                    }}</span>
+                  </div>
 
-                <!-- Phone -->
-                <div class="contact-item">
-                  <q-icon name="phone" size="16px" color="primary" />
-                  <span class="contact-text">{{ row.mobile || "N/A" }}</span>
+                  <div class="contact-item-mobile">
+                    <q-icon name="phone" size="16px" color="primary" />
+                    <span class="contact-text-mobile text-weight-medium">{{
+                      row.mobile || "N/A"
+                    }}</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Expandable Area Information -->
             <q-expansion-item
-              class="area-expansion"
+              class="area-expansion-mobile"
               expand-separator
               icon="location_on"
               label="Area Information"
-              header-class="area-header"
+              header-class="area-header-mobile"
             >
-              <q-card class="area-content">
+              <q-card class="area-content-mobile">
                 <q-card-section>
-                  <div class="area-row">
-                    <span class="area-label">Commissionerate:</span>
-                    <span class="area-value">
+                  <div class="area-row-mobile">
+                    <span class="area-label-mobile">Commissionerate:</span>
+                    <span class="area-value-mobile">
                       {{
                         store.getCommissionerate.find(
                           (item) => item.value === row.commissionerate_id
@@ -309,9 +319,9 @@
                       }}
                     </span>
                   </div>
-                  <div class="area-row">
-                    <span class="area-label">Division:</span>
-                    <span class="area-value">
+                  <div class="area-row-mobile">
+                    <span class="area-label-mobile">Division:</span>
+                    <span class="area-value-mobile">
                       {{
                         store.getDivision.find(
                           (item) => item.value === row.division_id
@@ -319,9 +329,9 @@
                       }}
                     </span>
                   </div>
-                  <div class="area-row">
-                    <span class="area-label">Circle:</span>
-                    <span class="area-value">
+                  <div class="area-row-mobile">
+                    <span class="area-label-mobile">Circle:</span>
+                    <span class="area-value-mobile">
                       {{
                         store.getCircle.find(
                           (item) => item.value === row.circle_id
@@ -329,9 +339,9 @@
                       }}
                     </span>
                   </div>
-                  <div class="area-row">
-                    <span class="area-label">District:</span>
-                    <span class="area-value">
+                  <div class="area-row-mobile">
+                    <span class="area-label-mobile">District:</span>
+                    <span class="area-value-mobile">
                       {{
                         store.getDistrict.find(
                           (item) => item.value === row.district_id
@@ -344,7 +354,6 @@
             </q-expansion-item>
           </q-card>
 
-          <!-- Mobile Pagination -->
           <div
             class="mobile-pagination q-mt-md q-mb-lg"
             v-if="pagination.rowsNumber > pagination.rowsPerPage"
@@ -586,157 +595,151 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Desktop Styles */
+/* --- 🎨 Custom Color Palette --- */
+/* Primary: Deep Blue/Navy */
+.bg-primary-gradient {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+}
+.text-primary-dark {
+  color: #1e3c72 !important;
+}
+
+/* Accent: Vibrant Teal/Cyan */
+.bg-accent-light {
+  background-color: #e0f7fa !important; /* Light Cyan for search background */
+}
+.text-accent-dark {
+  color: #00838f !important; /* Deep Teal */
+}
+.bg-accent-faded {
+  background-color: #b2ebf2 !important; /* Faded Teal for chips */
+}
+.text-secondary-dark {
+  color: #607d8b;
+}
+
+/* --- 💻 Desktop Styles --- */
+.member-directory-wrapper {
+  background-color: #f4f7f6; /* Light, clean background */
+}
 .desktop-card {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 24px;
+  padding: 32px 24px;
 }
 
-.header-content {
-  color: white;
+.header-content .text-h4 {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.header-content .text-h5 {
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.header-content .text-caption {
-  opacity: 0.9;
-}
-
-.header-separator {
-  margin: 0;
+.total-chip {
+  font-size: 16px !important;
+  padding: 8px 16px;
 }
 
 .search-expansion {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 2px solid #00838f;
 }
 
 .search-expansion :deep(.q-item) {
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  font-size: 16px;
+  color: #1e3c72;
 }
 
 .members-table {
   border: none;
+  background-color: white;
+  border-radius: 0 0 12px 12px;
 }
 
-.members-table :deep(.q-table__top) {
-  padding: 20px 24px 0;
-  border-bottom: 1px solid #e0e0e0;
+/* Table Header */
+.members-table :deep(.q-th) {
+  font-weight: 700;
+  color: #424242;
+  background-color: #f8f9fa;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
-.table-top {
-  padding: 8px 0;
+/* Table Row Hover Effect */
+.members-table :deep(.q-table tbody tr) {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  border-bottom: 1px solid #eee;
 }
 
-/* Photo Cell */
-.photo-cell {
-  padding: 8px 16px;
+.members-table :deep(.q-table tbody tr:hover) {
+  background-color: #e0f7fa !important;
+  transform: scale(1.005);
+  box-shadow: 0 4px 10px rgba(0, 131, 143, 0.1);
 }
 
-.photo-container {
+/* Photo Cell - FIX APPLIED HERE */
+.photo-container-desktop {
   display: flex;
   justify-content: center;
+  /* Make container relative for proper centering/stacking */
+  position: relative; 
 }
 
-.member-photo {
-  border: 3px solid #e3f2fd;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
+.member-photo-desktop {
+  /* This is the q-avatar that holds the image */
+  border: 4px solid #f7fafb; 
+  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.3);
   transition: all 0.3s ease;
+  z-index: 2; /* Ensure image is on top of any potential background effects */
 }
 
-.member-photo:hover {
-  transform: scale(1.05);
-  border-color: #2196f3;
-}
-
-.avatar-img {
-  border-radius: 50%;
-}
+/* .member-photo-desktop:hover {
+  transform: scale(1.1);
+  border-color: #00838f;
+  box-shadow: 0 6px 15px rgba(0, 131, 143, 0.5);
+} */
 
 /* Name Cell */
-.name-cell {
-  padding: 16px;
-}
-
-.member-name {
-  line-height: 1.4;
-}
-
 .english-name {
-  font-size: 15px;
-  margin-bottom: 4px;
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+.bangla-name{
+  font-size:18px;
 }
 
-.bangla-name {
-  font-size: 13px;
-  font-style: italic;
-}
-
-/* ID Cell */
-.id-cell {
-  padding: 16px;
-}
-
+/* ID Chip */
 .member-id-chip {
-  font-weight: 600;
-  border-radius: 16px;
-}
-
-/* Contact Cell */
-.contact-cell {
-  padding: 16px;
-}
-
-.contact-info {
-  line-height: 1.6;
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
+  border-radius: 8px;
 }
 
 /* Area Cell */
-.area-cell {
-  padding: 16px;
-}
-
 .area-info {
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.area-item {
-  display: flex;
-  margin-bottom: 4px;
+  font-size: 20px;
+  line-height: 1.5;
+  padding-left: 8px;
+  border-left: 3px solid #b2ebf2;
 }
 
 .area-label {
   font-weight: 600;
-  color: #666;
-  min-width: 120px;
+  font-size: 20px;
+  color: #455a64;
+  min-width: 100px;
 }
 
 .area-value {
-  color: #333;
-  flex: 1;
+  color: #1e3c72;
+  font-size: 16px;
 }
 
-/* Table Bottom */
+/* Table Bottom (Pagination) */
 .table-bottom {
-  background-color: #fafafa;
-  border-top: 1px solid #e0e0e0;
-  min-height: 64px;
+  border-top: 1px solid #d4d4d4;
 }
 
 .pagination-wrapper {
@@ -745,235 +748,134 @@ onMounted(async () => {
   transform: translateX(-50%);
 }
 
-/* Table Row Hover Effect */
-.members-table :deep(.q-table tbody tr) {
-  transition: background-color 0.2s;
+.contact-item{
+font-size: 20px;
 }
 
-.members-table :deep(.q-table tbody tr:hover) {
-  background-color: #f5f9ff !important;
-}
-
-/* Table Header */
-.members-table :deep(.q-th) {
-  font-weight: 700;
-  color: #424242;
-  background-color: #f8f9fa;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Column Specific Styles */
-.members-table :deep(.id-column) {
-  min-width: 150px;
-}
-
-.members-table :deep(.photo-column) {
-  min-width: 100px;
-}
-
-.members-table :deep(.name-column) {
-  min-width: 200px;
-}
-
-.members-table :deep(.contact-column) {
-  min-width: 180px;
-}
-
-.members-table :deep(.area-column) {
-  min-width: 300px;
-}
-
-/* Loading State */
-:deep(.q-inner-loading) {
-  background-color: rgba(255, 255, 255, 0.9);
-  z-index: 1000;
-}
-
-/* Responsive adjustments for medium screens */
-@media (max-width: 1200px) {
-  .desktop-card {
-    margin: 0 -8px;
-  }
-
-  .members-table :deep(.q-table__container) {
-    min-width: 100%;
-  }
-}
-
-/* Mobile Styles */
+/* --- 📱 Mobile Styles (Reverted to Original Simplicity) --- */
 .mobile-card-container {
   padding: 16px;
-  background: #f8f9fa;
+  background: #f8f9fa; /* Light grey background */
   min-height: 400px;
   position: relative;
 }
 
-.mobile-pagination {
-  display: flex;
-  justify-content: center;
-}
-
 .mobile-data-card {
-  border-radius: 16px;
+  border-radius: 12px; /* Smoother edges */
   overflow: hidden;
   background: white;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Lighter shadow */
   transition: all 0.3s ease;
 }
 
-.mobile-data-card:hover {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-}
-
-/* Main Content Layout */
-.card-main-content {
+/* Main Content Layout - Mobile */
+.card-main-content-mobile {
   display: flex;
   gap: 16px;
   padding: 20px;
   align-items: flex-start;
 }
 
-/* Photo Section */
-.photo-container {
+/* Photo Section - Mobile */
+.photo-container-mobile {
   flex-shrink: 0;
 }
 
-.card-photo-rounded {
-  width: 100px;
-  height: 100px;
+.card-photo-rounded-mobile {
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
-  border: 4px solid #f0f0f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e0e0e0; /* Simple border */
+  box-shadow: none; /* No strong shadow */
   object-fit: cover;
 }
 
-/* Info Section */
-.info-container {
+/* Info Section - Mobile */
+.info-container-mobile {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px; /* Closer gaps */
   min-width: 0;
 }
 
-.name-english {
+.name-english-mobile {
   font-size: 18px;
   font-weight: 700;
   color: #1a1a1a;
   line-height: 1.3;
-  margin-bottom: 2px;
 }
 
-.name-bangla-with-id {
+.name-bangla-with-id-mobile {
   font-size: 14px;
   color: #555;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   line-height: 1.4;
 }
 
-.member-id {
-  color: #1976d2;
+.member-id-mobile {
+  color: #1976d2; /* Original Blue */
   font-weight: 600;
-  font-size: 12px;
+  font-size: 13px;
   margin-left: 4px;
 }
 
-.contact-item {
+.contact-details-mobile {
+  margin-top: 8px;
+}
+
+.contact-item-mobile {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 0;
+  padding: 2px 0;
 }
 
-.contact-text {
-  font-size: 13px;
+.contact-text-mobile {
+  font-size: 16px;
   color: #333;
   word-break: break-word;
 }
 
-/* Area Expansion */
-.area-expansion {
+/* Area Expansion - Mobile */
+.area-expansion-mobile {
   border-top: 1px solid #e0e0e0;
 }
 
-.area-expansion :deep(.area-header) {
+.area-expansion-mobile :deep(.area-header-mobile) {
   background: #f8f9fa;
   font-weight: 600;
   color: #333;
   padding: 12px 20px;
 }
 
-.area-expansion :deep(.q-item__label) {
-  font-weight: 600;
-  color: #333;
-}
-
-.area-content {
+.area-content-mobile {
   background: #fafafa;
   box-shadow: none;
 }
 
-.area-content .q-card-section {
-  padding: 16px 20px;
-}
-
-.area-row {
+.area-row-mobile {
   display: flex;
   padding: 8px 0;
   border-bottom: 1px solid #e8e8e8;
 }
 
-.area-row:last-child {
-  border-bottom: none;
-}
-
-.area-label {
+.area-label-mobile {
   font-weight: 600;
   color: #666;
-  min-width: 130px;
+  min-width: 120px;
   font-size: 13px;
 }
 
-.area-value {
+.area-value-mobile {
   color: #333;
   flex: 1;
   font-size: 13px;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 400px) {
-  .card-main-content {
-    gap: 12px;
-    padding: 16px;
-  }
-
-  .card-photo-rounded {
-    width: 80px;
-    height: 80px;
-  }
-
-  .name-english {
-    font-size: 16px;
-  }
-
-  .name-bangla-with-id {
-    font-size: 13px;
-  }
-
-  .contact-text {
-    font-size: 12px;
-  }
-
-  .area-label {
-    min-width: 110px;
-    font-size: 12px;
-  }
-
-  .area-value {
-    font-size: 12px;
-  }
+.mobile-pagination {
+  display: flex;
+  justify-content: center;
 }
 </style>

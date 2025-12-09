@@ -5,21 +5,16 @@
         <div class="registration-container">
           <q-card class="registration-card shadow-24 q-pa-lg" flat bordered>
             
-            <!-- Header Section -->
-            <q-card-section class="text-center q-pb-lg">
-              <div class="registration-header">
-                <q-icon name="person_add" size="60px" color="primary" class="q-mb-md" />
-                <div class="text-h4 text-weight-light text-primary q-mb-sm">Create Account</div>
-                <div class="text-subtitle1 text-grey-7">Join us today and get started</div>
+             <q-card-section class="text-center q-pb-md">
+              <div class="logo-container q-mb-md">
+                <img src="../assets/logo.jpg" alt="Corporation Logo" class="corporation-logo">
               </div>
-              <q-linear-progress
-                v-if="loading"
-                indeterminate
-                color="primary"
-                class="q-mt-lg"
-                rounded
-              />
+              <div class="text-h6 text-weight-bolder text-primary q-mb-xs">
+                
+              </div>
+              <div class="text-subtitle2 text-grey-7">Create your Account</div>
             </q-card-section>
+
 
             <!-- Error Banner -->
             <q-card-section v-if="error" class="q-pt-none">
@@ -365,23 +360,6 @@
                     </q-select>
                   </div>
                 </div>
-
-                <!-- Role Selection -->
-                <q-select
-                  filled
-                  v-model="formData.role"
-                  :options="roleOptions"
-                  label="Role"
-                  emit-value
-                  map-options
-                  class="custom-input"
-                  :rules="[(val) => !!val || 'Role is required']"
-                >
-                  <template v-slot:prepend>
-                    <q-icon name="admin_panel_settings" color="primary" />
-                  </template>
-                </q-select>
-
                 <!-- Action Buttons -->
                 <div class="row justify-between q-mt-xl q-pt-lg">
                   <q-btn
@@ -451,12 +429,6 @@ const formData = ref({
 const designationOptions = [
   { label: 'RO (Revenue Officer)', value: 'RO', icon: 'badge', color: 'blue' },
   { label: 'ARO (Assistant Revenue Officer)', value: 'ARO', icon: 'assistant', color: 'green' },
-];
-
-// Role options
-const roleOptions = [
-  { label: 'Sub Admin', value: 'subadmin' },
-  { label: 'Admin', value: 'admin' },
 ];
 
 // Location data
@@ -568,7 +540,6 @@ const handleRegister = async () => {
     loading.value = true;
     error.value = null;
 
-    // Convert form data to URLSearchParams for x-www-form-urlencoded
     const params = new URLSearchParams();
     params.append('name', formData.value.name);
     params.append('name_bangla', formData.value.name_bangla || '');
@@ -644,6 +615,12 @@ const handleRegister = async () => {
 .custom-input :deep(.q-field__control) {
   border-radius: 12px;
 }
+
+.corporation-logo {
+    max-width: 200px; 
+    height: auto;
+}
+
 
 .text-red {
   color: red;

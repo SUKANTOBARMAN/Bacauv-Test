@@ -25,8 +25,50 @@
       </div>
     </div>
 
+    <!-- Quick Actions with Enhanced Design -->
+    <div class="actions-section">
+      <div class="section-title">
+        <div class="title-icon-wrapper">
+          <q-icon name="bolt" size="28px" />
+        </div>
+        <span>দ্রুত কার্যক্রম</span>
+      </div>
+      <div class="row q-col-gutter-md">
+        <div
+          v-for="(card, index) in actionCards"
+          :key="index"
+          class="col-12 col-sm-6 col-md-4 col-lg-3"
+        >
+          <q-card
+            class="action-card glassmorphism"
+            flat
+            clickable
+            @click="navigateTo(card.route)"
+          >
+            <q-card-section>
+              <div class="action-icon" :style="{ background: card.gradient }">
+                <q-icon :name="card.icon" size="36px" />
+                <div class="action-icon-pulse"></div>
+              </div>
+              <div class="action-title">{{ card.title }}</div>
+              <div class="action-description">{{ card.description }}</div>
+              <div class="action-arrow">
+                <q-icon name="arrow_forward" size="20px" />
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+    </div>
+
     <!-- Stats Cards with Real Data -->
     <div class="stats-section">
+      <div class="section-title">
+        <div class="title-icon-wrapper">
+          <q-icon name="bolt" size="28px" />
+        </div>
+        <span>Info</span>
+      </div>
       <div class="row q-col-gutter-md">
         <!-- Total Members Card -->
         <div class="col-12 col-sm-6 col-md-3">
@@ -39,7 +81,9 @@
               <div class="stat-content">
                 <div class="stat-label">মোট সদস্য</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalMembers }}</span>
+                  <span class="counting-number">{{
+                    animatedStats.totalMembers
+                  }}</span>
                 </div>
                 <div class="stat-change positive">
                   <q-icon name="trending_up" size="16px" />
@@ -62,7 +106,9 @@
               <div class="stat-content">
                 <div class="stat-label">কমিশনারেট</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalCommissionerates }}</span>
+                  <span class="counting-number">{{
+                    animatedStats.totalCommissionerates
+                  }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_city" size="16px" />
@@ -72,7 +118,7 @@
               <div class="card-glow commissionerate-glow"></div>
             </q-card-section>
           </q-card>
-        </div> 
+        </div>
         <!-- <div class="col-12 col-sm-6 col-md-3">
           <q-card class="stat-card ro-card" flat>
             <q-card-section>
@@ -96,7 +142,7 @@
         </div> -->
 
         <!-- Districts Count Card -->
-         <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-12 col-sm-6 col-md-3">
           <q-card class="stat-card district-card" flat>
             <q-card-section>
               <div class="stat-icon-wrapper">
@@ -106,7 +152,9 @@
               <div class="stat-content">
                 <div class="stat-label">জেলা</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalDistricts }}</span>
+                  <span class="counting-number">{{
+                    animatedStats.totalDistricts
+                  }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_on" size="16px" />
@@ -150,7 +198,9 @@
               <div class="stat-content">
                 <div class="stat-label">যাচাইকৃত সদস্য</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.verifiedMembers }}</span>
+                  <span class="counting-number">{{
+                    animatedStats.verifiedMembers
+                  }}</span>
                 </div>
                 <div class="stat-change positive">
                   <q-icon name="check_circle" size="16px" />
@@ -161,7 +211,6 @@
             </q-card-section>
           </q-card>
         </div>
-
 
         <!-- Division Card -->
         <div class="col-12 col-sm-6 col-md-3">
@@ -174,7 +223,9 @@
               <div class="stat-content">
                 <div class="stat-label">বিভাগ</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalDivisions }}</span>
+                  <span class="counting-number">{{
+                    animatedStats.totalDivisions
+                  }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="hub" size="16px" />
@@ -197,7 +248,9 @@
               <div class="stat-content">
                 <div class="stat-label">সার্কেল</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalCircles }}</span>
+                  <span class="counting-number">{{
+                    animatedStats.totalCircles
+                  }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="donut_small" size="16px" />
@@ -227,15 +280,19 @@
             <q-card-section>
               <div class="simple-bar-chart">
                 <div class="bar-chart-container">
-                  <div v-for="(bar, index) in barChartData" :key="bar.label" class="bar-wrapper">
+                  <div
+                    v-for="(bar, index) in barChartData"
+                    :key="bar.label"
+                    class="bar-wrapper"
+                  >
                     <div class="bar-column">
                       <div class="bar-value-label">{{ bar.value }}</div>
-                      <div 
-                        class="bar" 
+                      <div
+                        class="bar"
                         :style="{
-                          height: animatedBars[index] + '%', 
+                          height: animatedBars[index] + '%',
                           background: bar.gradient,
-                          '--target-height': bar.percentage + '%'
+                          '--target-height': bar.percentage + '%',
                         }"
                         @mouseenter="activeBar = index"
                         @mouseleave="activeBar = null"
@@ -243,7 +300,10 @@
                         <div class="bar-shine"></div>
                       </div>
                       <transition name="fade">
-                        <div v-if="activeBar === index" class="bar-hover-tooltip">
+                        <div
+                          v-if="activeBar === index"
+                          class="bar-hover-tooltip"
+                        >
                           {{ bar.percentage }}% মোট সদস্যের
                         </div>
                       </transition>
@@ -271,40 +331,68 @@
                 <svg viewBox="0 0 200 200" class="pie-svg">
                   <defs>
                     <filter id="glow">
-                      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                      <feGaussianBlur stdDeviation="2" result="coloredBlur" />
                       <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
                       </feMerge>
                     </filter>
                   </defs>
-                  <circle v-for="(segment, idx) in pieSegments" :key="'segment-'+idx"
-                          :cx="100" :cy="100" :r="80"
-                          :fill="segment.color"
-                          :stroke="segment.color"
-                          :stroke-width="80"
-                          :stroke-dasharray="`${segment.dashArray} ${circumference}`"
-                          :stroke-dashoffset="segment.dashOffset"
-                          transform="rotate(-90 100 100)"
-                          class="pie-segment"
-                          :class="{ 'active': activeSegment === idx }"
-                          @mouseenter="activeSegment = idx"
-                          @mouseleave="activeSegment = null"
-                          filter="url(#glow)"/>
-                  <circle cx="100" cy="100" r="50" fill="white"/>
-                  <text x="100" y="95" text-anchor="middle" class="pie-total-label">মোট</text>
-                  <text x="100" y="115" text-anchor="middle" class="pie-total-value">{{ animatedStats.totalMembers }}</text>
+                  <circle
+                    v-for="(segment, idx) in pieSegments"
+                    :key="'segment-' + idx"
+                    :cx="100"
+                    :cy="100"
+                    :r="80"
+                    :fill="segment.color"
+                    :stroke="segment.color"
+                    :stroke-width="80"
+                    :stroke-dasharray="`${segment.dashArray} ${circumference}`"
+                    :stroke-dashoffset="segment.dashOffset"
+                    transform="rotate(-90 100 100)"
+                    class="pie-segment"
+                    :class="{ active: activeSegment === idx }"
+                    @mouseenter="activeSegment = idx"
+                    @mouseleave="activeSegment = null"
+                    filter="url(#glow)"
+                  />
+                  <circle cx="100" cy="100" r="50" fill="white" />
+                  <text
+                    x="100"
+                    y="95"
+                    text-anchor="middle"
+                    class="pie-total-label"
+                  >
+                    মোট
+                  </text>
+                  <text
+                    x="100"
+                    y="115"
+                    text-anchor="middle"
+                    class="pie-total-value"
+                  >
+                    {{ animatedStats.totalMembers }}
+                  </text>
                 </svg>
               </div>
               <div class="pie-legend">
-                <div class="legend-item" v-for="(item, idx) in distributionData" :key="item.label"
-                     @mouseenter="activeSegment = idx"
-                     @mouseleave="activeSegment = null"
-                     :class="{ 'active': activeSegment === idx }">
-                  <div class="legend-color" :style="{background: item.color}"></div>
+                <div
+                  class="legend-item"
+                  v-for="(item, idx) in distributionData"
+                  :key="item.label"
+                  @mouseenter="activeSegment = idx"
+                  @mouseleave="activeSegment = null"
+                  :class="{ active: activeSegment === idx }"
+                >
+                  <div
+                    class="legend-color"
+                    :style="{ background: item.color }"
+                  ></div>
                   <div class="legend-text">
                     <span class="legend-label">{{ item.label }}</span>
-                    <span class="legend-value">{{ item.value }} ({{ getPercentage(item.value) }}%)</span>
+                    <span class="legend-value"
+                      >{{ item.value }} ({{ getPercentage(item.value) }}%)</span
+                    >
                   </div>
                 </div>
               </div>
@@ -330,7 +418,9 @@
                   </div>
                   <div class="growth-info">
                     <div class="growth-label">নতুন সদস্য</div>
-                    <div class="growth-value">+{{ stats.newMembers || 45 }}</div>
+                    <div class="growth-value">
+                      +{{ stats.newMembers || 45 }}
+                    </div>
                     <div class="growth-period">এই মাসে</div>
                   </div>
                 </div>
@@ -340,17 +430,25 @@
                   </div>
                   <div class="growth-info">
                     <div class="growth-label">বৃদ্ধির হার</div>
-                    <div class="growth-value">{{ stats.growthRate || 12.5 }}%</div>
+                    <div class="growth-value">
+                      {{ stats.growthRate || 12.5 }}%
+                    </div>
                     <div class="growth-period">গত মাসের তুলনায়</div>
                   </div>
                 </div>
                 <div class="growth-item">
                   <div class="growth-icon">
-                    <q-icon name="workspace_premium" size="32px" color="warning" />
+                    <q-icon
+                      name="workspace_premium"
+                      size="32px"
+                      color="warning"
+                    />
                   </div>
                   <div class="growth-info">
                     <div class="growth-label">সক্রিয় হার</div>
-                    <div class="growth-value">{{ stats.activeRate || 94.6 }}%</div>
+                    <div class="growth-value">
+                      {{ stats.activeRate || 94.6 }}%
+                    </div>
                     <div class="growth-period">সর্বমোট সদস্য</div>
                   </div>
                 </div>
@@ -360,54 +458,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Quick Actions with Enhanced Design -->
-    <div class="actions-section">
-      <div class="section-title">
-        <div class="title-icon-wrapper">
-          <q-icon name="bolt" size="28px" />
-        </div>
-        <span>দ্রুত কার্যক্রম</span>
-      </div>
-      <div class="row q-col-gutter-md">
-        <div 
-          v-for="(card, index) in actionCards" 
-          :key="index"
-          class="col-12 col-sm-6 col-md-4 col-lg-3"
-        >
-          <q-card 
-            class="action-card glassmorphism" 
-            flat
-            clickable
-            @click="navigateTo(card.route)"
-          >
-            <q-card-section>
-              <div class="action-icon" :style="{ background: card.gradient }">
-                <q-icon :name="card.icon" size="36px" />
-                <div class="action-icon-pulse"></div>
-              </div>
-              <div class="action-title">{{ card.title }}</div>
-              <div class="action-description">{{ card.description }}</div>
-              <div class="action-arrow">
-                <q-icon name="arrow_forward" size="20px" />
-              </div>
-            </q-card-section>
-          </q-card>
-        </div>
-      </div>
-    </div>
-
-    <!-- Loading State -->
-    <transition name="fade">
-      <div v-if="loading" class="loading-overlay">
-        <div class="loading-content">
-          <div class="loading-spinner">
-            <q-spinner-cube color="primary" size="60px" />
-          </div>
-          <div class="loading-text">ডেটা লোড হচ্ছে...</div>
-        </div>
-      </div>
-    </transition>
   </q-page>
 </template>
 
@@ -435,7 +485,7 @@ const stats = ref({
   verifiedMembers: 0,
   newMembers: 0,
   growthRate: 0,
-  activeRate: 0
+  activeRate: 0,
 });
 
 // Animated stats for counting effect
@@ -447,7 +497,7 @@ const animatedStats = ref({
   totalDistricts: 0,
   totalDivisions: 0,
   totalCircles: 0,
-  verifiedMembers: 0
+  verifiedMembers: 0,
 });
 
 // Chart state
@@ -457,93 +507,77 @@ const animatedBars = ref([]);
 
 // Enhanced action cards
 const actionCards = ref([
-  { 
-    title: "সদস্য তালিকা", 
-    icon: "people", 
+  {
+    title: "সদস্য তালিকা",
+    icon: "people",
     route: "/members",
     description: "সকল সদস্যদের দেখুন",
-    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
-  { 
-    title: "নতুন সদস্য যোগ করুন", 
-    icon: "person_add", 
+  {
+    title: "নতুন সদস্য যোগ করুন",
+    icon: "person_add",
     route: "/members/create",
     description: "নতুন সদস্য নিবন্ধন",
-    gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+    gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
   },
-  { 
-    title: "রিপোর্ট", 
-    icon: "assessment", 
+  {
+    title: "রিপোর্ট",
+    icon: "assessment",
     route: "/reports",
     description: "বিস্তারিত রিপোর্ট দেখুন",
-    gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+    gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
   },
-  { 
-    title: "কমিশনারেট", 
-    icon: "business", 
+  {
+    title: "কমিশনারেট",
+    icon: "business",
     route: "/commissionerates",
     description: "কমিশনারেট ব্যবস্থাপনা",
-    gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"
+    gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
   },
-  { 
-    title: "জেলা", 
-    icon: "map", 
-    route: "/districts",
-    description: "জেলা ব্যবস্থাপনা",
-    gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
-  },
-  { 
-    title: "বিভাগ", 
-    icon: "account_tree", 
-    route: "/divisions",
-    description: "বিভাগ ব্যবস্থাপনা",
-    gradient: "linear-gradient(135deg, #30cfd0 0%, #330867 100%)"
-  },
-  { 
-    title: "সার্কেল", 
-    icon: "workspaces", 
-    route: "/circles",
-    description: "সার্কেল ব্যবস্থাপনা",
-    gradient: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
-  },
-  { 
-    title: "সেটিংস", 
-    icon: "settings", 
+  {
+    title: "সেটিংস",
+    icon: "settings",
     route: "/settings",
     description: "সিস্টেম কনফিগারেশন",
-    gradient: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
-  }
+    gradient: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+  },
 ]);
 
 // Computed properties
 const verificationPercentage = computed(() => {
   if (stats.value.totalMembers === 0) return 0;
-  return Math.round((stats.value.verifiedMembers / stats.value.totalMembers) * 100);
+  return Math.round(
+    (stats.value.verifiedMembers / stats.value.totalMembers) * 100
+  );
 });
 
 // Distribution data for pie chart
 const distributionData = ref([
-  { label: 'ঢাকা', value: 450, color: '#3b82f6' },
-  { label: 'চট্টগ্রাম', value: 320, color: '#8b5cf6' },
-  { label: 'রাজশাহী', value: 180, color: '#ef4444' },
-  { label: 'খুলনা', value: 150, color: '#f59e0b' },
-  { label: 'অন্যান্য', value: 147, color: '#10b981' }
+  { label: "ঢাকা", value: 450, color: "#3b82f6" },
+  { label: "চট্টগ্রাম", value: 320, color: "#8b5cf6" },
+  { label: "রাজশাহী", value: 180, color: "#ef4444" },
+  { label: "খুলনা", value: 150, color: "#f59e0b" },
+  { label: "অন্যান্য", value: 147, color: "#10b981" },
 ]);
 
 const circumference = 2 * Math.PI * 80;
 
 const pieSegments = computed(() => {
-  const total = distributionData.value.reduce((sum, item) => sum + item.value, 0);
+  const total = distributionData.value.reduce(
+    (sum, item) => sum + item.value,
+    0
+  );
   let currentOffset = 0;
-  
-  return distributionData.value.map(item => {
+
+  return distributionData.value.map((item) => {
     const percentage = item.value / total;
     const dashArray = percentage * circumference;
     const segment = {
       ...item,
       dashArray,
       dashOffset: -currentOffset,
-      percentage: (percentage * 100).toFixed(1)
+      percentage: (percentage * 100).toFixed(1),
     };
     currentOffset += dashArray;
     return segment;
@@ -554,17 +588,17 @@ const pieSegments = computed(() => {
 const barChartData = computed(() => {
   const maxValue = Math.max(stats.value.totalRO, stats.value.totalARO, 1);
   return [
-    { 
-      label: 'RO', 
-      value: stats.value.totalRO, 
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
-      percentage: (stats.value.totalRO / maxValue) * 100 
+    {
+      label: "RO",
+      value: stats.value.totalRO,
+      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      percentage: (stats.value.totalRO / maxValue) * 100,
     },
-    { 
-      label: 'ARO', 
-      value: stats.value.totalARO, 
-      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', 
-      percentage: (stats.value.totalARO / maxValue) * 100 
+    {
+      label: "ARO",
+      value: stats.value.totalARO,
+      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      percentage: (stats.value.totalARO / maxValue) * 100,
     },
   ];
 });
@@ -574,33 +608,46 @@ const fetchDashboardData = async () => {
   loading.value = true;
   try {
     // Fetch total members count
-    const membersResponse = await api.get('/v1/users?verified=true&limit=1');
+    const membersResponse = await api.get("/v1/users?verified=true&limit=1");
     const totalMembers = membersResponse.data.meta?.pagination?.total || 0;
-    
+
     // Fetch RO count
-    const roResponse = await api.get('/v1/users?verified=true&search=role:RO&limit=1');
+    const roResponse = await api.get(
+      "/v1/users?verified=true&search=role:RO&limit=1"
+    );
     const totalRO = roResponse.data.meta?.pagination?.total || 0;
-    
+
     // Fetch ARO count
-    const aroResponse = await api.get('/v1/users?verified=true&search=role:ARO&limit=1');
+    const aroResponse = await api.get(
+      "/v1/users?verified=true&search=role:ARO&limit=1"
+    );
     const totalARO = aroResponse.data.meta?.pagination?.total || 0;
-    
+
     // Fetch commissionerate count
-    const commissionerateResponse = await api.get('/v1/categories?search=type:commissionerate&limit=1');
-    const totalCommissionerates = commissionerateResponse.data.meta?.pagination?.total || 0;
-    
+    const commissionerateResponse = await api.get(
+      "/v1/categories?search=type:commissionerate&limit=1"
+    );
+    const totalCommissionerates =
+      commissionerateResponse.data.meta?.pagination?.total || 0;
+
     // Fetch district count
-    const districtResponse = await api.get('/v1/categories?search=type:district&limit=1');
+    const districtResponse = await api.get(
+      "/v1/categories?search=type:district&limit=1"
+    );
     const totalDistricts = districtResponse.data.meta?.pagination?.total || 0;
-    
+
     // Fetch division count
-    const divisionResponse = await api.get('/v1/categories?search=type:division&limit=1');
+    const divisionResponse = await api.get(
+      "/v1/categories?search=type:division&limit=1"
+    );
     const totalDivisions = divisionResponse.data.meta?.pagination?.total || 0;
-    
+
     // Fetch circle count
-    const circleResponse = await api.get('/v1/categories?search=type:circle&limit=1');
+    const circleResponse = await api.get(
+      "/v1/categories?search=type:circle&limit=1"
+    );
     const totalCircles = circleResponse.data.meta?.pagination?.total || 0;
-    
+
     // Update stats
     stats.value = {
       totalMembers,
@@ -613,23 +660,15 @@ const fetchDashboardData = async () => {
       verifiedMembers: totalMembers, // Assuming all fetched members are verified
       newMembers: Math.round(totalMembers * 0.036), // 3.6% estimate
       growthRate: 12.5,
-      activeRate: 94.6
+      activeRate: 94.6,
     };
-    
+
     // Animate counting
     animateNumbers();
     animateBars();
-    
-    $q.notify({
-      type: 'positive',
-      message: 'ড্যাশবোর্ড সফলভাবে লোড হয়েছে',
-      timeout: 1500,
-      position: 'top'
-    });
-    
   } catch (error) {
-    console.error('Dashboard load error:', error);
-    
+    console.error("Dashboard load error:", error);
+
     // Fallback demo data
     stats.value = {
       totalMembers: 1247,
@@ -642,17 +681,17 @@ const fetchDashboardData = async () => {
       verifiedMembers: 1180,
       newMembers: 45,
       growthRate: 12.5,
-      activeRate: 94.6
+      activeRate: 94.6,
     };
-    
+
     animateNumbers();
     animateBars();
-    
+
     $q.notify({
-      type: 'warning',
-      message: 'ডেমো ডেটা দেখানো হচ্ছে',
-      caption: 'API সংযোগ ব্যর্থ হয়েছে',
-      timeout: 2500
+      type: "warning",
+      message: "ডেমো ডেটা দেখানো হচ্ছে",
+      caption: "API সংযোগ ব্যর্থ হয়েছে",
+      timeout: 2500,
     });
   } finally {
     loading.value = false;
@@ -663,24 +702,26 @@ const animateNumbers = () => {
   const duration = 1500;
   const steps = 60;
   const interval = duration / steps;
-  
+
   let currentStep = 0;
-  
+
   const timer = setInterval(() => {
     currentStep++;
     const progress = currentStep / steps;
-    
+
     animatedStats.value = {
       totalMembers: Math.round(stats.value.totalMembers * progress),
       totalRO: Math.round(stats.value.totalRO * progress),
       totalARO: Math.round(stats.value.totalARO * progress),
-      totalCommissionerates: Math.round(stats.value.totalCommissionerates * progress),
+      totalCommissionerates: Math.round(
+        stats.value.totalCommissionerates * progress
+      ),
       totalDistricts: Math.round(stats.value.totalDistricts * progress),
       totalDivisions: Math.round(stats.value.totalDivisions * progress),
       totalCircles: Math.round(stats.value.totalCircles * progress),
-      verifiedMembers: Math.round(stats.value.verifiedMembers * progress)
+      verifiedMembers: Math.round(stats.value.verifiedMembers * progress),
     };
-    
+
     if (currentStep >= steps) {
       clearInterval(timer);
       animatedStats.value = { ...stats.value };
@@ -715,11 +756,11 @@ const getCurrentGreeting = () => {
 
 const getCurrentDate = () => {
   const date = new Date();
-  return date.toLocaleDateString('bn-BD', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  return date.toLocaleDateString("bn-BD", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 };
 
@@ -779,7 +820,8 @@ onMounted(() => {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   33% {
@@ -825,19 +867,27 @@ onMounted(() => {
 }
 
 .welcome-header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
   animation: rotate 20s linear infinite;
 }
 
 @keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .welcome-content {
@@ -885,7 +935,7 @@ onMounted(() => {
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .welcome-subtitle {
@@ -1071,14 +1121,30 @@ onMounted(() => {
   opacity: 1;
 }
 
-.members-glow { background: linear-gradient(90deg, #667eea, #764ba2); }
-.ro-glow { background: linear-gradient(90deg, #f093fb, #f5576c); }
-.aro-glow { background: linear-gradient(90deg, #4facfe, #00f2fe); }
-.verified-glow { background: linear-gradient(90deg, #43e97b, #38f9d7); }
-.commissionerate-glow { background: linear-gradient(90deg, #fa709a, #fee140); }
-.district-glow { background: linear-gradient(90deg, #30cfd0, #330867); }
-.division-glow { background: linear-gradient(90deg, #a8edea, #fed6e3); }
-.circle-glow { background: linear-gradient(90deg, #ff9a9e, #fecfef); }
+.members-glow {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+.ro-glow {
+  background: linear-gradient(90deg, #f093fb, #f5576c);
+}
+.aro-glow {
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+}
+.verified-glow {
+  background: linear-gradient(90deg, #43e97b, #38f9d7);
+}
+.commissionerate-glow {
+  background: linear-gradient(90deg, #fa709a, #fee140);
+}
+.district-glow {
+  background: linear-gradient(90deg, #30cfd0, #330867);
+}
+.division-glow {
+  background: linear-gradient(90deg, #a8edea, #fed6e3);
+}
+.circle-glow {
+  background: linear-gradient(90deg, #ff9a9e, #fecfef);
+}
 
 /* Charts Section */
 .charts-section {
@@ -1176,14 +1242,25 @@ onMounted(() => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
   animation: shine 3s infinite;
 }
 
 @keyframes shine {
-  0% { left: -100%; }
-  50% { left: 100%; }
-  100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 .bar:hover {
@@ -1201,11 +1278,11 @@ onMounted(() => {
   font-size: 13px;
   white-space: nowrap;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .bar-hover-tooltip::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -1231,7 +1308,7 @@ onMounted(() => {
 .pie-svg {
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
 }
 
 .pie-segment {
@@ -1283,7 +1360,7 @@ onMounted(() => {
   height: 18px;
   border-radius: 6px;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .legend-text {
@@ -1331,7 +1408,7 @@ onMounted(() => {
   background: white;
   padding: 16px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .growth-info {
@@ -1397,13 +1474,17 @@ onMounted(() => {
 }
 
 .action-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -1436,7 +1517,7 @@ onMounted(() => {
   justify-content: center;
   margin-bottom: 16px;
   color: white;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
 }
@@ -1445,7 +1526,7 @@ onMounted(() => {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 18px;
   animation: pulse 2s infinite;
 }
