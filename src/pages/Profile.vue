@@ -1,245 +1,351 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-page-container>
-      <q-page class="q-pa-md bg-grey-1">
-        <q-card flat class="bg-indigo-8 text-white q-mb-md rounded-borders-md">
-          <q-card-section>
-            <div class="text-h4">
-              <q-icon name="account_circle" class="q-mr-sm" />
-              প্রোফাইল
-            </div>
-            <div class="text-subtitle1">আপনার ব্যক্তিগত এবং প্রশাসনিক তথ্য</div>
-          </q-card-section>
-        </q-card>
+      <q-page class="q-pa-lg bg-grey-2">
+        <!-- Page Header -->
+        <div class="row items-center justify-between q-mb-xl">
+          <div>
+            <div class="text-h4 text-weight-bold text-indigo-9">প্রোফাইল</div>
+            <div class="text-subtitle1 text-grey-7">আপনার ব্যক্তিগত এবং প্রশাসনিক তথ্য</div>
+          </div>
+        </div>
 
-        <div class="row q-col-gutter-md">
-          
-          <div class="col-md-4 col-sm-12 col-xs-12">
-            <q-card class="shadow-6 rounded-borders-md">
-              <q-card-section class="bg-teal-1">
-                <div class="text-h6 text-teal-8 text-center">
+        <!-- Main Content -->
+        <div class="row q-col-gutter-xl">
+          <!-- Left Side - Profile Picture -->
+          <div class="col-md-4 col-sm-12">
+            <q-card class="shadow-5 rounded-borders" style="border-radius: 16px;">
+              <q-card-section class="bg-indigo-8 text-white">
+                <div class="text-h6 text-center">
                   <q-icon name="photo" class="q-mr-sm" />
                   প্রোফাইল ছবি
                 </div>
               </q-card-section>
-              <q-card-section>
-                <div class="flex flex-center q-mt-sm">
-                  <q-avatar size="200px" class="profile-avatar shadow-1">
+              
+              <q-card-section class="text-center q-pa-xl">
+                <!-- Clickable Profile Picture -->
+                <div class="profile-image-container q-mb-lg" @click="triggerPhotoUpload">
+                  <q-avatar size="200px" class="profile-avatar">
                     <img 
                       v-if="user.photo || photoPreview" 
-                      :src="photoPreview || `${baseUrl}/storage/${user.photo}`" 
-                      alt=""
+                      :src="photoPreview || `${baseUrl}${user.photo}`" 
+                      alt="Profile"
+                      class="profile-img"
                     >
-                    <q-icon v-else name="person" size="90px" color="grey-6" />
+                    <div v-else class="profile-placeholder">
+                      <q-icon name="person" size="90px" color="grey-6" />
+                    </div>
+                    
+                    <!-- Hover Overlay -->
+                    <div class="profile-overlay">
+                      <q-icon name="camera_alt" size="40px" />
+                      <div class="text-subtitle2 q-mt-sm">ছবি পরিবর্তন করুন</div>
+                    </div>
                   </q-avatar>
+                  
+                  <!-- Upload Status Badge -->
+                  <div v-if="user.verified_at" class="verified-badge">
+                    <q-icon name="verified" size="16px" />
+                  </div>
                 </div>
 
-                <div class="q-mt-md">
-                  <q-file
-                    v-model="photoFile"
-                    label="ছবি নির্বাচন করুন"
-                    accept=".jpg,.jpeg,.png"
-                    outlined
-                    dense
-                    color="teal"
-                    @update:model-value="handlePhotoSelect"
-                  >
-                    <template v-slot:prepend>
-                      <q-icon name="attach_file" />
-                    </template>
-                  </q-file>
+                <!-- Hidden File Input -->
+                <input
+                  type="file"
+                  ref="fileInput"
+                  style="display: none"
+                  accept=".jpg,.jpeg,.png"
+                  @change="handlePhotoSelect"
+                />
 
-                  <q-btn
-                    v-if="photoPreview"
-                    label="ছবি আপলোড করুন"
-                    color="teal-7"
-                    class="full-width text-white q-mt-sm"
-                    :loading="uploadingPhoto"
-                    @click="uploadPhoto"
-                    icon="cloud_upload"
+                <!-- Upload Actions -->
+                <div v-if="photoPreview" class="upload-actions">
+                  <q-linear-progress 
+                    v-if="uploadingPhoto" 
+                    indeterminate 
+                    color="indigo-7" 
+                    class="q-mb-md"
                   />
+                  
+                  <div class="row q-col-gutter-sm">
+                    <div class="col-6">
+                      <q-btn
+                        label="আপলোড"
+                        color="indigo-7"
+                        class="full-width text-white"
+                        :loading="uploadingPhoto"
+                        @click="uploadPhoto"
+                        icon="cloud_upload"
+                      />
+                    </div>
+                    <div class="col-6">
+                      <q-btn
+                        label="বাতিল"
+                        color="negative"
+                        outline
+                        class="full-width"
+                        @click="cancelUpload"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- User Quick Info -->
+                <div class="q-mt-xl">
+                  <div class="text-h6 text-weight-bold text-grey-9">{{ user.name_bangla || user.name }}</div>
+                  <div class="text-subtitle1 text-indigo-7 q-mb-md">{{ getDesignationLabel(user.designation) }}</div>
+                  
+                  <div class="text-left q-gutter-y-md">
+                    <div class="row items-center">
+                      <q-icon name="email" size="sm" color="grey-6" class="q-mr-sm" />
+                      <div class="text-caption text-grey-7">{{ user.email }}</div>
+                    </div>
+                    <div class="row items-center">
+                      <q-icon name="phone" size="sm" color="grey-6" class="q-mr-sm" />
+                      <div class="text-caption text-grey-7">{{ user.mobile || 'N/A' }}</div>
+                    </div>
+                    <div class="row items-center">
+                      <q-icon name="calendar_today" size="sm" color="grey-6" class="q-mr-sm" />
+                      <div class="text-caption text-grey-7">{{ formatDate(user.created_at) }}</div>
+                    </div>
+                  </div>
                 </div>
               </q-card-section>
             </q-card>
           </div>
 
-          <div class="col-md-8 col-sm-12 col-xs-12">
-            <q-card class="shadow-6 rounded-borders-md">
+          <!-- Right Side - Profile Information -->
+          <div class="col-md-8 col-sm-12">
+            <q-card class="shadow-5 rounded-borders" style="border-radius: 16px;">
+              <!-- Tabs -->
               <q-tabs
                 v-model="tab"
                 dense
-                class="text-grey-7"
+                class="text-grey-7 q-mt-sm"
                 active-color="indigo-8"
                 indicator-color="indigo-8"
-                align="justify"
+                align="left"
                 narrow-indicator
               >
-                <q-tab name="personal" icon="person_outline" label="ব্যক্তিগত তথ্য" />
-                <q-tab name="admin" icon="account_tree" label="প্রশাসনিক তথ্য" />
+                <q-tab name="personal" icon="person" label="ব্যক্তিগত তথ্য" />
+                <q-tab name="admin" icon="account_balance" label="প্রশাসনিক তথ্য" />
               </q-tabs>
 
               <q-separator />
 
-              <q-tab-panels v-model="tab" animated>
-                
-                <q-tab-panel name="personal" class="q-pa-md">
-                  <q-form
-                    @submit.prevent="updateProfile"
-                    class="q-gutter-md"
-                  >
-                    <div class="text-h6 text-indigo-8 q-mb-md">আপনার ব্যক্তিগত বিবরণ</div>
-                    
-                    <div class="row q-col-gutter-md">
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+              <!-- Tab Panels -->
+              <q-tab-panels v-model="tab" animated class="q-pa-none">
+                <!-- Personal Information -->
+                <q-tab-panel name="personal">
+                  <div class="q-pa-lg">
+                    <div class="section-header q-mb-lg">
+                      <q-icon name="person" size="24px" color="indigo-7" class="q-mr-sm" />
+                      <span class="text-h5 text-weight-bold text-grey-9">ব্যক্তিগত তথ্য</span>
+                    </div>
+
+                    <div class="form-grid">
+                      <!-- Row 1: Names -->
+                      <div class="form-section">
+                        <div class="form-label">নাম (ইংরেজি)</div>
                         <q-input
                           outlined
                           v-model="editForm.name"
-                          label="নাম (ইংরেজি)"
                           readonly
-                          bg-color="grey-2"
+                          dense
+                          bg-color="grey-3"
                         />
                       </div>
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+
+                      <div class="form-section">
+                        <div class="form-label">নাম (বাংলা)</div>
                         <q-input
                           outlined
                           v-model="editForm.name_bangla"
-                          label="নাম (বাংলা)"
                           readonly
-                          bg-color="grey-2"
+                          dense
+                          bg-color="grey-3"
                         />
                       </div>
-                    </div>
 
-                    <div class="row q-col-gutter-md">
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+                      <!-- Row 2: Contact -->
+                      <div class="form-section">
+                        <div class="form-label">ইমেইল</div>
                         <q-input
                           outlined
                           v-model="editForm.email"
-                          label="ইমেইল"
                           type="email"
                           readonly
-                          bg-color="grey-2"
+                          dense
+                          bg-color="grey-3"
                         />
                       </div>
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+
+                      <div class="form-section">
+                        <div class="form-label">মোবাইল নম্বর</div>
                         <q-input
                           outlined
                           v-model="editForm.mobile"
-                          label="মোবাইল নম্বর"
                           mask="###########"
                           readonly
-                          bg-color="grey-2"
+                          dense
+                          bg-color="grey-3"
                         />
                       </div>
-                    </div>
 
-                    <div class="row q-col-gutter-md">
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+                      <!-- Row 3: Designation -->
+                      <div class="form-section">
+                        <div class="form-label">পদবি</div>
                         <q-select
                           outlined
                           v-model="editForm.designation"
-                          label="পদবি"
                           :options="designationOptions"
                           option-value="value"
                           option-label="label"
                           emit-value
                           map-options
+                          dense
                           color="indigo"
+                          class="full-width"
                         />
                       </div>
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+
+                      <div class="form-section">
+                        <div class="form-label">ঠিকানা</div>
                         <q-input
                           outlined
                           v-model="editForm.address"
-                          label="ঠিকানা"
+                          dense
                           color="indigo"
+                          autogrow
+                          class="full-width"
                         />
                       </div>
-                    </div>
 
-                    <div class="row q-col-gutter-md">
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+                      <!-- Row 4: Dates -->
+                      <div class="form-section">
+                        <div class="form-label">জন্ম তারিখ</div>
                         <q-input
                           outlined
                           :model-value="formatDate(user.dob)"
-                          label="জন্ম তারিখ"
                           readonly
-                          bg-color="grey-2"
+                          dense
+                          bg-color="grey-3"
                         />
                       </div>
-                      <div class="col-md-6 col-sm-12 col-xs-12">
+
+                      <div class="form-section">
+                        <div class="form-label">যাচাইকরণ তারিখ</div>
                         <q-input
                           outlined
                           :model-value="formatDate(user.verified_at)"
-                          label="যাচাইকরণ তারিখ"
                           readonly
-                          bg-color="grey-2"
+                          dense
+                          bg-color="grey-3"
                         />
                       </div>
                     </div>
 
-                    <div class="q-mt-lg text-right">
+                    <!-- Save Button at Bottom of Personal Info -->
+                    <div class="text-right q-mt-xl">
                       <q-btn
-                        label="আপডেট করুন"
-                        type="submit"
-                        color="indigo-8"
-                        size="lg"
+                        color="indigo-7"
                         class="text-white"
-                        :loading="updatingProfile"
                         icon="save"
+                        label="সংরক্ষণ করুন"
+                        :loading="updatingProfile"
+                        @click="updateProfile"
                       />
-                    </div>
-                  </q-form>
-                </q-tab-panel>
-
-                <q-tab-panel name="admin" class="q-pa-md">
-                  <div class="text-h6 text-teal-8 q-mb-md">প্রশাসনিক তথ্য (পরিবর্তনযোগ্য নয়)</div>
-
-                  <div class="q-gutter-md">
-                    <div class="row q-col-gutter-md">
-                      <div class="col-md-6 col-sm-12 col-xs-12">
-                        <q-input
-                          outlined
-                          :model-value="user.commissionerate?.data?.name || 'N/A'"
-                          label="কমিশনারেট"
-                          readonly
-                          bg-color="grey-2"
-                        />
-                      </div>
-                      <div class="col-md-6 col-sm-12 col-xs-12">
-                        <q-input
-                          outlined
-                          :model-value="user.division?.data?.name || 'N/A'"
-                          label="ডিভিশন"
-                          readonly
-                          bg-color="grey-2"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="row q-col-gutter-md">
-                      <div class="col-md-6 col-sm-12 col-xs-12">
-                        <q-input
-                          outlined
-                          :model-value="user.circle?.data?.name || 'N/A'"
-                          label="সার্কেল"
-                          readonly
-                          bg-color="grey-2"
-                        />
-                      </div>
-                      <div class="col-md-6 col-sm-12 col-xs-12">
-                        <q-input
-                          outlined
-                          :model-value="user.district?.data?.name || 'N/A'"
-                          label="জেলা"
-                          readonly
-                          bg-color="grey-2"
-                        />
-                      </div>
                     </div>
                   </div>
                 </q-tab-panel>
 
+                <!-- Administrative Information -->
+                <q-tab-panel name="admin">
+                  <div class="q-pa-lg">
+                    <div class="section-header q-mb-lg">
+                      <q-icon name="account_balance" size="24px" color="indigo-7" class="q-mr-sm" />
+                      <span class="text-h5 text-weight-bold text-grey-9">প্রশাসনিক তথ্য</span>
+                      <div class="text-caption text-grey-7 q-mt-xs">এই তথ্যগুলি পরিবর্তনযোগ্য নয়</div>
+                    </div>
+
+                    <div class="admin-grid">
+                      <!-- Administrative Hierarchy -->
+                      <div class="admin-section">
+                        <div class="admin-section-header">
+                          <q-icon name="business" size="20px" color="indigo-6" class="q-mr-sm" />
+                          <span class="text-subtitle1 text-weight-bold">প্রশাসনিক কাঠামো</span>
+                        </div>
+                        
+                        <div class="hierarchy-grid">
+                          <div class="hierarchy-item">
+                            <div class="hierarchy-label">
+                              <q-icon name="apartment" size="sm" class="q-mr-xs" />
+                              কমিশনারেট
+                            </div>
+                            <div class="hierarchy-value">{{ user.commissionerate?.data?.name || 'N/A' }}</div>
+                          </div>
+                          
+                          <div class="hierarchy-item">
+                            <div class="hierarchy-label">
+                              <q-icon name="account_tree" size="sm" class="q-mr-xs" />
+                              ডিভিশন
+                            </div>
+                            <div class="hierarchy-value">{{ user.division?.data?.name || 'N/A' }}</div>
+                          </div>
+                          
+                          <div class="hierarchy-item">
+                            <div class="hierarchy-label">
+                              <q-icon name="workspaces" size="sm" class="q-mr-xs" />
+                              সার্কেল
+                            </div>
+                            <div class="hierarchy-value">{{ user.circle?.data?.name || 'N/A' }}</div>
+                          </div>
+                          
+                          <div class="hierarchy-item">
+                            <div class="hierarchy-label">
+                              <q-icon name="map" size="sm" class="q-mr-xs" />
+                              জেলা
+                            </div>
+                            <div class="hierarchy-value">{{ user.district?.data?.name || 'N/A' }}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Account Information -->
+                      <div class="admin-section">
+                        <div class="admin-section-header">
+                          <q-icon name="info" size="20px" color="indigo-6" class="q-mr-sm" />
+                          <span class="text-subtitle1 text-weight-bold">অ্যাকাউন্ট তথ্য</span>
+                        </div>
+                        
+                        <div class="account-grid">
+                          
+                          <div class="account-item">
+                            <div class="account-label">অ্যাকাউন্ট স্ট্যাটাস</div>
+                            <div class="account-value">
+                              <q-badge 
+                                :color="user.verified_at ? 'green' : 'orange'" 
+                                class="status-badge"
+                              >
+                                {{ user.verified_at ? 'যাচাইকৃত' : 'অপেক্ষমান' }}
+                              </q-badge>
+                            </div>
+                          </div>
+                          
+                          <div class="account-item">
+                            <div class="account-label">রেজিস্ট্রেশন তারিখ</div>
+                            <div class="account-value">{{ formatDate(user.created_at) }}</div>
+                          </div>
+                          
+                          <div class="account-item">
+                            <div class="account-label">সর্বশেষ আপডেট</div>
+                            <div class="account-value">{{ formatDate(user.updated_at) }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </q-tab-panel>
               </q-tab-panels>
             </q-card>
           </div>
@@ -255,12 +361,10 @@ import { useQuasar } from "quasar";
 import { api } from "boot/axios";
 
 const $q = useQuasar();
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const baseUrl = process.env.DEV_WEB_URL;
 
-// New ref for handling tabs
+// Refs
 const tab = ref("personal");
-
-// User data
 const user = ref({
   name: "",
   name_bangla: "",
@@ -275,9 +379,11 @@ const user = ref({
   division: null,
   circle: null,
   district: null,
+  created_at: "",
+  updated_at: "",
+  id: null
 });
 
-// Edit form
 const editForm = ref({
   name: "",
   name_bangla: "",
@@ -287,24 +393,18 @@ const editForm = ref({
   address: "",
 });
 
-// Designation options
 const designationOptions = [
-  { label: "RO (Revenue Officer)", value: "RO", icon: "badge", color: "blue" },
-  {
-    label: "ARO (Assistant Revenue Officer)",
-    value: "ARO",
-    icon: "assistant",
-    color: "green",
-  },
+  { label: "RO (Revenue Officer)", value: "RO" },
+  { label: "ARO (Assistant Revenue Officer)", value: "ARO" },
 ];
 
-// Photo upload
 const photoFile = ref(null);
 const photoPreview = ref(null);
 const uploadingPhoto = ref(false);
 const updatingProfile = ref(false);
+const fileInput = ref(null);
 
-// Fetch user profile
+// Methods
 const fetchUserProfile = async () => {
   try {
     const { data } = await api.get("/v1/profile", {
@@ -313,7 +413,7 @@ const fetchUserProfile = async () => {
       },
     });
     user.value = data.data;
-    // Initialize edit form with current values
+
     editForm.value = {
       name: data.data.name,
       name_bangla: data.data.name_bangla,
@@ -331,20 +431,48 @@ const fetchUserProfile = async () => {
   }
 };
 
-// Handle photo selection
-const handlePhotoSelect = (file) => {
+const triggerPhotoUpload = () => {
+  fileInput.value.click();
+};
+
+const handlePhotoSelect = (event) => {
+  const file = event.target.files[0];
   if (file) {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!validTypes.includes(file.type)) {
+      $q.notify({
+        type: "negative",
+        message: "শুধুমাত্র JPG, JPEG, PNG ফাইল আপলোড করা যাবে",
+      });
+      return;
+    }
+    
+    if (file.size > 5 * 1024 * 1024) {
+      $q.notify({
+        type: "negative",
+        message: "ছবির সাইজ 5MB এর বেশি হতে পারবে না",
+      });
+      return;
+    }
+    
+    photoFile.value = file;
+    
     const reader = new FileReader();
     reader.onload = (e) => {
       photoPreview.value = e.target.result;
     };
     reader.readAsDataURL(file);
-  } else {
-    photoPreview.value = null;
   }
 };
 
-// Upload photo
+const cancelUpload = () => {
+  photoFile.value = null;
+  photoPreview.value = null;
+  if (fileInput.value) {
+    fileInput.value.value = '';
+  }
+};
+
 const uploadPhoto = async () => {
   if (!photoFile.value) return;
 
@@ -365,10 +493,8 @@ const uploadPhoto = async () => {
       icon: "check",
     });
 
-    // Refresh user data to show new photo
     await fetchUserProfile();
-    photoFile.value = null;
-    photoPreview.value = null;
+    cancelUpload();
   } catch (error) {
     $q.notify({
       type: "negative",
@@ -380,7 +506,6 @@ const uploadPhoto = async () => {
   }
 };
 
-// Update profile
 const updateProfile = async () => {
   try {
     updatingProfile.value = true;
@@ -416,7 +541,6 @@ const updateProfile = async () => {
   }
 };
 
-// Format date for display
 const formatDate = (dateString) => {
   if (!dateString) return "N/A";
   const date = new Date(dateString);
@@ -427,28 +551,274 @@ const formatDate = (dateString) => {
   });
 };
 
-// Initialize component
+const getDesignationLabel = (designationValue) => {
+  const found = designationOptions.find(opt => opt.value === designationValue);
+  return found ? found.label : designationValue;
+};
+
 onMounted(() => {
   fetchUserProfile();
 });
 </script>
 
 <style scoped>
+/* Profile Image Styles */
+.profile-image-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
 .profile-avatar {
-  /* Teal color border for a professional look */
-  border: 5px solid #009688; 
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+  border: 4px solid white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }
 
-.rounded-borders-md {
-  border-radius: 8px;
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
-.q-avatar {
-  border: 3px solid #e0e0e0;
-} 
-/* Ensure responsiveness on smaller screens */
-.q-tab-panel {
+.profile-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+}
+
+.profile-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.profile-image-container:hover .profile-overlay {
+  opacity: 1;
+}
+
+.profile-image-container:hover .profile-avatar {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.verified-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #10b981;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 3px solid white;
+  z-index: 2;
+}
+
+.upload-actions {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form Styles */
+.section-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.form-section {
+  margin-bottom: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Admin Information Styles */
+.admin-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.admin-section {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.hierarchy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.hierarchy-item {
+  background: white;
   padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.hierarchy-label {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.hierarchy-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.account-item {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.account-label {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.account-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.status-badge {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* Tabs Styling */
+:deep(.q-tab) {
+  padding: 12px 24px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+:deep(.q-tab--active) {
+  color: #4f46e5;
+  border-bottom: 3px solid #4f46e5;
+}
+
+:deep(.q-tabs__content) {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Card Styling */
+.q-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Save Button Styling */
+.text-right .q-btn {
+  padding: 10px 24px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.text-right .q-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hierarchy-grid,
+  .account-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 599px) {
+  .text-h4 {
+    font-size: 1.5rem;
+  }
+  
+  .text-h5 {
+    font-size: 1.25rem;
+  }
+  
+  .q-pa-lg {
+    padding: 16px;
+  }
+  
+  .profile-avatar {
+    width: 160px;
+    height: 160px;
+  }
 }
 </style>

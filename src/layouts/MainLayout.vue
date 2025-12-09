@@ -41,7 +41,9 @@
             class="action-btn"
           >
             <q-tooltip>
-              {{ $q.fullscreen.isActive ? 'Fullscreen বন্ধ করুন' : 'Fullscreen' }}
+              {{
+                $q.fullscreen.isActive ? "Fullscreen বন্ধ করুন" : "Fullscreen"
+              }}
             </q-tooltip>
           </q-btn>
 
@@ -51,7 +53,7 @@
               <img :src="employeePhotoUrl" />
               <div class="online-indicator"></div>
             </q-avatar>
-            
+
             <q-menu
               class="profile-menu"
               anchor="bottom right"
@@ -68,12 +70,19 @@
                   </q-item-section>
                   <q-item-section>
                     <q-item-label class="text-weight-bold text-body1">
-                      {{ userProfile.name || 'ব্যবহারকারী' }}
+                      {{ userProfile.name || "ব্যবহারকারী" }}
                     </q-item-label>
                     <q-item-label caption>
-                      {{ getDesignationLabel(userProfile.designation) || 'কর্মচারী' }}
+                      {{
+                        getDesignationLabel(userProfile.designation) ||
+                        "কর্মচারী"
+                      }}
                     </q-item-label>
-                    <q-item-label caption v-if="userProfile.email" class="ellipsis">
+                    <q-item-label
+                      caption
+                      v-if="userProfile.email"
+                      class="ellipsis"
+                    >
                       <q-icon name="email" size="14px" class="q-mr-xs" />
                       {{ userProfile.email }}
                     </q-item-label>
@@ -103,7 +112,12 @@
                 <q-separator v-if="userStore.getHighestRole !== 'admin'" />
 
                 <!-- Logout -->
-                <q-item clickable v-ripple @click="logout" class="menu-item logout-item">
+                <q-item
+                  clickable
+                  v-ripple
+                  @click="logout"
+                  class="menu-item logout-item"
+                >
                   <q-item-section avatar>
                     <q-icon name="logout" color="negative" />
                   </q-item-section>
@@ -134,12 +148,15 @@
           </q-avatar>
           <div class="sidebar-user-info">
             <div class="text-weight-bold text-body1">
-              {{ userProfile.name || '' }}
+              {{ userProfile.name || "" }}
             </div>
             <div class="text-caption text-blue-1">
-              {{ getDesignationLabel(userProfile.designation) || '' }}
+              {{ getDesignationLabel(userProfile.designation) || "" }}
             </div>
-            <div v-if="userProfile.email" class="text-caption text-blue-2 ellipsis q-mt-xs">
+            <div
+              v-if="userProfile.email"
+              class="text-caption text-blue-2 ellipsis q-mt-xs"
+            >
               {{ userProfile.email }}
             </div>
           </div>
@@ -152,10 +169,10 @@
       <q-scroll-area class="scroll-area">
         <q-list padding class="menu-list">
           <!-- Dashboard -->
-          <q-item 
-            to="/" 
-            exact 
-            clickable 
+          <q-item
+            to="/"
+            exact
+            clickable
             v-ripple
             class="menu-item"
             active-class="active-menu-item"
@@ -172,9 +189,9 @@
           </q-item>
 
           <!-- Member List -->
-          <q-item 
-            to="/member-list" 
-            clickable 
+          <q-item
+            to="/member-list"
+            clickable
             v-ripple
             class="menu-item"
             active-class="active-menu-item"
@@ -199,9 +216,9 @@
             :content-inset-level="0.5"
           >
             <q-list class="submenu">
-              <q-item 
-                clickable 
-                to="/my-profile" 
+              <q-item
+                clickable
+                to="/my-profile"
                 v-ripple
                 active-class="active-submenu-item"
                 class="submenu-item"
@@ -224,9 +241,9 @@
             :content-inset-level="0.5"
           >
             <q-list class="submenu">
-              <q-item 
+              <q-item
                 v-if="userStore.getHighestRole === 'admin'"
-                clickable 
+                clickable
                 to="/employees/add"
                 v-ripple
                 active-class="active-submenu-item"
@@ -239,8 +256,8 @@
                   <q-item-label>কর্মচারী যোগ করুন</q-item-label>
                 </q-item-section>
               </q-item>
-              <q-item 
-                clickable 
+              <q-item
+                clickable
                 to="/office/employees"
                 v-ripple
                 active-class="active-submenu-item"
@@ -266,8 +283,8 @@
             :content-inset-level="0.5"
           >
             <q-list class="submenu">
-              <q-item 
-                clickable 
+              <q-item
+                clickable
                 to="/offices"
                 v-ripple
                 active-class="active-submenu-item"
@@ -280,10 +297,10 @@
                   <q-item-label>অফিসের তালিকা</q-item-label>
                 </q-item-section>
               </q-item>
-              
+
               <template v-if="userStore.getHighestRole === 'admin'">
-                <q-item 
-                  clickable 
+                <q-item
+                  clickable
                   to="/designations"
                   v-ripple
                   active-class="active-submenu-item"
@@ -296,9 +313,9 @@
                     <q-item-label>পদবির তালিকা</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/salary"
                   v-ripple
                   active-class="active-submenu-item"
@@ -311,9 +328,9 @@
                     <q-item-label>বেতন স্কেল</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/trainings"
                   v-ripple
                   active-class="active-submenu-item"
@@ -326,9 +343,9 @@
                     <q-item-label>প্রশিক্ষণসমূহ</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/leave-types"
                   v-ripple
                   active-class="active-submenu-item"
@@ -341,9 +358,9 @@
                     <q-item-label>Leave Types</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/award-types"
                   v-ripple
                   active-class="active-submenu-item"
@@ -356,9 +373,9 @@
                     <q-item-label>Awards</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/punishment-types"
                   v-ripple
                   active-class="active-submenu-item"
@@ -386,8 +403,8 @@
           >
             <q-list class="submenu">
               <template v-if="userStore.getHighestRole === 'admin'">
-                <q-item 
-                  clickable 
+                <q-item
+                  clickable
                   to="/products"
                   v-ripple
                   active-class="active-submenu-item"
@@ -400,9 +417,9 @@
                     <q-item-label>পণ্যসমূহ</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/add-stock"
                   v-ripple
                   active-class="active-submenu-item"
@@ -415,9 +432,9 @@
                     <q-item-label>স্টক যোগ করুন</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/stocks"
                   v-ripple
                   active-class="active-submenu-item"
@@ -430,9 +447,9 @@
                     <q-item-label>স্টকসমূহ</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/add-allocation"
                   v-ripple
                   active-class="active-submenu-item"
@@ -446,9 +463,9 @@
                   </q-item-section>
                 </q-item>
               </template>
-              
-              <q-item 
-                clickable 
+
+              <q-item
+                clickable
                 to="/allocations"
                 v-ripple
                 active-class="active-submenu-item"
@@ -474,8 +491,8 @@
           >
             <q-list class="submenu">
               <template v-if="userStore.getHighestRole === 'admin'">
-                <q-item 
-                  clickable 
+                <q-item
+                  clickable
                   to="/notices/add"
                   v-ripple
                   active-class="active-submenu-item"
@@ -488,9 +505,9 @@
                     <q-item-label>নোটিশ যোগ করুন</q-item-label>
                   </q-item-section>
                 </q-item>
-                
-                <q-item 
-                  clickable 
+
+                <q-item
+                  clickable
                   to="/notices"
                   v-ripple
                   active-class="active-submenu-item"
@@ -504,10 +521,10 @@
                   </q-item-section>
                 </q-item>
               </template>
-              
-              <q-item 
+
+              <q-item
                 v-if="userStore.getHighestRole !== 'admin'"
-                clickable 
+                clickable
                 to="/notices/view"
                 v-ripple
                 active-class="active-submenu-item"
@@ -533,8 +550,8 @@
             :content-inset-level="0.5"
           >
             <q-list class="submenu">
-              <q-item 
-                clickable 
+              <q-item
+                clickable
                 to="/reports/field-requisition"
                 v-ripple
                 active-class="active-submenu-item"
@@ -547,10 +564,10 @@
                   <q-item-label>ফিল্ড রিকুইজিশন</q-item-label>
                 </q-item-section>
               </q-item>
-              
-              <q-item 
+
+              <q-item
                 v-if="userStore.getHighestRole === 'admin'"
-                clickable 
+                clickable
                 to="/reports/stock-list"
                 v-ripple
                 active-class="active-submenu-item"
@@ -563,9 +580,9 @@
                   <q-item-label>স্টকের তালিকা</q-item-label>
                 </q-item-section>
               </q-item>
-              
-              <q-item 
-                clickable 
+
+              <q-item
+                clickable
                 to="/reports/employee-list"
                 v-ripple
                 active-class="active-submenu-item"
@@ -578,9 +595,9 @@
                   <q-item-label>কর্মচারীর তালিকা</q-item-label>
                 </q-item-section>
               </q-item>
-              
-              <q-item 
-                clickable 
+
+              <q-item
+                clickable
                 to="/reports/salary-details"
                 v-ripple
                 active-class="active-submenu-item"
@@ -634,24 +651,23 @@ const employeeStore = useEmployeeStore();
 const $q = useQuasar();
 const router = useRouter();
 
-// User Profile Data
+// User Profile Data - YOUR PROFILE COMPONENT STYLE
 const userProfile = ref({
   id: null,
-  name: '',
-  name_bangla: '',
-  email: '',
-  mobile: '',
-  designation: '',
-  address: '',
+  name: "",
+  name_bangla: "",
+  email: "",
+  mobile: "",
+  designation: "",
+  address: "",
   photo: null,
+  dob: "",
+  verified_at: "",
   commissionerate: null,
   division: null,
   circle: null,
   district: null,
 });
-
-// Current year for footer
-const currentYear = computed(() => new Date().getFullYear());
 
 // Drawer control
 const leftDrawerOpen = ref(false);
@@ -659,7 +675,7 @@ const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 
-// Fetch User Profile - SAME AS YOUR PROFILE COMPONENT
+// Fetch User Profile - EXACTLY SAME AS YOUR PROFILE COMPONENT
 const fetchUserProfile = async () => {
   try {
     const { data } = await api.get("/v1/profile", {
@@ -667,18 +683,32 @@ const fetchUserProfile = async () => {
         include: "commissionerate,division,circle,district",
       },
     });
-    
+
+    // Store the complete response data
+    userProfile.value = data.data;
+
+    console.log("PROFILE RESPONSE in MainLayout:", data.data);
+
+    // Your existing data mapping
     userProfile.value = {
       ...userProfile.value,
-      ...data.data,
+      id: data.data.id,
+      name: data.data.name || "",
+      name_bangla: data.data.name_bangla || "",
+      email: data.data.email || "",
+      mobile: data.data.mobile || "",
+      designation: data.data.designation || "",
+      address: data.data.address || "",
+      photo: data.data.photo || null,
+      dob: data.data.dob || "",
+      verified_at: data.data.verified_at || "",
       commissionerate: data.data.commissionerate || null,
       division: data.data.division || null,
       circle: data.data.circle || null,
       district: data.data.district || null,
     };
-    
   } catch (error) {
-    console.error("Failed to load user profile:", error);
+    console.error("Failed to load user profile in MainLayout:", error);
     $q.notify({
       type: "negative",
       message: "প্রোফাইল লোড করতে ব্যর্থ হয়েছে",
@@ -687,22 +717,115 @@ const fetchUserProfile = async () => {
   }
 };
 
-// Get designation label from value
+// Get designation label - SAME AS PROFILE COMPONENT
 const getDesignationLabel = (designationValue) => {
   const designationOptions = [
-    { label: "RO (Revenue Officer)", value: "RO", icon: "badge", color: "blue" },
-    { label: "ARO (Assistant Revenue Officer)", value: "ARO", icon: "assistant", color: "green" },
+    {
+      label: "RO (Revenue Officer)",
+      value: "RO",
+      icon: "badge",
+      color: "blue",
+    },
+    {
+      label: "ARO (Assistant Revenue Officer)",
+      value: "ARO",
+      icon: "assistant",
+      color: "green",
+    },
   ];
-  
-  const found = designationOptions.find(opt => opt.value === designationValue);
+
+  const found = designationOptions.find(
+    (opt) => opt.value === designationValue
+  );
   return found ? found.label : designationValue;
 };
 
-// Helper functions to extract names safely
+// Format date for display - SAME AS PROFILE COMPONENT
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("bn-BD", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+// View Profile - Navigate to my-profile route
+const viewProfile = async () => {
+  try {
+    await router.push("/my-profile");
+  } catch (error) {
+    console.error("Error navigating to profile:", error);
+    $q.notify({
+      type: "negative",
+      message: "প্রোফাইলে যেতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+    });
+  }
+};
+
+// Logout
+const logout = async () => {
+  $q.dialog({
+    title: "লগআউট নিশ্চিতকরণ",
+    message: "আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?",
+    cancel: true,
+    persistent: true,
+    ok: {
+      label: "লগআউট",
+      color: "negative",
+      flat: true,
+    },
+    cancel: {
+      label: "বাতিল",
+      color: "primary",
+      flat: true,
+    },
+  }).onOk(async () => {
+    try {
+      userStore.logout();
+      officeStore.removeOfficeInfo();
+      employeeStore.removeEmployeeDetails();
+
+      $q.notify({
+        type: "positive",
+        message: "সফলভাবে লগআউট করা হয়েছে",
+        position: "top",
+        timeout: 1500,
+      });
+      await router.push("/login");
+    } catch (error) {
+      console.error(error);
+      $q.notify({
+        type: "negative",
+        message: "লগআউট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+        position: "top",
+      });
+    }
+  });
+};
+
+// Current year for footer
+const currentYear = computed(() => new Date().getFullYear());
+
+// Employee photo URL - UPDATED TO MATCH YOUR PROFILE COMPONENT
+const employeePhotoUrl = computed(() => {
+  if (userProfile.value.photo) {
+    // Your base URL from profile component
+    const baseUrl = process.env.DEV_WEB_URL || "https://yshr_app.dyd-govbd.com";
+    return `${baseUrl}${userProfile.value.photo}`;
+  }
+  return "https://cdn.quasar.dev/img/boy-avatar.png";
+});
+
+// Helper functions to extract names safely - UPDATED
 const getCommissionerateName = () => {
   if (!userProfile.value.commissionerate) return null;
   // Handle both object structures
-  if (userProfile.value.commissionerate.data && userProfile.value.commissionerate.data.name) {
+  if (
+    userProfile.value.commissionerate.data &&
+    userProfile.value.commissionerate.data.name
+  ) {
     return userProfile.value.commissionerate.data.name;
   }
   if (userProfile.value.commissionerate.name) {
@@ -722,6 +845,17 @@ const getDivisionName = () => {
   return null;
 };
 
+const getCircleName = () => {
+  if (!userProfile.value.circle) return null;
+  if (userProfile.value.circle.data && userProfile.value.circle.data.name) {
+    return userProfile.value.circle.data.name;
+  }
+  if (userProfile.value.circle.name) {
+    return userProfile.value.circle.name;
+  }
+  return null;
+};
+
 const getDistrictName = () => {
   if (!userProfile.value.district) return null;
   if (userProfile.value.district.data && userProfile.value.district.data.name) {
@@ -733,112 +867,26 @@ const getDistrictName = () => {
   return null;
 };
 
-// View Profile - Navigate to my-profile route
-const viewProfile = async () => {
-  try {
-    await router.push('/my-profile');
-  } catch (error) {
-    console.error("Error navigating to profile:", error);
-    $q.notify({
-      type: "negative",
-      message: "প্রোফাইলে যেতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
-    });
-  }
-};
-
-// Logout
-const logout = async () => {
-  $q.dialog({
-    title: 'লগআউট নিশ্চিতকরণ',
-    message: 'আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?',
-    cancel: true,
-    persistent: true,
-    ok: {
-      label: 'লগআউট',
-      color: 'negative',
-      flat: true
-    },
-    cancel: {
-      label: 'বাতিল',
-      color: 'primary',
-      flat: true
-    }
-  }).onOk(async () => {
-    try {
-      userStore.logout();
-      officeStore.removeOfficeInfo();
-      employeeStore.removeEmployeeDetails();
-
-      $q.notify({ 
-        type: "positive", 
-        message: "সফলভাবে লগআউট করা হয়েছে",
-        position: 'top',
-        timeout: 1500
-      });
-      await router.push("/login");
-    } catch (error) {
-      console.error(error);
-      $q.notify({ 
-        type: "negative", 
-        message: "লগআউট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
-        position: 'top'
-      });
-    }
-  });
-};
-
-// Employee photo - Fix this function
-const employeePhotoUrl = ref("https://cdn.quasar.dev/img/boy-avatar.png");
-
-const fetchEmployeePhoto = async () => {
-  try {
-    // First get employee ID from user profile
-    if (!userProfile.value.id) {
-      await fetchUserProfile();
-    }
-    
-    const employeeId = userProfile.value.id;
-    if (!employeeId) {
-      console.log("No employee ID found");
-      return;
-    }
-
-    const { data } = await api.get(
-      `/v1/files?searchJoin=and&search=owner_type:employee;owner_id:${employeeId}`
-    );
-
-    if (data.data && data.data.length > 0) {
-      employeePhotoUrl.value = `https://yshr_app.dyd-govbd.com/storage/${data.data[0].path}`;
-    } else if (userProfile.value.photo) {
-      // If no file record found but user has photo property
-      employeePhotoUrl.value = `https://yshr_app.dyd-govbd.com/storage/${userProfile.value.photo}`;
-    }
-  } catch (error) {
-    console.error("Error fetching employee photo:", error);
-  }
-};
-
-// On mounted
+// On mounted - FETCH PROFILE DATA
 onMounted(async () => {
   try {
     // Fetch user profile first
     await fetchUserProfile();
-    // Then fetch photo
-    await fetchEmployeePhoto();
+
+    // You can also fetch other initial data if needed
+    // await officeStore.fetchOfficeInfo();
+    // await categoryStore.fetchCategories();
   } catch (error) {
-    console.error("Error in mounted:", error);
+    console.error("Error in MainLayout mounted:", error);
   }
 });
 
-// Watch for profile changes to update photo
+// Watch for route changes or other events if needed
 watch(
-  () => userProfile.value,
-  (newProfile) => {
-    if (newProfile.id) {
-      fetchEmployeePhoto();
-    }
-  },
-  { deep: true }
+  () => router.currentRoute.value,
+  () => {
+    // You can add logic here if needed
+  }
 );
 </script>
 
@@ -960,7 +1008,11 @@ watch(
 
 /* Regular hover for non-active items */
 .menu-item:not(.active-menu-item):hover {
-  background: linear-gradient(90deg, rgba(25, 118, 210, 0.1) 0%, rgba(25, 118, 210, 0.05) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(25, 118, 210, 0.1) 0%,
+    rgba(25, 118, 210, 0.05) 100%
+  );
   transform: translateX(4px);
 }
 
@@ -1073,7 +1125,7 @@ watch(
   right: 2px;
   width: 10px;
   height: 10px;
-  background: #4CAF50;
+  background: #4caf50;
   border: 2px solid white;
   border-radius: 50%;
 }

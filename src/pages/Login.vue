@@ -3,32 +3,26 @@
     <q-page-container>
       <q-page class="flex bg-gradient flex-center">
         <div class="login-container">
-          <q-card class="login-card shadow-24 q-pa-lg" flat bordered>
-            <!-- Header Section -->
-            <q-card-section class="text-center q-pb-none">
-              <div class="login-avatar-container q-mb-lg">
-                <q-avatar size="120px" class="login-avatar shadow-10">
-                  <q-icon name="account_circle" size="80px" color="primary" />
-                </q-avatar>
+          <q-card class="login-card shadow-15 q-pa-lg" flat bordered>
+            
+            <q-card-section class="text-center q-pb-md">
+              <div class="logo-container q-mb-md">
+                <img src="../assets/logo.jpg" alt="Corporation Logo" class="corporation-logo">
               </div>
-              <div class="text-h4 text-weight-light text-primary q-mb-sm">Welcome Back</div>
-              <div class="text-subtitle1 text-grey-7">Sign in to your account</div>
+              <div class="text-h6 text-weight-bolder text-primary q-mb-xs">
+                Bangladesh Customs & VAT Officer's Association
+              </div>
+            </q-card-section>
+            
+            <q-card-section class="text-center q-pt-md q-pb-none">
+              <div class="login-avatar-container q-mb-lg">
+              </div>
+              <div class="text-subtitle2 text-grey-7">Sign in to your account</div>
             </q-card-section>
 
-            <!-- Error Banner -->
-            <q-card-section v-if="errors" class="q-pt-md">
-              <q-banner class="bg-negative text-white rounded-borders" dense>
-                <template v-slot:avatar>
-                  <q-icon name="error" />
-                </template>
-                {{ errors }}
-              </q-banner>
-            </q-card-section>
-
-            <!-- Login Form -->
             <q-card-section class="q-pt-lg">
               <q-form
-                class="q-gutter-lg"
+                class="q-gutter-md"
                 ref="loginForm"
                 @input="clearValidationErrors"
                 @submit.prevent="handleLogin"
@@ -81,17 +75,16 @@
                   </q-input>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="q-mt-xl">
+                <div class="q-mt-lg">
                   <q-btn
                     label="Sign In"
                     type="submit"
                     color="primary"
                     size="lg"
-                    class="full-width q-mb-md"
+                    class="full-width q-mb-sm custom-submit-btn"
                     rounded
                     no-caps
-                    icon="login"
+                    icon-right="login"
                   />
 
                   <div class="text-center">
@@ -99,7 +92,7 @@
                       to="/forgot-password"
                       label="Forgot Password?"
                       type="button"
-                      color="primary"
+                      color="secondary"
                       flat
                       no-caps
                       icon="help_outline"
@@ -110,20 +103,19 @@
               </q-form>
             </q-card-section>
 
-            <!-- Register Link -->
-            <q-card-section class="text-center q-pt-lg">
-              <q-separator class="q-mb-lg" />
+            <q-card-section class="text-center q-pt-md">
+              <q-separator class="q-mb-md" />
               <div class="text-body2 text-grey-7">
                 Don't have an account?
               </div>
               <q-btn
                 to="/register"
                 label="Create Account"
-                color="secondary"
+                color="primary"
                 flat
                 no-caps
                 icon="person_add"
-                class="text-weight-medium q-mt-sm"
+                class="text-weight-bold q-mt-sm"
               />
             </q-card-section>
           </q-card>
@@ -134,6 +126,7 @@
 </template>
 
 <script setup>
+
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
@@ -158,7 +151,7 @@ const handleLogin = async () => {
     const isValid = await loginForm.value.validate();
 
     if (isValid) {
-      // Create URLSearchParams for x-www-form-urlencoded
+    
       const params = new URLSearchParams();
       params.append("mobile", formData.value.phone);
       params.append("password", formData.value.password);
@@ -168,8 +161,8 @@ const handleLogin = async () => {
         },
       });
       loginForm.value.resetValidation();
-      // Only set the token in the user store
-       userStore.login({
+      
+      userStore.login({
         name: "User",
         accessToken: response.data.access_token,
       });
@@ -197,52 +190,86 @@ const clearValidationErrors = () => {
 </script>
 
 <style scoped>
+:root {
+  --color-primary: #004d40; 
+  --color-secondary: #ffb300; 
+  --color-background-start: #e0f2f1; 
+  --color-background-end: #b2dfdb; 
+}
+
+.text-primary { color: var(--color-primary) !important; }
+.text-secondary { color: var(--color-secondary) !important; }
+.bg-primary { background: var(--color-primary) !important; }
+.bg-secondary { background: var(--color-secondary) !important; }
+
 .bg-gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-background-start) 0%, var(--color-background-end) 100%);
   min-height: 100vh;
 }
 
 .login-container {
   width: 100%;
-  max-width: 420px;
+  max-width: 450px; 
   margin: 0 auto;
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #ffffff;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 77, 64, 0.15); 
 }
 
+/* Logo Styles */
+.logo-container {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.corporation-logo {
+    max-width: 200px;
+    height: auto;
+}
+
+/* Avatar Style */
 .login-avatar-container {
   position: relative;
 }
 
 .login-avatar {
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  border: 4px solid white;
-}
-
-.custom-input {
-  border-radius: 12px;
+  background: var(--color-primary); 
+  border: 4px solid var(--color-secondary); 
 }
 
 .custom-input :deep(.q-field__control) {
-  border-radius: 12px;
+  border-radius: 8px;
+  background: #f8f8f8 !important; 
 }
 
-.input-group {
-  position: relative;
+.custom-submit-btn {
+  font-weight: bold;
+  border-radius: 8px; 
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 77, 64, 0.3); 
+  background: #00382e !important;
+  color: white !important;
 }
 
-.text-red {
-  color: red;
+.custom-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 77, 64, 0.5);
+}
+
+.custom-submit-btn.q-btn--primary {
+  background: var(--color-primary) !important;
+}
+
+.custom-submit-btn.q-btn--primary:hover {
+  background: #00382e !important;
 }
 
 @media (max-width: 600px) {
   .login-container {
-    padding: 16px;
+    padding: 20px;
   }
   
   .login-card {
