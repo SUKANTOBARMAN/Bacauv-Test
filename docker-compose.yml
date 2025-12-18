@@ -5,8 +5,8 @@ networks:
     name: tunnel_nbr
     external: true
 services:
-  bacuav-admin:
-    container_name: bacuav-admin-prod
+  bacuav-web:
+    container_name: bacuav-web-prod
     build:
       context: .
     ports:
