@@ -10,7 +10,7 @@
                 <img src="../assets/logo.jpg" alt="Corporation Logo" class="corporation-logo">
               </div>
               <div class="text-h6 text-weight-bolder text-primary q-mb-xs">
-                Bangladesh Customs & VAT Officer's Association
+                Bangladesh Customs & VAT Officers' Association
               </div>
             </q-card-section>
             
@@ -276,4 +276,5 @@ const clearValidationErrors = () => {
     margin: 0;
   }
 }
+
 </style>
