@@ -205,11 +205,65 @@
                           map-options
                           dense
                           color="indigo"
-                          class="full-width"
                         />
                       </div>
 
                       <div class="form-section">
+                        <div class="form-label">যোগদানের তারিখ</div>
+                        <q-input
+                          outlined
+                          v-model="editForm.joining_date"
+                          dense
+                          color="indigo"
+                          class="full-width"
+                          :rules="['date']"
+                        >
+                          <template v-slot:append>
+                            <q-icon name="event" class="cursor-pointer">
+                              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                                <q-date v-model="editForm.joining_date" mask="YYYY-MM-DD">
+                                  <div class="row items-center justify-end">
+                                    <q-btn v-close-popup label="Close" color="primary" flat />
+                                  </div>
+                                </q-date>
+                              </q-popup-proxy>
+                            </q-icon>
+                          </template>
+                        </q-input>
+                      </div>
+
+                      <!-- Row 4: Blood Group & Facebook -->
+                      <div class="form-section">
+                        <div class="form-label">রক্তের গ্রুপ</div>
+                        <q-select
+                          outlined
+                          v-model="editForm.blood_group"
+                          :options="bloodGroupOptions"
+                          option-value="value"
+                          option-label="label"
+                          emit-value
+                          map-options
+                          dense
+                          color="indigo"
+                          class="full-width"
+                          clearable
+                        />
+                      </div>
+
+                      <div class="form-section">
+                        <div class="form-label">Facebook ID</div>
+                        <q-input
+                          outlined
+                          v-model="editForm.facebook_id"
+                          dense
+                          color="indigo"
+                          class="full-width"
+                          placeholder="https://facebook.com/username"
+                        />
+                      </div>
+
+                      <!-- Row 5: Address -->
+                      <div class="form-section full-width">
                         <div class="form-label">ঠিকানা</div>
                         <q-input
                           outlined
@@ -221,7 +275,45 @@
                         />
                       </div>
 
-                      <!-- Row 4: Dates -->
+                      <!-- Row 6: Education -->
+                      <div class="form-section">
+                        <div class="form-label">শিক্ষাগত যোগ্যতা (সর্বোচ্চ)</div>
+                        <q-input
+                          outlined
+                          v-model="editForm.education_degree"
+                          dense
+                          color="indigo"
+                          class="full-width"
+                          placeholder="যেমন: মাস্টার্স, বিএসসি ইঞ্জিনিয়ারিং"
+                        />
+                      </div>
+
+                      <div class="form-section">
+                        <div class="form-label">শিক্ষাপ্রতিষ্ঠান (সর্বোচ্চ)</div>
+                        <q-input
+                          outlined
+                          v-model="editForm.education_institute"
+                          dense
+                          color="indigo"
+                          class="full-width"
+                          placeholder="যেমন: ঢাকা বিশ্ববিদ্যালয়"
+                        />
+                      </div>
+
+                      <!-- Row 7: Spouse Info -->
+                      <div class="form-section">
+                        <div class="form-label">স্বামী/স্ত্রীর পদবি</div>
+                        <q-input
+                          outlined
+                          v-model="editForm.spouse_designation"
+                          dense
+                          color="indigo"
+                          class="full-width"
+                          placeholder="যেমন: সরকারি কর্মকর্তা, শিক্ষক"
+                        />
+                      </div>
+
+                      <!-- Row 8: Dates (Read Only) -->
                       <div class="form-section">
                         <div class="form-label">জন্ম তারিখ</div>
                         <q-input
@@ -265,7 +357,7 @@
                     <div class="section-header q-mb-lg">
                       <q-icon name="account_balance" size="24px" color="indigo-7" class="q-mr-sm" />
                       <span class="text-h5 text-weight-bold text-grey-9">প্রশাসনিক তথ্য</span>
-                      <div class="text-caption text-grey-7 q-mt-xs">এই তথ্যগুলি পরিবর্তনযোগ্য নয়</div>
+                      <div class="text-caption text-grey-7 q-mt-xs"> (এই তথ্যগুলি পরিবর্তনযোগ্য নয়)</div>
                     </div>
 
                     <div class="admin-grid">
@@ -319,6 +411,10 @@
                         </div>
                         
                         <div class="account-grid">
+                          <div class="account-item">
+                            <div class="account-label">ইউজার আইডি</div>
+                            <div class="account-value text-weight-bold">{{ user.member_id || 'N/A' }}</div>
+                          </div>
                           
                           <div class="account-item">
                             <div class="account-label">অ্যাকাউন্ট স্ট্যাটাস</div>
@@ -381,7 +477,15 @@ const user = ref({
   district: null,
   created_at: "",
   updated_at: "",
-  id: null
+  id: null,
+  // New fields
+  joining_date: "",
+  blood_group: "",
+  facebook_id: "",
+  education_degree: "",
+  education_institute: "",
+  spouse_name: "",
+  spouse_designation: ""
 });
 
 const editForm = ref({
@@ -391,11 +495,30 @@ const editForm = ref({
   mobile: "",
   designation: "",
   address: "",
+  // New fields
+  joining_date: "",
+  blood_group: "",
+  facebook_id: "",
+  education_degree: "",
+  education_institute: "",
+  spouse_name: "",
+  spouse_designation: ""
 });
 
 const designationOptions = [
   { label: "RO (Revenue Officer)", value: "RO" },
   { label: "ARO (Assistant Revenue Officer)", value: "ARO" },
+];
+
+const bloodGroupOptions = [
+  { label: "A+", value: "A+" },
+  { label: "A-", value: "A-" },
+  { label: "B+", value: "B+" },
+  { label: "B-", value: "B-" },
+  { label: "O+", value: "O+" },
+  { label: "O-", value: "O-" },
+  { label: "AB+", value: "AB+" },
+  { label: "AB-", value: "AB-" },
 ];
 
 const photoFile = ref(null);
@@ -421,6 +544,14 @@ const fetchUserProfile = async () => {
       mobile: data.data.mobile,
       designation: data.data.designation,
       address: data.data.address,
+      // New fields
+      joining_date: data.data.joining_date || "",
+      blood_group: data.data.blood_group || "",
+      facebook_id: data.data.facebook_id || "",
+      education_degree: data.data.education_degree || "",
+      education_institute: data.data.education_institute || "",
+      spouse_name: data.data.spouse_name || "",
+      spouse_designation: data.data.spouse_designation || ""
     };
   } catch (error) {
     $q.notify({
@@ -668,6 +799,10 @@ onMounted(() => {
   margin-bottom: 8px;
 }
 
+.form-section.full-width {
+  grid-column: 1 / -1;
+}
+
 .form-label {
   font-size: 14px;
   font-weight: 600;
@@ -709,6 +844,13 @@ onMounted(() => {
   padding: 16px;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.hierarchy-item:hover {
+  border-color: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
 }
 
 .hierarchy-label {
@@ -736,6 +878,13 @@ onMounted(() => {
   padding: 16px;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.account-item:hover {
+  border-color: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
 }
 
 .account-label {
@@ -761,11 +910,16 @@ onMounted(() => {
   padding: 12px 24px;
   font-weight: 600;
   text-transform: none;
+  transition: all 0.3s ease;
 }
 
 :deep(.q-tab--active) {
   color: #4f46e5;
   border-bottom: 3px solid #4f46e5;
+}
+
+:deep(.q-tab:hover) {
+  background-color: rgba(79, 70, 229, 0.05);
 }
 
 :deep(.q-tabs__content) {
@@ -776,6 +930,11 @@ onMounted(() => {
 .q-card {
   border-radius: 16px;
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.q-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Save Button Styling */
@@ -791,10 +950,29 @@ onMounted(() => {
   box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
 }
 
+/* Input field styling for better alignment */
+:deep(.q-field--outlined .q-field__control) {
+  border-radius: 8px;
+}
+
+:deep(.q-field--focused .q-field__control) {
+  border-color: #4f46e5 !important;
+}
+
+/* Date picker styling */
+:deep(.q-date) {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
 /* Responsive Design */
 @media (max-width: 1023px) {
   .form-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .form-section.full-width {
+    grid-column: 1;
   }
   
   .hierarchy-grid,
@@ -820,5 +998,41 @@ onMounted(() => {
     width: 160px;
     height: 160px;
   }
+  
+  .form-grid {
+    gap: 16px;
+  }
+  
+  .admin-section {
+    padding: 16px;
+  }
 }
+
+/* Animation for form sections */
+.form-section {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger animation for form items */
+.form-section:nth-child(1) { animation-delay: 0.1s; }
+.form-section:nth-child(2) { animation-delay: 0.2s; }
+.form-section:nth-child(3) { animation-delay: 0.3s; }
+.form-section:nth-child(4) { animation-delay: 0.4s; }
+.form-section:nth-child(5) { animation-delay: 0.5s; }
+.form-section:nth-child(6) { animation-delay: 0.6s; }
+.form-section:nth-child(7) { animation-delay: 0.7s; }
+.form-section:nth-child(8) { animation-delay: 0.8s; }
+.form-section:nth-child(9) { animation-delay: 0.9s; }
+.form-section:nth-child(10) { animation-delay: 1.0s; }
+.form-section:nth-child(11) { animation-delay: 1.1s; }
+.form-section:nth-child(12) { animation-delay: 1.2s; }
 </style>

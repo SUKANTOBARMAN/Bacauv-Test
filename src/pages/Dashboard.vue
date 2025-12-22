@@ -15,7 +15,7 @@
           <div class="icon-pulse"></div>
         </div>
         <div class="welcome-text">
-          <h1 class="welcome-title">আপনাকে BACUAV অ্যাপে স্বাগতম</h1>
+          <h1 class="welcome-title"> Welcome to BACUAV</h1>
           <p class="welcome-subtitle">{{ getCurrentGreeting() }}</p>
         </div>
       </div>
@@ -31,7 +31,7 @@
         <div class="title-icon-wrapper">
           <q-icon name="bolt" size="28px" />
         </div>
-        <span>দ্রুত কার্যক্রম</span>
+        <span>Quick Actions</span>
       </div>
       <div class="row q-col-gutter-md">
         <div
@@ -79,7 +79,7 @@
                 <div class="icon-bg-circle"></div>
               </div>
               <div class="stat-content">
-                <div class="stat-label">মোট সদস্য</div>
+                <div class="stat-label">Total User</div>
                 <div class="stat-value">
                   <span class="counting-number">{{
                     animatedStats.totalMembers
@@ -87,7 +87,7 @@
                 </div>
                 <div class="stat-change positive">
                   <q-icon name="trending_up" size="16px" />
-                  সক্রিয় সদস্য
+                  Active User
                 </div>
               </div>
               <div class="card-glow members-glow"></div>
@@ -104,7 +104,7 @@
                 <div class="icon-bg-circle"></div>
               </div>
               <div class="stat-content">
-                <div class="stat-label">কমিশনারেট</div>
+                <div class="stat-label">Commissionerate</div>
                 <div class="stat-value">
                   <span class="counting-number">{{
                     animatedStats.totalCommissionerates
@@ -112,7 +112,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_city" size="16px" />
-                  সক্রিয় অঞ্চল
+                 Active Area
                 </div>
               </div>
               <div class="card-glow commissionerate-glow"></div>
@@ -150,7 +150,7 @@
                 <div class="icon-bg-circle"></div>
               </div>
               <div class="stat-content">
-                <div class="stat-label">জেলা</div>
+                <div class="stat-label">District</div>
                 <div class="stat-value">
                   <span class="counting-number">{{
                     animatedStats.totalDistricts
@@ -158,7 +158,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_on" size="16px" />
-                  কভারেজ এলাকা
+                 Active Area
                 </div>
               </div>
               <div class="card-glow district-glow"></div>
@@ -196,7 +196,7 @@
                 <div class="icon-bg-circle"></div>
               </div>
               <div class="stat-content">
-                <div class="stat-label">যাচাইকৃত সদস্য</div>
+                <div class="stat-label">Verified User</div>
                 <div class="stat-value">
                   <span class="counting-number">{{
                     animatedStats.verifiedMembers
@@ -204,7 +204,7 @@
                 </div>
                 <div class="stat-change positive">
                   <q-icon name="check_circle" size="16px" />
-                  {{ verificationPercentage }}% যাচাইকৃত
+                  {{ verificationPercentage }}% Verified
                 </div>
               </div>
               <div class="card-glow verified-glow"></div>
@@ -221,7 +221,7 @@
                 <div class="icon-bg-circle"></div>
               </div>
               <div class="stat-content">
-                <div class="stat-label">বিভাগ</div>
+                <div class="stat-label">Division</div>
                 <div class="stat-value">
                   <span class="counting-number">{{
                     animatedStats.totalDivisions
@@ -229,7 +229,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="hub" size="16px" />
-                  প্রশাসনিক এলাকা
+                  Administrative Division
                 </div>
               </div>
               <div class="card-glow division-glow"></div>
@@ -246,7 +246,7 @@
                 <div class="icon-bg-circle"></div>
               </div>
               <div class="stat-content">
-                <div class="stat-label">সার্কেল</div>
+                <div class="stat-label">Circle</div>
                 <div class="stat-value">
                   <span class="counting-number">{{
                     animatedStats.totalCircles
@@ -254,7 +254,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="donut_small" size="16px" />
-                  কর্ম এলাকা
+                 Executive Area
                 </div>
               </div>
               <div class="card-glow circle-glow"></div>
@@ -273,7 +273,7 @@
             <div class="chart-header">
               <div class="chart-title">
                 <q-icon name="bar_chart" size="24px" color="primary" />
-                <span>পদবি অনুযায়ী বিভাজন</span>
+                <span>Designation-wise Breakdown</span>
               </div>
             </div>
             <q-separator />
@@ -304,7 +304,7 @@
                           v-if="activeBar === index"
                           class="bar-hover-tooltip"
                         >
-                          {{ bar.percentage }}% মোট সদস্যের
+                          {{ bar.percentage }}% of Total User 
                         </div>
                       </transition>
                     </div>
@@ -322,7 +322,7 @@
             <div class="chart-header">
               <div class="chart-title">
                 <q-icon name="pie_chart" size="24px" color="primary" />
-                <span>সদস্য বিতরণ</span>
+                <span>Member Distribution</span>
               </div>
             </div>
             <q-separator />
@@ -363,7 +363,7 @@
                     text-anchor="middle"
                     class="pie-total-label"
                   >
-                    মোট
+                    Total
                   </text>
                   <text
                     x="100"
@@ -406,7 +406,7 @@
             <div class="chart-header">
               <div class="chart-title">
                 <q-icon name="trending_up" size="24px" color="primary" />
-                <span>বৃদ্ধির ধারা</span>
+                <span>Growth Over Time</span>
               </div>
             </div>
             <q-separator />
@@ -417,11 +417,11 @@
                     <q-icon name="person_add" size="32px" color="positive" />
                   </div>
                   <div class="growth-info">
-                    <div class="growth-label">নতুন সদস্য</div>
+                    <div class="growth-label">New User</div>
                     <div class="growth-value">
                       +{{ stats.newMembers || 45 }}
                     </div>
-                    <div class="growth-period">এই মাসে</div>
+                    <div class="growth-period">This Month</div>
                   </div>
                 </div>
                 <div class="growth-item">
@@ -429,11 +429,11 @@
                     <q-icon name="speed" size="32px" color="info" />
                   </div>
                   <div class="growth-info">
-                    <div class="growth-label">বৃদ্ধির হার</div>
+                    <div class="growth-label">Growth Rate</div>
                     <div class="growth-value">
                       {{ stats.growthRate || 12.5 }}%
                     </div>
-                    <div class="growth-period">গত মাসের তুলনায়</div>
+                    <div class="growth-period">Compared to Last Month</div>
                   </div>
                 </div>
                 <div class="growth-item">
@@ -445,11 +445,11 @@
                     />
                   </div>
                   <div class="growth-info">
-                    <div class="growth-label">সক্রিয় হার</div>
+                    <div class="growth-label">Active Rate</div>
                     <div class="growth-value">
                       {{ stats.activeRate || 94.6 }}%
                     </div>
-                    <div class="growth-period">সর্বমোট সদস্য</div>
+                    <div class="growth-period">Total User</div>
                   </div>
                 </div>
               </div>
@@ -508,40 +508,40 @@ const animatedBars = ref([]);
 // Enhanced action cards
 const actionCards = ref([
   {
-    title: "সদস্য তালিকা",
+    title: "Member List",
     icon: "people",
-    route: "/members",
-    description: "সকল সদস্যদের দেখুন",
+    route: "/member-list",
+    description: "View Total Members",
     gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
   {
-    title: "নতুন সদস্য যোগ করুন",
-    icon: "person_add",
-    route: "/members/create",
-    description: "নতুন সদস্য নিবন্ধন",
-    gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    title: "My-Profile",
+    icon: "person",
+    route: "/my-profile",
+    description: "View User Details",
+    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
-  {
-    title: "রিপোর্ট",
-    icon: "assessment",
-    route: "/reports",
-    description: "বিস্তারিত রিপোর্ট দেখুন",
-    gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-  },
-  {
-    title: "কমিশনারেট",
-    icon: "business",
-    route: "/commissionerates",
-    description: "কমিশনারেট ব্যবস্থাপনা",
-    gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-  },
-  {
-    title: "সেটিংস",
+   {
+    title: "Notice",
     icon: "settings",
-    route: "/settings",
-    description: "সিস্টেম কনফিগারেশন",
-    gradient: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+    route: "/notices",
+    description: "View Notice",
+    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
+  // {
+  //   title: "রিপোর্ট",
+  //   icon: "assessment",
+  //   route: "/reports",
+  //   description: "বিস্তারিত রিপোর্ট দেখুন",
+  //   gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+  // },
+  // {
+  //   title: "কমিশনারেট",
+  //   icon: "business",
+  //   route: "/commissionerates",
+  //   description: "কমিশনারেট ব্যবস্থাপনা",
+  //   gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+  // },
 ]);
 
 // Computed properties
@@ -554,11 +554,11 @@ const verificationPercentage = computed(() => {
 
 // Distribution data for pie chart
 const distributionData = ref([
-  { label: "ঢাকা", value: 450, color: "#3b82f6" },
-  { label: "চট্টগ্রাম", value: 320, color: "#8b5cf6" },
-  { label: "রাজশাহী", value: 180, color: "#ef4444" },
-  { label: "খুলনা", value: 150, color: "#f59e0b" },
-  { label: "অন্যান্য", value: 147, color: "#10b981" },
+  { label: "Dhaka", value: 450, color: "#3b82f6" },
+  { label: "Chittagong", value: 320, color: "#8b5cf6" },
+  { label: "Rajshahi", value: 180, color: "#ef4444" },
+  { label: "Khulna", value: 150, color: "#f59e0b" },
+  { label: "Others", value: 147, color: "#10b981" },
 ]);
 
 const circumference = 2 * Math.PI * 80;
@@ -749,14 +749,14 @@ const navigateTo = (route) => {
 
 const getCurrentGreeting = () => {
   const hour = new Date().getHours();
-  if (hour < 12) return "সুপ্রভাত! আজকের দিনটি শুভ হোক";
-  if (hour < 17) return "শুভ অপরাহ্ন! কাজ ভালো চলছে তো?";
-  return "শুভ সন্ধ্যা! দিনটি কেমন কাটলো?";
+  if (hour < 12) return "Good morning! Wishing you a great day ahead.";
+  if (hour < 17) return "Good afternoon! Hope your work is going well.";
+  return "Good evening! Hope you had a pleasant day.";
 };
 
 const getCurrentDate = () => {
   const date = new Date();
-  return date.toLocaleDateString("bn-BD", {
+  return date.toLocaleDateString("eng", {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -850,7 +850,7 @@ onMounted(() => {
 
 /* Welcome Header */
 .welcome-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4d7fe4 0%, #389deb 100%);
   border-radius: 24px;
   padding: 32px;
   margin-bottom: 32px;
@@ -1452,7 +1452,7 @@ onMounted(() => {
 }
 
 .title-icon-wrapper {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #5399d3 100%);
   padding: 12px;
   border-radius: 12px;
   display: flex;

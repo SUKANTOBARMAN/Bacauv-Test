@@ -21,7 +21,7 @@
             <q-icon name="account_circle" size="28px" color="white" />
           </div>
           <q-toolbar-title class="app-title">
-            <span class="text-h6 text-weight-bold">bacuav অ্যাপ</span>
+            <span class="text-h20 text-weight-bold">Bangladesh Customs & VAT Officers' Association (BACAUV)</span>
           </q-toolbar-title>
         </div>
 
@@ -181,7 +181,7 @@
               <q-icon name="dashboard" class="menu-icon" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>ড্যাশবোর্ড</q-item-label>
+              <q-item-label>Dashboard</q-item-label>
             </q-item-section>
             <q-tooltip anchor="center right" self="center left">
               ড্যাশবোর্ড
@@ -210,7 +210,7 @@
           <!-- My Profile Expansion -->
           <q-expansion-item
             icon="person"
-            label="আমার প্রোফাইল"
+            label="User Information"
             expand-icon-class="expansion-icon"
             class="expansion-item"
             :content-inset-level="0.5"
@@ -226,7 +226,7 @@
                 <q-item-section avatar>
                   <q-icon name="info" size="18px" />
                 </q-item-section>
-                <q-item-section>ব্যবহারকারী তথ্য</q-item-section>
+                <q-item-section>My Profile</q-item-section>
               </q-item>
             </q-list>
           </q-expansion-item>
@@ -484,7 +484,7 @@
           <!-- Notice Menu -->
           <q-expansion-item
             icon="assignment"
-            label="নোটিশ ব্যবস্থাপনা"
+            label="Notice"
             expand-icon-class="expansion-icon"
             class="expansion-item"
             :content-inset-level="0.5"
@@ -534,7 +534,7 @@
                   <q-icon name="list" size="18px" />
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label>নোটিশ দেখুন</q-item-label>
+                  <q-item-label>My Notices</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
