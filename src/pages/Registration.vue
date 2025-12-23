@@ -5,16 +5,12 @@
         <div class="registration-container">
           <q-card class="registration-card shadow-24 q-pa-lg" flat bordered>
             
-             <q-card-section class="text-center q-pb-md">
+            <q-card-section class="text-center q-pb-md">
               <div class="logo-container q-mb-md">
                 <img src="../assets/logo.jpg" alt="Corporation Logo" class="corporation-logo">
               </div>
-              <div class="text-h6 text-weight-bolder text-primary q-mb-xs">
-                
-              </div>
               <div class="text-subtitle2 text-grey-7">Create your Account</div>
             </q-card-section>
-
 
             <!-- Error Banner -->
             <q-card-section v-if="error" class="q-pt-none">
@@ -41,7 +37,7 @@
                     <q-input
                       filled
                       v-model="formData.name"
-                      label="Full Name"
+                      label="Full Name *"
                       lazy-rules
                       class="custom-input"
                       :rules="[(val) => !!val || 'Name is required']"
@@ -59,7 +55,7 @@
                       class="custom-input"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="translate" color="secondary" />
+                        <q-icon name="badge" color="primary" />
                       </template>
                     </q-input>
                   </div>
@@ -70,7 +66,7 @@
                     <q-input
                       filled
                       v-model="formData.email"
-                      label="Email Address"
+                      label="Email Address *"
                       lazy-rules
                       type="email"
                       class="custom-input"
@@ -88,7 +84,7 @@
                     <q-input
                       filled
                       v-model="formData.mobile"
-                      label="Mobile Number"
+                      label="Mobile Number *"
                       mask="###########"
                       lazy-rules
                       class="custom-input"
@@ -109,7 +105,7 @@
                     <q-input
                       filled
                       v-model="formData.password"
-                      label="Password"
+                      label="Password *"
                       :type="showPassword ? 'text' : 'password'"
                       lazy-rules
                       class="custom-input"
@@ -135,7 +131,7 @@
                     <q-input
                       filled
                       v-model="confirmPassword"
-                      label="Confirm Password"
+                      label="Confirm Password *"
                       :type="showConfirmPassword ? 'text' : 'password'"
                       lazy-rules
                       class="custom-input"
@@ -159,38 +155,13 @@
                   </div>
                 </div>
 
+                <!-- Additional Personal Information -->
                 <div class="row q-col-gutter-md">
-                  <div class="col-12 col-sm-6">
-                    <q-select
-                      filled
-                      v-model="formData.designation"
-                      :options="designationOptions"
-                      label="Designation"
-                      emit-value
-                      map-options
-                      class="custom-input"
-                      :rules="[(val) => !!val || 'Designation is required']"
-                    >
-                      <template v-slot:prepend>
-                        <q-icon name="work" color="primary" />
-                      </template>
-                      <template v-slot:option="scope">
-                        <q-item v-bind="scope.itemProps">
-                          <q-item-section avatar>
-                            <q-icon :name="scope.opt.icon" :color="scope.opt.color" />
-                          </q-item-section>
-                          <q-item-section>
-                            <q-item-label>{{ scope.opt.label }}</q-item-label>
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </q-select>
-                  </div>
                   <div class="col-12 col-sm-6">
                     <q-input
                       filled
                       v-model="formData.dob"
-                      label="Date of Birth"
+                      label="Date of Birth *"
                       mask="####-##-##"
                       lazy-rules
                       class="custom-input"
@@ -212,12 +183,81 @@
                       </template>
                     </q-input>
                   </div>
+                  <div class="col-12 col-sm-6">
+                    <q-input
+                      filled
+                      v-model="formData.officer_joining_date"
+                      label="Joining Date"
+                      mask="####-##-##"
+                      class="custom-input"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="date_range" color="primary" />
+                      </template>
+                      <template v-slot:append>
+                        <q-icon name="event" class="cursor-pointer" color="grey-5">
+                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                            <q-date v-model="formData.officer_joining_date" mask="YYYY-MM-DD">
+                              <div class="row items-center justify-end">
+                                <q-btn v-close-popup label="Close" color="primary" flat />
+                              </div>
+                            </q-date>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+                    </q-input>
+                  </div>
                 </div>
 
+                <div class="row q-col-gutter-md">
+                  <div class="col-12 col-sm-6">
+                    <q-select
+                      filled
+                      v-model="formData.designation"
+                      :options="designationOptions"
+                      label="Designation *"
+                      emit-value
+                      map-options
+                      class="custom-input"
+                      :rules="[(val) => !!val || 'Designation is required']"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="work" color="primary" />
+                      </template>
+                      <template v-slot:option="scope">
+                        <q-item v-bind="scope.itemProps">
+                          <q-item-section avatar>
+                            <q-icon :name="scope.opt.icon" :color="scope.opt.color" />
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>{{ scope.opt.label }}</q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <q-select
+                      filled
+                      v-model="formData.blood_group"
+                      :options="bloodGroupOptions"
+                      label="Blood Group"
+                      emit-value
+                      map-options
+                      class="custom-input"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="favorite" color="primary" />
+                      </template>
+                    </q-select>
+                  </div>
+                </div>
+
+                <!-- Address Section -->
                 <q-input
                   filled
                   v-model="formData.address"
-                  label="Address"
+                  label="Address *"
                   lazy-rules
                   class="custom-input"
                   :rules="[(val) => !!val || 'Address is required']"
@@ -227,10 +267,76 @@
                   </template>
                 </q-input>
 
+                <!-- Educational Information -->
+                <div class="section-header q-mt-xl">
+                  <q-icon name="school" color="teal" size="24px" />
+                  <span class="text-h6 text-weight-medium q-ml-sm text-teal">Educational Information</span>
+                </div>
+
+                <div class="row q-col-gutter-md">
+                  <div class="col-12 col-sm-6">
+                    <q-input
+                      filled
+                      v-model="formData.educational_qualification"
+                      label="Educational Qualification"
+                      class="custom-input"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="school" color="teal" />
+                      </template>
+                    </q-input>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <q-input
+                      filled
+                      v-model="formData.last_education_institution"
+                      label="Last Education Institution"
+                      class="custom-input"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="account_balance" color="teal" />
+                      </template>
+                    </q-input>
+                  </div>
+                </div>
+
+                <!-- Family Information -->
+                <div class="section-header q-mt-xl">
+                  <q-icon name="family_restroom" color="deep-orange" size="24px" />
+                  <span class="text-h6 text-weight-medium q-ml-sm text-deep-orange">Family Information</span>
+                </div>
+
+                <div class="row q-col-gutter-md">
+                  <div class="col-12 col-sm-6">
+                    <q-input
+                      filled
+                      v-model="formData.spouse_profession"
+                      label="Spouse Profession"
+                      class="custom-input"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="work_outline" color="deep-orange" />
+                      </template>
+                    </q-input>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <q-input
+                      filled
+                      v-model="formData.social_media_link"
+                      label="Social Media ID"
+                      class="custom-input"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="share" color="deep-orange" />
+                      </template>
+                    </q-input>
+                  </div>
+                </div>
+
                 <!-- Location Information Section -->
                 <div class="section-header q-mt-xl">
                   <q-icon name="location_on" color="secondary" size="24px" />
-                  <span class="text-h6 text-weight-medium q-ml-sm text-secondary">Location Information</span>
+                  <span class="text-h6 text-weight-medium q-ml-sm text-secondary">Location Information (Optional)</span>
                 </div>
                 
                 <div class="row q-col-gutter-md">
@@ -248,7 +354,6 @@
                       class="custom-input"
                       @filter="filterCommissionerates"
                       @update:model-value="loadDivisions"
-                      :rules="[(val) => !!val || 'Commissionerate is required']"
                     >
                       <template v-slot:prepend>
                         <q-icon name="location_city" color="secondary" />
@@ -278,7 +383,6 @@
                       :disable="!formData.commissionerate_id"
                       @filter="filterDivisions"
                       @update:model-value="loadCircles"
-                      :rules="[(val) => !!val || 'Division is required']"
                     >
                       <template v-slot:prepend>
                         <q-icon name="account_balance" color="secondary" />
@@ -313,7 +417,6 @@
                       class="custom-input"
                       :disable="!formData.division_id"
                       @filter="filterCircles"
-                      :rules="[(val) => !!val || 'Circle is required']"
                     >
                       <template v-slot:prepend>
                         <q-icon name="maps_home_work" color="secondary" />
@@ -345,7 +448,6 @@
                       use-input
                       class="custom-input"
                       @filter="filterDistricts"
-                      :rules="[(val) => !!val || 'District is required']"
                     >
                       <template v-slot:prepend>
                         <q-icon name="map" color="secondary" />
@@ -360,6 +462,7 @@
                     </q-select>
                   </div>
                 </div>
+
                 <!-- Action Buttons -->
                 <div class="row justify-between q-mt-xl q-pt-lg">
                   <q-btn
@@ -418,6 +521,12 @@ const formData = ref({
   designation: '',
   address: '',
   dob: '',
+  officer_joining_date: '',
+  blood_group: '',
+  social_media_link: '',
+  educational_qualification: '',
+  last_education_institution: '',
+  spouse_profession: '',
   role: 'subadmin',
   commissionerate_id: null,
   division_id: null,
@@ -429,6 +538,11 @@ const formData = ref({
 const designationOptions = [
   { label: 'RO (Revenue Officer)', value: 'RO', icon: 'badge', color: 'blue' },
   { label: 'ARO (Assistant Revenue Officer)', value: 'ARO', icon: 'assistant', color: 'green' },
+];
+
+// Blood group options
+const bloodGroupOptions = [
+  'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
 ];
 
 // Location data
@@ -550,26 +664,73 @@ const handleRegister = async () => {
     params.append('address', formData.value.address);
     params.append('dob', formData.value.dob);
     params.append('role', formData.value.role);
-    params.append('commissionerate_id', formData.value.commissionerate_id);
-    params.append('division_id', formData.value.division_id);
-    params.append('circle_id', formData.value.circle_id);
-    params.append('district_id', formData.value.district_id);
+    
+    // Optional fields - only append if they have value
+    if (formData.value.officer_joining_date) {
+      params.append('officer_joining_date', formData.value.officer_joining_date);
+    }
+    if (formData.value.blood_group) {
+      params.append('blood_group', formData.value.blood_group);
+    }
+    if (formData.value.social_media_id) {
+      params.append('social_media_link', formData.value.social_media_link);
+    }
+    if (formData.value.educational_qualification) {
+      params.append('educational_qualification', formData.value.educational_qualification);
+    }
+    if (formData.value.last_education_institution) {
+      params.append('last_education_institution', formData.value.last_education_institution);
+    }
+    if (formData.value.spouse_profession) {
+      params.append('spouse_profession', formData.value.spouse_profession);
+    }
+    
+    // Optional location fields
+    if (formData.value.commissionerate_id) {
+      params.append('commissionerate_id', formData.value.commissionerate_id);
+    }
+    if (formData.value.division_id) {
+      params.append('division_id', formData.value.division_id);
+    }
+    if (formData.value.circle_id) {
+      params.append('circle_id', formData.value.circle_id);
+    }
+    if (formData.value.district_id) {
+      params.append('district_id', formData.value.district_id);
+    }
 
     const response = await api.post('/v1/register', params, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
+    
     console.log('Registration response:', response.data);
+    
     $q.notify({
       type: 'positive',
       message: 'Registration successful! Please login.',
       icon: 'check_circle',
+      position: 'top',
+      timeout: 3000
     });
+    
     router.push('/login');
+    
   } catch (err) {
+    console.error('Registration error:', err);
+    
     error.value =
       err.response?.data?.message || 'Registration failed. Please try again.';
+    
+    $q.notify({
+      type: 'negative',
+      message: error.value,
+      icon: 'error',
+      position: 'top',
+      timeout: 5000
+    });
+    
   } finally {
     loading.value = false;
   }
@@ -578,22 +739,23 @@ const handleRegister = async () => {
 
 <style scoped>
 .bg-gradient {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #36839d 0%, #2a5b6e 100%);
   min-height: 100vh;
 }
 
 .registration-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
 }
 
 .registration-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .registration-header {
@@ -604,8 +766,17 @@ const handleRegister = async () => {
   display: flex;
   align-items: center;
   padding: 16px 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 2px solid #f0f0f0;
   margin-bottom: 16px;
+  border-radius: 8px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.02), transparent);
+  padding-left: 12px;
+}
+
+.section-header .q-icon {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  border-radius: 50%;
 }
 
 .custom-input {
@@ -614,16 +785,22 @@ const handleRegister = async () => {
 
 .custom-input :deep(.q-field__control) {
   border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.custom-input :deep(.q-field__control:hover) {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .corporation-logo {
-    max-width: 200px; 
-    height: auto;
+  max-width: 200px; 
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-
-.text-red {
-  color: red;
+.required-field :deep(.q-field__label)::after {
+  content: " *";
+  color: #f44336;
 }
 
 @media (max-width: 600px) {
@@ -633,6 +810,16 @@ const handleRegister = async () => {
   
   .registration-card {
     margin: 0;
+    border-radius: 16px;
+  }
+  
+  .section-header {
+    padding: 12px 0;
+    margin-bottom: 12px;
+  }
+  
+  .section-header .text-h6 {
+    font-size: 1.1rem;
   }
 }
 </style>

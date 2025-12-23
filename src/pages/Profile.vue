@@ -212,7 +212,7 @@
                         <div class="form-label">যোগদানের তারিখ</div>
                         <q-input
                           outlined
-                          v-model="editForm.joining_date"
+                          v-model="editForm.officer_joining_date"
                           dense
                           color="indigo"
                           class="full-width"
@@ -221,7 +221,7 @@
                           <template v-slot:append>
                             <q-icon name="event" class="cursor-pointer">
                               <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                                <q-date v-model="editForm.joining_date" mask="YYYY-MM-DD">
+                                <q-date v-model="editForm.officer_joining_date" mask="YYYY-MM-DD">
                                   <div class="row items-center justify-end">
                                     <q-btn v-close-popup label="Close" color="primary" flat />
                                   </div>
@@ -254,7 +254,7 @@
                         <div class="form-label">Facebook ID</div>
                         <q-input
                           outlined
-                          v-model="editForm.facebook_id"
+                          v-model="editForm.social_media_link"
                           dense
                           color="indigo"
                           class="full-width"
@@ -280,7 +280,7 @@
                         <div class="form-label">শিক্ষাগত যোগ্যতা (সর্বোচ্চ)</div>
                         <q-input
                           outlined
-                          v-model="editForm.education_degree"
+                          v-model="editForm.educational_qualification"
                           dense
                           color="indigo"
                           class="full-width"
@@ -292,7 +292,7 @@
                         <div class="form-label">শিক্ষাপ্রতিষ্ঠান (সর্বোচ্চ)</div>
                         <q-input
                           outlined
-                          v-model="editForm.education_institute"
+                          v-model="editForm.last_education_institution"
                           dense
                           color="indigo"
                           class="full-width"
@@ -305,7 +305,7 @@
                         <div class="form-label">স্বামী/স্ত্রীর পদবি</div>
                         <q-input
                           outlined
-                          v-model="editForm.spouse_designation"
+                          v-model="editForm.spouse_profession"
                           dense
                           color="indigo"
                           class="full-width"
@@ -479,13 +479,12 @@ const user = ref({
   updated_at: "",
   id: null,
   // New fields
-  joining_date: "",
+  officer_joining_date: "",
   blood_group: "",
-  facebook_id: "",
-  education_degree: "",
-  education_institute: "",
-  spouse_name: "",
-  spouse_designation: ""
+  social_media_link: "",
+  educational_qualification: "",
+  last_education_institution: "",
+  spouse_profession: ""
 });
 
 const editForm = ref({
@@ -496,13 +495,12 @@ const editForm = ref({
   designation: "",
   address: "",
   // New fields
-  joining_date: "",
+  officer_joining_date: "",
   blood_group: "",
-  facebook_id: "",
-  education_degree: "",
-  education_institute: "",
-  spouse_name: "",
-  spouse_designation: ""
+  social_media_link: "",
+  educational_qualification: "",
+  last_education_institution: "",
+  spouse_profession: ""
 });
 
 const designationOptions = [
@@ -545,13 +543,12 @@ const fetchUserProfile = async () => {
       designation: data.data.designation,
       address: data.data.address,
       // New fields
-      joining_date: data.data.joining_date || "",
+      officer_joining_date: data.data.officer_joining_date || "",
       blood_group: data.data.blood_group || "",
-      facebook_id: data.data.facebook_id || "",
-      education_degree: data.data.education_degree || "",
-      education_institute: data.data.education_institute || "",
-      spouse_name: data.data.spouse_name || "",
-      spouse_designation: data.data.spouse_designation || ""
+      social_media_link: data.data.social_media_link || "",
+      educational_qualification: data.data.educational_qualification || "",
+      last_education_institution: data.data.last_education_institution || "",
+      spouse_profession: data.data.spouse_profession || ""
     };
   } catch (error) {
     $q.notify({
