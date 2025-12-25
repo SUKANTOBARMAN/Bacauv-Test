@@ -17,15 +17,11 @@
 
         <!-- App Logo & Title -->
         <div class="row items-center">
-<q-toolbar-title class="app-title">
-  <span
-    class="text-weight-bold text-h6 text-md-h5 text-lg-h4"
-    style="white-space: normal; line-height: 1.3;"
-  >
+          <q-toolbar-title class="app-title">
+  <span class="app-title-text">
     Bangladesh Customs & VAT Officers' Association (BACAUV)
   </span>
 </q-toolbar-title>
-
 
         </div>
 
@@ -1140,4 +1136,22 @@ watch(
   padding: 6px 10px;
   border-radius: 6px;
 }
+
+.app-title-text {
+  white-space: nowrap;       
+  overflow: hidden;          
+  text-overflow: ellipsis;  
+  display: block;
+  font-weight: 700;
+  line-height: 1.3;
+  font-size: 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .app-title-text {
+    font-size: 11px;  /* মোবাইলে ছোট হবে */
+  }
+}
+
 </style>

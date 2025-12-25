@@ -85,7 +85,12 @@
           <template #body-cell-MemberID="props">
             <q-td :props="props" class="id-cell text-left">
               <div class="member-id-container">
-                <q-icon name="vpn_key" size="16px" color="primary" class="q-mr-sm" />
+                <q-icon
+                  name="vpn_key"
+                  size="16px"
+                  color="primary"
+                  class="q-mr-sm"
+                />
                 <span class="member-id-text text-weight-bold text-primary-dark">
                   {{ props.row.member_id }}
                 </span>
@@ -99,7 +104,8 @@
               <div class="photo-container-desktop">
                 <q-avatar size="56px" class="member-photo-desktop">
                   <q-img
-                    :src="imageURL(props.row.photo, '/src/assets/action.jpg')"
+                    v-if="props.row.photo || photoPreview"
+                    :src="photoPreview || `${baseUrl}${props.row.photo}`"
                     :ratio="1"
                     class="avatar-img"
                   />
@@ -225,7 +231,8 @@
             v-if="!loading && data.length === 0"
             class="text-center q-pa-lg text-h6 text-blue-grey-6"
           >
-            <q-icon name="group_off" size="24px" class="q-mr-sm" /> No members found
+            <q-icon name="group_off" size="24px" class="q-mr-sm" /> No members
+            found
           </div>
 
           <div class="mobile-cards-list q-pa-md">
@@ -238,34 +245,49 @@
               <q-card-section class="q-pa-md">
                 <!-- Mobile Card Layout with 5 sections matching desktop -->
                 <div class="mobile-card-layout">
-                  
                   <!-- Row 1: Member ID -->
-                  <div class="mobile-row mobile-id-row row items-center q-mb-sm">
-                    <q-icon name="vpn_key" size="16px" color="primary" class="q-mr-sm" />
-                    <span class="mobile-id-text text-weight-bold text-primary-dark">
+                  <div
+                    class="mobile-row mobile-id-row row items-center q-mb-sm"
+                  >
+                    <q-icon
+                      name="vpn_key"
+                      size="16px"
+                      color="primary"
+                      class="q-mr-sm"
+                    />
+                    <span
+                      class="mobile-id-text text-weight-bold text-primary-dark"
+                    >
                       {{ row.member_id }}
                     </span>
                   </div>
 
                   <!-- Row 2: Photo and Name -->
-                  <div class="mobile-row mobile-photo-name-row row items-start q-mb-md">
+                  <div
+                    class="mobile-row mobile-photo-name-row row items-start q-mb-md"
+                  >
                     <!-- Photo -->
                     <div class="mobile-photo-section col-4">
                       <q-avatar size="80px" class="mobile-photo">
                         <q-img
-                          :src="imageURL(row.photo, '/src/assets/action.jpg')"
+                          v-if="row.photo || photoPreview"
+                          :src="photoPreview || `${baseUrl}${row.photo}`"
                           :ratio="1"
                           class="avatar-img"
                         />
                       </q-avatar>
                     </div>
-                    
+
                     <!-- Name -->
                     <div class="mobile-name-section col-8 q-pl-md">
-                      <div class="mobile-english-name text-weight-bold text-dark text-h6">
+                      <div
+                        class="mobile-english-name text-weight-bold text-dark text-h6"
+                      >
                         {{ row.name }}
                       </div>
-                      <div class="mobile-bangla-name text-caption text-blue-grey-7 q-mt-xs">
+                      <div
+                        class="mobile-bangla-name text-caption text-blue-grey-7 q-mt-xs"
+                      >
                         {{ row.name_bangla }}
                       </div>
                     </div>
@@ -280,7 +302,9 @@
                         color="primary"
                         class="q-mr-sm"
                       />
-                      <span class="mobile-contact-text text-weight-medium text-dark">
+                      <span
+                        class="mobile-contact-text text-weight-medium text-dark"
+                      >
                         {{ row.mobile || "N/A" }}
                       </span>
                     </div>
@@ -291,7 +315,9 @@
                         color="primary"
                         class="q-mr-sm"
                       />
-                      <span class="mobile-contact-text text-body2 text-blue-grey-7">
+                      <span
+                        class="mobile-contact-text text-body2 text-blue-grey-7"
+                      >
                         {{ row.email || "N/A" }}
                       </span>
                     </div>
@@ -332,7 +358,8 @@
               class="mobile-pagination-controls"
             />
             <div class="text-caption text-center q-mt-sm text-blue-grey-6">
-              Page {{ pagination.page }} of {{ Math.ceil(pagination.rowsNumber / pagination.rowsPerPage) }}
+              Page {{ pagination.page }} of
+              {{ Math.ceil(pagination.rowsNumber / pagination.rowsPerPage) }}
             </div>
           </div>
         </div>
@@ -355,6 +382,7 @@ const tableRef = ref(null);
 const loading = ref(false);
 const store = useStore();
 const $q = useQuasar();
+const baseUrl = process.env.DEV_WEB_URL;
 
 const pagination = ref({
   page: 1,
@@ -437,9 +465,9 @@ function imageURL(url, defaultPATH) {
 
 const viewMemberDetails = (member) => {
   router.push({
-    name: 'MemberDetails',
+    name: "MemberDetails",
     params: { id: member.id },
-    state: { memberData: member }
+    state: { memberData: member },
   });
 };
 
@@ -499,7 +527,6 @@ const fetchData = async (page = 1) => {
       rowsPerPage: meta.per_page,
       rowsNumber: meta.total,
     };
-
   } catch (err) {
     console.error("Error fetching members:", err);
     $q.notify({
@@ -943,37 +970,43 @@ onMounted(async () => {
 
 /* Responsive adjustments for very small screens */
 @media (max-width: 480px) {
+  .header-title {
+    font-size: 1.2rem;
+  }
+   .header-subtitle {
+    font-size: 0.9rem;
+  }
   .mobile-header-title {
     font-size: 1.3rem;
   }
-  
+
   .mobile-header-subtitle {
     font-size: 0.9rem;
   }
-  
+
   .mobile-photo {
     width: 70px;
     height: 70px;
   }
-  
+
   .mobile-english-name {
     font-size: 16px;
   }
-  
+
   .mobile-bangla-name {
     font-size: 13px;
   }
-  
+
   .mobile-contact-text {
     font-size: 14px;
   }
-  
+
   .mobile-view-btn {
     height: 44px;
     min-height: 44px;
     font-size: 15px;
   }
-  
+
   .mobile-view-btn :deep(.q-btn__content) {
     font-size: 15px;
   }
@@ -983,34 +1016,34 @@ onMounted(async () => {
   .mobile-header-title {
     font-size: 1.2rem;
   }
-  
+
   .mobile-photo {
     width: 60px;
     height: 60px;
   }
-  
+
   .mobile-name-section {
     padding-left: 12px;
   }
-  
+
   .mobile-english-name {
     font-size: 15px;
   }
-  
+
   .mobile-bangla-name {
     font-size: 12px;
   }
-  
+
   .mobile-contact-text {
     font-size: 13px;
   }
-  
+
   .mobile-view-btn {
     height: 40px;
     min-height: 40px;
     font-size: 14px;
   }
-  
+
   .mobile-view-btn :deep(.q-btn__content) {
     font-size: 14px;
   }

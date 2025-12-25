@@ -261,33 +261,24 @@
                       </template>
                     </q-select>
                   </div>
-                  <q-input
-                  filled
-                  v-model="formData.address"
-                  label="Address *"
-                  lazy-rules
-                  class="custom-input, full-width"
-                  :rules="[(val) => !!val || 'Address is required']"
-                >
-                  <template v-slot:prepend>
-                    <q-icon name="home" color="primary" />
-                  </template>
-                </q-input>
                 </div>
 
-                <!-- Address Section -->
-                <!-- <q-input
-                  filled
-                  v-model="formData.address"
-                  label="Address *"
-                  lazy-rules
-                  class="custom-input"
-                  :rules="[(val) => !!val || 'Address is required']"
-                >
-                  <template v-slot:prepend>
-                    <q-icon name="home" color="primary" />
-                  </template>
-                </q-input> -->
+                <div class="row q-col-gutter-md">
+                  <div class="col-12">
+                    <q-input
+                      filled
+                      v-model="formData.address"
+                      label="Address *"
+                      lazy-rules
+                      class="custom-input full-width"
+                      :rules="[(val) => !!val || 'Address is required']"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="home" color="primary" />
+                      </template>
+                    </q-input>
+                  </div>
+                </div>
 
                 <!-- Educational Information -->
                 <div class="section-header q-mt-xl">
@@ -297,23 +288,76 @@
 
                 <div class="row q-col-gutter-md">
                   <div class="col-12 col-sm-6">
-                    <q-input
+                    <q-select
                       filled
                       v-model="formData.educational_qualification"
                       label="Educational Qualification"
+                      :options="degreeOptions"
+                      option-label="label"
+                      option-value="value"
+                      emit-value
+                      map-options
                       class="custom-input"
+                      clearable
+                      dropdown-icon="expand_more"
+                      use-input
+                      input-debounce="300"
+                      @filter="filterDegrees"
+                      :loading="degreeLoading"
                     >
                       <template v-slot:prepend>
                         <q-icon name="school" color="teal" />
                       </template>
-                    </q-input>
+                      
+                      <!-- Custom dropdown with categories -->
+                      <template v-slot:option="scope">
+                        <q-item v-bind="scope.itemProps">
+                          <q-item-section avatar>
+                            <q-icon 
+                              :name="scope.opt.icon" 
+                              :color="getDegreeColor(scope.opt.category)" 
+                            />
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label class="text-weight-medium">{{ scope.opt.label }}</q-item-label>
+                            <q-item-label caption class="text-grey-7">
+                              {{ getCategoryLabel(scope.opt.category) }}
+                            </q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                      
+                      <!-- Custom selected display -->
+                      <template v-slot:selected>
+                        <div v-if="formData.educational_qualification" class="flex items-center">
+                          <q-icon 
+                            :name="getSelectedDegreeIcon()" 
+                            :color="getSelectedDegreeColor()" 
+                            size="20px"
+                            class="q-mr-sm"
+                          />
+                          {{ getSelectedDegreeLabel() }}
+                        </div>
+                        <span v-else class="text-grey-6"></span>
+                      </template>
+                      
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No matching degree found
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
                   </div>
+                  
                   <div class="col-12 col-sm-6">
                     <q-input
                       filled
                       v-model="formData.last_education_institution"
                       label="Last Education Institution"
                       class="custom-input"
+                      placeholder="e.g., University of Dhaka"
                     >
                       <template v-slot:prepend>
                         <q-icon name="account_balance" color="teal" />
@@ -335,6 +379,7 @@
                       v-model="formData.spouse_profession"
                       label="Spouse Profession"
                       class="custom-input"
+                      placeholder="e.g., Government Officer, Teacher"
                     >
                       <template v-slot:prepend>
                         <q-icon name="work_outline" color="deep-orange" />
@@ -347,6 +392,7 @@
                       v-model="formData.social_media_link"
                       label="Social Media Link"
                       class="custom-input"
+                      placeholder="https://facebook.com/username"
                     >
                       <template v-slot:prepend>
                         <q-icon name="share" color="deep-orange" />
@@ -376,6 +422,7 @@
                       class="custom-input"
                       @filter="filterCommissionerates"
                       @update:model-value="loadDivisions"
+                      :loading="commissionerateLoading"
                     >
                       <template v-slot:prepend>
                         <q-icon name="location_city" color="secondary" />
@@ -405,6 +452,7 @@
                       :disable="!formData.commissionerate_id"
                       @filter="filterDivisions"
                       @update:model-value="loadCircles"
+                      :loading="divisionLoading"
                     >
                       <template v-slot:prepend>
                         <q-icon name="account_balance" color="secondary" />
@@ -439,6 +487,7 @@
                       class="custom-input"
                       :disable="!formData.division_id"
                       @filter="filterCircles"
+                      :loading="circleLoading"
                     >
                       <template v-slot:prepend>
                         <q-icon name="maps_home_work" color="secondary" />
@@ -470,6 +519,7 @@
                       use-input
                       class="custom-input"
                       @filter="filterDistricts"
+                      :loading="districtLoading"
                     >
                       <template v-slot:prepend>
                         <q-icon name="map" color="secondary" />
@@ -486,7 +536,7 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="row justify-between q-mt-xl q-pt-lg">
+                <div class="row justify-between q-mt-xl q-pt-lg action-buttons">
                   <q-btn
                     label="Back to Login"
                     to="/login"
@@ -495,7 +545,7 @@
                     icon="arrow_back"
                     size="md"
                     no-caps
-                    class="q-px-lg"
+                    class="q-px-lg back-btn"
                   />
                   <q-btn
                     label="Create Account"
@@ -505,7 +555,7 @@
                     icon="how_to_reg"
                     size="md"
                     no-caps
-                    class="q-px-xl"
+                    class="q-px-xl submit-btn"
                     rounded
                   />
                 </div>
@@ -519,7 +569,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { api } from 'boot/axios';
 import { useQuasar } from 'quasar';
@@ -532,6 +582,14 @@ const error = ref(null);
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const confirmPassword = ref('');
+const termsAccepted = ref(false);
+
+// Loading states
+const commissionerateLoading = ref(false);
+const divisionLoading = ref(false);
+const circleLoading = ref(false);
+const districtLoading = ref(false);
+const degreeLoading = ref(false);
 
 // Form data
 const formData = ref({
@@ -578,59 +636,174 @@ const filteredCommissionerates = ref([]);
 const filteredDivisions = ref([]);
 const filteredCircles = ref([]);
 const filteredDistricts = ref([]);
+const filteredDegrees = ref([]);
+
+// Degree options with categories
+const allDegreeOptions = ref([
+
+  // Bachelor's Degrees
+  { label: 'Bachelor of Science (BSc)', value: 'bsc', category: 'bachelor', icon: 'science' },
+  { label: 'Bachelor of Arts (BA)', value: 'ba', category: 'bachelor', icon: 'menu_book' },
+  { label: 'Bachelor of Commerce (BCom)', value: 'bcom', category: 'bachelor', icon: 'account_balance' },
+  { label: 'Bachelor of Business Administration (BBA)', value: 'bba', category: 'bachelor', icon: 'business' },
+  { label: 'Bachelor of Science in Engineering (BSc Engg)', value: 'bsc_engg', category: 'engineering', icon: 'engineering' },
+  
+  // Master's Degrees
+  { label: 'Master of Science (MSc)', value: 'msc', category: 'masters', icon: 'science' },
+  { label: 'Master of Arts (MA)', value: 'ma', category: 'masters', icon: 'menu_book' },
+  { label: 'Master of Commerce (MCom)', value: 'mcom', category: 'masters', icon: 'account_balance' },
+  { label: 'Master of Business Administration (MBA)', value: 'mba', category: 'masters', icon: 'business' },
+  { label: 'Master of Science in Engineering (MSc Engg)', value: 'msc_engg', category: 'engineering_masters', icon: 'engineering' },
+  
+]);
+
+// Initialize filtered degrees
+const degreeOptions = computed(() => {
+  return filteredDegrees.value.length > 0 ? filteredDegrees.value : allDegreeOptions.value;
+});
+
+// Category labels for display
+const getCategoryLabel = (category) => {
+  const categories = {
+    'bachelor': "Bachelor's Degree",
+    'engineering': 'Engineering Degree',
+    'masters': "Master's Degree",
+  };
+  return categories[category] || 'Other';
+};
+
+// Color coding for categories
+const getDegreeColor = (category) => {
+  const colors = {
+    'bachelor': 'indigo',
+    'engineering': 'deep-purple',
+    'masters': 'orange',
+    'engineering_masters': 'purple',
+    
+  };
+  return colors[category] || 'grey';
+};
+
+// Helper functions for selected value
+const getSelectedDegreeIcon = () => {
+  if (!formData.value.educational_qualification) return 'school';
+  const degree = allDegreeOptions.value.find(opt => opt.value === formData.value.educational_qualification);
+  return degree?.icon || 'school';
+};
+
+const getSelectedDegreeColor = () => {
+  if (!formData.value.educational_qualification) return 'grey';
+  const degree = allDegreeOptions.value.find(opt => opt.value === formData.value.educational_qualification);
+  return getDegreeColor(degree?.category);
+};
+
+const getSelectedDegreeLabel = () => {
+  if (!formData.value.educational_qualification) return '';
+  const degree = allDegreeOptions.value.find(opt => opt.value === formData.value.educational_qualification);
+  return degree?.label || '';
+};
+
+// Filter degrees
+const filterDegrees = (val, update) => {
+  update(() => {
+    if (val === '') {
+      filteredDegrees.value = allDegreeOptions.value;
+    } else {
+      const needle = val.toLowerCase();
+      filteredDegrees.value = allDegreeOptions.value.filter(
+        v => v.label.toLowerCase().indexOf(needle) > -1 ||
+             v.category.toLowerCase().indexOf(needle) > -1
+      );
+    }
+  });
+};
 
 // Load initial data
 onMounted(async () => {
   try {
-    await loadCommissionerates();
-    await loadDistricts();
+    await Promise.all([
+      loadCommissionerates(),
+      loadDistricts()
+    ]);
+    // Initialize filtered degrees
+    filteredDegrees.value = allDegreeOptions.value;
   } catch (err) {
+    console.error('Failed to load initial data:', err);
     $q.notify({
       type: 'negative',
-      message: 'Failed to load location data',
+      message: 'Failed to load initial data. Please refresh the page.',
+      timeout: 3000
     });
   }
 });
 
 // Load commissionerates
 const loadCommissionerates = async () => {
-  const response = await api.get(
-    '/v1/categories?limit=0&search=type:commissionerate'
-  );
-  commissionerates.value = response.data.data;
-  filteredCommissionerates.value = commissionerates.value;
+  commissionerateLoading.value = true;
+  try {
+    const response = await api.get(
+      '/v1/categories?limit=0&search=type:commissionerate'
+    );
+    commissionerates.value = response.data.data;
+    filteredCommissionerates.value = commissionerates.value;
+  } catch (error) {
+    console.error('Error loading commissionerates:', error);
+  } finally {
+    commissionerateLoading.value = false;
+  }
 };
 
 // Load divisions for selected commissionerate
 const loadDivisions = async () => {
   if (!formData.value.commissionerate_id) return;
-
-  const response = await api.get(
-    `/v1/categories?limit=0&search=parent_id:${formData.value.commissionerate_id}`
-  );
-  divisions.value = response.data.data || [];
-  filteredDivisions.value = divisions.value;
-  formData.value.division_id = null;
-  formData.value.circle_id = null;
+  
+  divisionLoading.value = true;
+  try {
+    const response = await api.get(
+      `/v1/categories?limit=0&search=parent_id:${formData.value.commissionerate_id}`
+    );
+    divisions.value = response.data.data || [];
+    filteredDivisions.value = divisions.value;
+    formData.value.division_id = null;
+    formData.value.circle_id = null;
+  } catch (error) {
+    console.error('Error loading divisions:', error);
+  } finally {
+    divisionLoading.value = false;
+  }
 };
 
 // Load circles for selected division
 const loadCircles = async () => {
   if (!formData.value.division_id) return;
-
-  const response = await api.get(
-    `/v1/categories?limit=0&search=parent_id:${formData.value.division_id}`
-  );
-  circles.value = response.data.data || [];
-  filteredCircles.value = circles.value;
-  formData.value.circle_id = null;
+  
+  circleLoading.value = true;
+  try {
+    const response = await api.get(
+      `/v1/categories?limit=0&search=parent_id:${formData.value.division_id}`
+    );
+    circles.value = response.data.data || [];
+    filteredCircles.value = circles.value;
+    formData.value.circle_id = null;
+  } catch (error) {
+    console.error('Error loading circles:', error);
+  } finally {
+    circleLoading.value = false;
+  }
 };
 
 // Load all districts
 const loadDistricts = async () => {
-  const response = await api.get('/v1/categories?limit=0&search=type:district');
-  districts.value = response.data.data;
-  filteredDistricts.value = districts.value;
+  districtLoading.value = true;
+  try {
+    const response = await api.get('/v1/categories?limit=0&search=type:district');
+    districts.value = response.data.data;
+    filteredDistricts.value = districts.value;
+  } catch (error) {
+    console.error('Error loading districts:', error);
+  } finally {
+    districtLoading.value = false;
+  }
 };
 
 // Filter functions for searchable selects
@@ -676,35 +849,60 @@ const handleRegister = async () => {
     loading.value = true;
     error.value = null;
 
+    // Validate required fields
+    if (!formData.value.name || !formData.value.email || !formData.value.mobile || 
+        !formData.value.password || !formData.value.designation || !formData.value.address || 
+        !formData.value.dob) {
+      error.value = 'Please fill all required fields marked with *';
+      loading.value = false;
+      return;
+    }
+
+    if (formData.value.password !== confirmPassword.value) {
+      error.value = 'Passwords do not match';
+      loading.value = false;
+      return;
+    }
+
+    if (!termsAccepted.value) {
+      error.value = 'You must accept the Terms & Conditions';
+      loading.value = false;
+      return;
+    }
+
     const params = new URLSearchParams();
-    params.append('name', formData.value.name);
-    params.append('name_bangla', formData.value.name_bangla || '');
-    params.append('email', formData.value.email);
-    params.append('mobile', formData.value.mobile);
+    
+    // Required fields
+    params.append('name', formData.value.name.trim());
+    params.append('email', formData.value.email.trim());
+    params.append('mobile', formData.value.mobile.trim());
     params.append('password', formData.value.password);
     params.append('designation', formData.value.designation);
-    params.append('address', formData.value.address);
+    params.append('address', formData.value.address.trim());
     params.append('dob', formData.value.dob);
-    params.append('role', formData.value.role);
+    params.append('role', 'subadmin');
     
     // Optional fields - only append if they have value
+    if (formData.value.name_bangla && formData.value.name_bangla.trim()) {
+      params.append('name_bangla', formData.value.name_bangla.trim());
+    }
     if (formData.value.officer_joining_date) {
       params.append('officer_joining_date', formData.value.officer_joining_date);
     }
     if (formData.value.blood_group) {
       params.append('blood_group', formData.value.blood_group);
     }
-    if (formData.value.social_media_id) {
-      params.append('social_media_link', formData.value.social_media_link);
+    if (formData.value.social_media_link && formData.value.social_media_link.trim()) {
+      params.append('social_media_link', formData.value.social_media_link.trim());
     }
     if (formData.value.educational_qualification) {
       params.append('educational_qualification', formData.value.educational_qualification);
     }
-    if (formData.value.last_education_institution) {
-      params.append('last_education_institution', formData.value.last_education_institution);
+    if (formData.value.last_education_institution && formData.value.last_education_institution.trim()) {
+      params.append('last_education_institution', formData.value.last_education_institution.trim());
     }
-    if (formData.value.spouse_profession) {
-      params.append('spouse_profession', formData.value.spouse_profession);
+    if (formData.value.spouse_profession && formData.value.spouse_profession.trim()) {
+      params.append('spouse_profession', formData.value.spouse_profession.trim());
     }
     
     // Optional location fields
@@ -727,27 +925,56 @@ const handleRegister = async () => {
       },
     });
     
-    console.log('Registration response:', response.data);
-    
     $q.notify({
       type: 'positive',
-      message: 'Registration successful! Please login.',
+      message: 'Registration successful! Please login to continue.',
       icon: 'check_circle',
       position: 'top',
-      timeout: 3000
+      timeout: 4000
     });
     
-    router.push('/login');
+    // Reset form
+    formData.value = {
+      name: '',
+      name_bangla: '',
+      email: '',
+      mobile: '',
+      password: '',
+      designation: '',
+      address: '',
+      dob: '',
+      officer_joining_date: '',
+      blood_group: '',
+      social_media_link: '',
+      educational_qualification: '',
+      last_education_institution: '',
+      spouse_profession: '',
+      role: 'subadmin',
+      commissionerate_id: null,
+      division_id: null,
+      circle_id: null,
+      district_id: null,
+    };
+    confirmPassword.value = '';
+    termsAccepted.value = false;
+    
+    // Redirect after a short delay
+    setTimeout(() => {
+      router.push('/login');
+    }, 2000);
     
   } catch (err) {
     console.error('Registration error:', err);
     
-    error.value =
-      err.response?.data?.message || 'Registration failed. Please try again.';
+    const errorMsg = err.response?.data?.message || 
+                     err.response?.data?.error || 
+                     'Registration failed. Please try again.';
+    
+    error.value = errorMsg;
     
     $q.notify({
       type: 'negative',
-      message: error.value,
+      message: errorMsg,
       icon: 'error',
       position: 'top',
       timeout: 5000
@@ -763,6 +990,7 @@ const handleRegister = async () => {
 .bg-gradient {
   background: linear-gradient(135deg, #36839d 0%, #2a5b6e 100%);
   min-height: 100vh;
+  padding: 20px;
 }
 
 .registration-container {
@@ -773,8 +1001,6 @@ const handleRegister = async () => {
 }
 
 .registration-card {
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(10px);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -789,7 +1015,7 @@ const handleRegister = async () => {
   align-items: center;
   padding: 16px 0;
   border-bottom: 2px solid #f0f0f0;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   border-radius: 8px;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.02), transparent);
   padding-left: 12px;
@@ -808,10 +1034,15 @@ const handleRegister = async () => {
 .custom-input :deep(.q-field__control) {
   border-radius: 12px;
   transition: all 0.3s ease;
+  min-height: 56px;
 }
 
 .custom-input :deep(.q-field__control:hover) {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-input.full-width {
+  width: 100%;
 }
 
 .corporation-logo {
@@ -820,32 +1051,204 @@ const handleRegister = async () => {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-.required-field :deep(.q-field__label)::after {
-  content: " *";
-  color: #f44336;
-}
-
 .text-size{
   font-size: x-large;
 }
 
-@media (max-width: 600px) {
+/* Custom dropdown styling */
+.custom-input :deep(.q-menu) {
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-height: 400px;
+}
+
+.custom-input :deep(.q-item) {
+  min-height: 56px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.custom-input :deep(.q-item--active) {
+  background-color: #f0f7ff;
+}
+
+.custom-input :deep(.q-item__label) {
+  font-size: 15px;
+}
+
+.custom-input :deep(.q-item__label--caption) {
+  font-size: 12px;
+}
+
+/* Selected item styling */
+.custom-input :deep(.q-field__native > div) {
+  display: flex;
+  align-items: center;
+}
+
+/* Action buttons styling */
+.action-buttons {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 24px;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  color: white !important;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.back-btn {
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Terms checkbox */
+.terms-checkbox {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+}
+
+.terms-checkbox :deep(.q-checkbox__inner) {
+  font-size: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
   .registration-container {
+    max-width: 900px;
     padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .registration-container {
+    max-width: 95%;
+    padding: 12px;
   }
   
   .registration-card {
-    margin: 0;
     border-radius: 16px;
   }
   
   .section-header {
     padding: 12px 0;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
   }
   
   .section-header .text-h6 {
     font-size: 1.1rem;
+  }
+  
+  .custom-input :deep(.q-field__control) {
+    min-height: 52px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bg-gradient {
+    padding: 12px;
+  }
+  
+  .registration-container {
+    padding: 8px;
+  }
+  
+  .registration-card {
+    margin: 0;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  
+  .corporation-logo {
+    max-width: 150px;
+  }
+  
+  .text-size {
+    font-size: large;
+  }
+  
+  .section-header {
+    padding: 10px 0;
+    margin-bottom: 16px;
+  }
+  
+  .section-header .text-h6 {
+    font-size: 1rem;
+  }
+  
+  .section-header .q-icon {
+    font-size: 20px;
+  }
+  
+  .custom-input :deep(.q-field__control) {
+    min-height: 48px;
+  }
+  
+  .custom-input :deep(.q-field__native) {
+    font-size: 14px;
+  }
+  
+  .custom-input :deep(.q-item) {
+    min-height: 48px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .back-btn, .submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .q-gutter-lg {
+    gap: 16px !important;
+  }
+  
+  .q-mt-xl {
+    margin-top: 24px !important;
+  }
+  
+  .q-pt-lg {
+    padding-top: 20px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .registration-card {
+    padding: 16px;
+  }
+  
+  .corporation-logo {
+    max-width: 120px;
+  }
+  
+  .text-size {
+    font-size: medium;
+  }
+  
+  .custom-input :deep(.q-field__control) {
+    min-height: 44px;
+  }
+  
+  .custom-input :deep(.q-field__native) {
+    font-size: 13px;
   }
 }
 </style>

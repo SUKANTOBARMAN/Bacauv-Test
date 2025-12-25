@@ -1,892 +1,520 @@
 <template>
-  <q-page class="profile-form-page q-pa-md">
-    <!-- Loading State -->
-    <div v-if="loading" class="loading-container column items-center justify-center q-pa-xl">
-      <q-spinner-cube color="primary" size="60px" />
-      <div class="text-h6 q-mt-md text-blue-grey-6">Loading Profile...</div>
-    </div>
+  <q-page class="bg-grey-1">
+    <div class="q-pa-md">
+      <!-- Loading -->
+      <div v-if="loading" class="flex justify-center q-pt-xl">
+        <q-spinner-cube color="primary" size="60px" />
+      </div>
 
-    <!-- Error State -->
-    <div v-else-if="error" class="error-container column items-center justify-center q-pa-xl">
-      <q-icon name="error_outline" color="negative" size="70px" />
-      <div class="text-h5 q-mt-md text-weight-medium text-negative">Profile Not Found</div>
-      <div class="text-body1 q-mt-sm text-blue-grey-6 text-center">{{ error }}</div>
-      <q-btn unelevated color="primary" @click="loadMemberData" class="q-mt-lg" icon="refresh">
-        Try Again
-      </q-btn>
-    </div>
-
-    <!-- Profile Content -->
-    <div v-else-if="member.id" class="profile-form-content">
-      <!-- Back Button (Top Right) -->
-      <div class="row justify-end q-mb-lg">
+      <!-- Error -->
+      <div v-else-if="error" class="text-center q-pt-xl">
+        <q-icon name="error_outline" color="negative" size="70px" />
+        <div class="text-h6 q-mt-md text-negative">Error Loading Member</div>
+        <div class="text-body2 q-mt-sm text-grey-7">{{ error }}</div>
         <q-btn 
-          flat 
-          color="blue-grey-6" 
-          icon="arrow_back" 
-          label="Back to List"
-          @click="$router.back()"
-          class="q-px-lg"
-          size="md"
+          unelevated 
+          color="primary" 
+          @click="fetchUserProfile" 
+          class="q-mt-lg" 
+          icon="refresh"
+          label="Try Again"
         />
       </div>
 
-      <!-- Main Form Container -->
-      <div class="form-container">
-        <!-- Profile Header with Image -->
-        <div class="profile-header-section q-mb-xl">
-          <div class="profile-image-wrapper">
-            <div class="profile-image-frame">
-              <q-img
-                :src="imageURL(member.photo,'/src/assets/action.jpg')"
-                :ratio="1"
-                class="profile-img"
-                loading="lazy"
-                @error="handleImageError"
-                @load="handleImageLoad"
-                spinner-color="primary"
-                spinner-size="50px"
-                :placeholder-src="defaultImage"
-              >
-                <template v-slot:error>
-                  <div class="absolute-full flex flex-center bg-grey-3 text-grey-7">
-                    <q-icon name="person" size="60px" />
-                  </div>
-                </template>
-              </q-img>
-              <div v-if="member.verified_at" class="verified-badge">
-                <q-icon name="verified" size="20px" />
-              </div>
+      <!-- Main Content -->
+      <div v-else-if="user.id">
+        <!-- Header -->
+        <div class="q-mb-lg">
+          <div class="flex items-center q-mb-md">
+            <q-btn 
+              flat 
+              round 
+              color="grey-7" 
+              icon="arrow_back" 
+              @click="$router.back()"
+              class="q-mr-sm"
+            />
+            <div>
+              <div class="text-h5 text-weight-bold text-dark">Member Details</div>
+              <div class="text-body2 text-grey-7">{{ user.name }}'s complete information</div>
             </div>
-          </div>
-          
-          <div class="profile-title-section text-center q-mt-lg">
-            <div class="text-h3 text-weight-bold text-blue-grey-9 q-mb-xs">
-              {{ member.name }}
-            </div>
-            <div class="text-h5 text-blue-grey-7 q-mb-md">
-              {{ member.name_bangla }}
-            </div>
-            
-            <!-- Member ID Badge -->
-            <div class="member-id-badge q-mb-sm">
-              <q-icon name="badge" size="18px" class="q-mr-sm" />
-              <span class="text-weight-bold">Member ID:</span> {{ member.member_id }}
-            </div>
-            
           </div>
         </div>
 
-        <!-- Form Sections -->
-        <div class="form-sections q-col-gutter-y-lg">
-          <!-- Personal Information Section -->
-          <q-card class="form-section-card" flat>
-            <q-card-section class="section-header">
-              <div class="section-title text-h5 text-weight-medium">
-                <q-icon name="person" size="28px" class="q-mr-sm" />
-                Personal Information
-              </div>
-            </q-card-section>
-            
-            <q-separator />
-            
-            <q-card-section class="q-pa-lg">
-              <div class="row q-col-gutter-lg">
-                <!-- Left Column -->
-                <div class="col-md-6 col-sm-12">
-                         <!-- Designation -->
-              <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="work" class="q-mr-sm" />
-                      Designation
-                    </div>
-                    <div class="field-value">{{ (member.designation) }}</div>
-                  </div>
-                  <!-- Date of Birth -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="cake" class="q-mr-sm" />
-                      Date of Birth
-                    </div>
-                    <div class="field-value">{{ formatDate(member.dob) }}</div>
-                  </div>
-                  
-                  <!-- Educational Qualification -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="school" class="q-mr-sm" />
-                      Educational Qualification
-                    </div>
-                    <div class="field-value">{{ member.educational_qualification || 'Not provided' }}</div>
-                  </div>
-                  
-                  <!-- Last Education Institution -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="location_city" class="q-mr-sm" />
-                      Last Education Institution
-                    </div>
-                    <div class="field-value">{{ member.last_education_institution || 'Not provided' }}</div>
-                  </div>
-                  
-                  <!-- Officer Joining Date -->
-                  <div class="form-field">
-                    <div class="field-label">
-                      <q-icon name="calendar_today" class="q-mr-sm" />
-                      Officer Since
-                    </div>
-                    <div class="field-value">{{ formatDate(member.officer_joining_date) }}</div>
-                  </div>
+        <div class="row q-col-gutter-lg">
+          <!-- Left Column - Profile -->
+          <div class="col-12 col-md-4">
+            <q-card class="shadow-1 rounded-borders">
+              <q-card-section class="bg-primary text-white">
+                <div class="text-center text-h6">Profile</div>
+              </q-card-section>
+              
+              <q-card-section class="text-center q-pa-lg">
+                <!-- Profile Image -->
+                <div class="q-mb-md">
+                  <q-avatar size="120px" class="profile-avatar">
+                    <img 
+                      v-if="user.photo || photoPreview" 
+                      :src="photoPreview || `${baseUrl}${user.photo}`" 
+                      alt="Profile"
+                      @error="handleImageError"
+                    >
+                    <q-icon v-else name="person" size="60px" color="grey-5" />
+                  </q-avatar>
+                  <q-badge 
+                    v-if="user.verified_at" 
+                    color="green" 
+                    class="verified-badge"
+                  >
+                    <q-icon name="verified" size="14px" />
+                  </q-badge>
                 </div>
-                
-                <!-- Right Column -->
-                <div class="col-md-6 col-sm-12">
-                  <!-- Spouse Profession -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="family_restroom" class="q-mr-sm" />
-                      Spouse Profession
-                    </div>
-                    <div class="field-value">{{ member.spouse_profession || 'Not provided' }}</div>
-                  </div>
-                  
-                  <!-- Blood Group -->
-                  <div v-if="member.blood_group" class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="bloodtype" class="q-mr-sm" />
-                      Blood Group
-                    </div>
-                    <div class="field-value">
-                      <span class="blood-group-chip">{{ member.blood_group }}</span>
-                    </div>
-                  </div>
-                  
-                  <!-- Age -->
-                  <div v-if="member.dob" class="form-field">
-                    <div class="field-label">
-                      <q-icon name="access_time" class="q-mr-sm" />
-                      Age
-                    </div>
-                    <div class="field-value">{{ calculateAge(member.dob) }} years</div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-          </q-card>
 
-          <!-- Contact Information Section -->
-          <q-card class="form-section-card" flat>
-            <q-card-section class="section-header">
-              <div class="section-title text-h5 text-weight-medium">
-                <q-icon name="contact_phone" size="28px" class="q-mr-sm" />
-                Contact Information
-              </div>
-            </q-card-section>
-            
-            <q-separator />
-            
-            <q-card-section class="q-pa-lg">
-              <div class="row q-col-gutter-lg">
-                <!-- Left Column -->
-                <div class="col-md-6 col-sm-12">
-                  <!-- Email -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="mail" class="q-mr-sm" />
-                      Email Address
-                    </div>
-                    <div class="field-value">
-                      <a v-if="member.email" :href="`mailto:${member.email}`" class="contact-link">
-                        {{ member.email }}
-                        <q-icon name="open_in_new" size="16px" class="q-ml-xs" />
-                      </a>
-                      <span v-else class="text-grey-6">Not provided</span>
-                    </div>
-                  </div>
-                  
-                  <!-- Mobile -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="phone" class="q-mr-sm" />
-                      Mobile Number
-                    </div>
-                    <div class="field-value">
-                      <a v-if="member.mobile" :href="`tel:${member.mobile}`" class="contact-link">
-                        {{ member.mobile }}
-                      </a>
-                      <span v-else class="text-grey-6">Not provided</span>
-                    </div>
-                  </div>
+                <!-- Basic Info -->
+                <div class="q-mb-md">
+                  <div class="text-h6 text-weight-bold text-dark">{{ user.name_bangla || user.name }}</div>
+                  <div class="text-body1 text-primary q-mb-sm">{{ getDesignationLabel(user.designation) }}</div>
+                  <div class="text-caption text-grey-7">ID: {{ user.member_id }}</div>
                 </div>
-                
-                <!-- Right Column -->
-                <div class="col-md-6 col-sm-12">
-                  <!-- Address -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="location_on" class="q-mr-sm" />
-                      Address
-                    </div>
-                    <div class="field-value">{{ member.address || 'Not provided' }}</div>
-                  </div>
-                  
-                  <!-- Social Media -->
-                  <div v-if="member.social_media_link" class="form-field">
-                    <div class="field-label">
-                      <q-icon name="link" class="q-mr-sm" />
-                      Social Media
-                    </div>
-                    <div class="field-value">
-                      <a :href="member.social_media_link" target="_blank" class="contact-link">
-                        {{ formatUrl(member.social_media_link) }}
-                        <q-icon name="open_in_new" size="16px" class="q-ml-xs" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-          </q-card>
 
-          <!-- Office Information Section -->
-          <q-card class="form-section-card" flat>
-            <q-card-section class="section-header">
-              <div class="section-title text-h5 text-weight-medium">
-                <q-icon name="business" size="28px" class="q-mr-sm" />
-                Office Information
-              </div>
-            </q-card-section>
-            
-            <q-separator />
-            
-            <q-card-section class="q-pa-lg">
-              <div class="row q-col-gutter-lg">
-                <!-- Left Column -->
-                <div class="col-md-6 col-sm-12">
-                  <!-- Commissionerate -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="location_city" class="q-mr-sm" />
-                      Commissionerate
-                    </div>
-                    <div class="field-value">{{ getCommissionerateName(member.commissionerate_id) }}</div>
+                <!-- Quick Info -->
+                <div class="text-left">
+                  <div class="row items-center q-mb-xs">
+                    <q-icon name="email" size="16px" color="grey-6" class="q-mr-sm" />
+                    <div class="text-body2 text-truncate">{{ user.email || 'N/A' }}</div>
                   </div>
-                  
-                  <!-- Division -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="account_balance" class="q-mr-sm" />
-                      Division
-                    </div>
-                    <div class="field-value">{{ getDivisionName(member.division_id) }}</div>
+                  <div class="row items-center q-mb-xs">
+                    <q-icon name="phone" size="16px" color="grey-6" class="q-mr-sm" />
+                    <div class="text-body2">{{ user.mobile || 'N/A' }}</div>
                   </div>
+                  <!-- <div class="row items-center q-mb-xs">
+                    <q-icon name="calendar_today" size="16px" color="grey-6" class="q-mr-sm" />
+                    <div class="text-body2">Joined: {{ formatDate(user.created_at) }}</div>
+                  </div> -->
                 </div>
-                
-                <!-- Right Column -->
-                <div class="col-md-6 col-sm-12">
-                  <!-- Circle -->
-                  <div class="form-field q-mb-lg">
-                    <div class="field-label">
-                      <q-icon name="settings" class="q-mr-sm" />
-                      Circle
-                    </div>
-                    <div class="field-value">{{ getCircleName(member.circle_id) }}</div>
-                  </div>
-                  
-                  <!-- District -->
-                  <div class="form-field">
-                    <div class="field-label">
-                      <q-icon name="place" class="q-mr-sm" />
-                      District
-                    </div>
-                    <div class="field-value">{{ getDistrictName(member.district_id) }}</div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
-          </q-card>
+              </q-card-section>
+            </q-card>
+          </div>
 
-          <!-- Bottom Actions -->
-          <div class="bottom-actions row justify-center q-mt-xl q-pt-xl q-pb-lg">
-        <q-btn 
-              outline 
-              color="blue-grey-6" 
-              icon="arrow_back" 
-              label="Back to Members"
-              @click="$router.back()"
-              class="action-btn q-px-xl"
-              size="lg"
-            />
+          <!-- Right Column - Tabs -->
+          <div class="col-12 col-md-8">
+            <q-card class="shadow-1 rounded-borders">
+              <!-- Tabs -->
+              <q-tabs
+                v-model="tab"
+                dense
+                class="text-grey-7"
+                active-color="primary"
+                indicator-color="primary"
+                align="left"
+              >
+                <q-tab name="personal" label="Personal" />
+                <q-tab name="contact" label="Contact" />
+                <q-tab name="office" label="Office" />
+              </q-tabs>
+
+              <q-separator />
+
+              <!-- Tab Content -->
+              <q-tab-panels v-model="tab" class="q-pa-none">
+                <!-- Personal -->
+                <q-tab-panel name="personal" class="q-pa-lg">
+                  <div class="text-h6 text-weight-bold q-mb-md">Personal Information</div>
+                  <div class="row q-col-gutter-md">
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Full Name (English)</div>
+                        <div class="text-body1 text-weight-medium">{{ user.name || 'N/A' }}</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Full Name (Bangla)</div>
+                        <div class="text-body1 text-weight-medium">{{ user.name_bangla || 'N/A' }}</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Designation</div>
+                        <div class="text-body1">{{ getDesignationLabel(user.designation) }}</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Date of Birth</div>
+                        <div class="text-body1">{{ formatDate(user.dob) }}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Blood Group</div>
+                        <div class="text-body1">
+                          <span v-if="user.blood_group" class="blood-group">{{ user.blood_group }}</span>
+                          <span v-else>N/A</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Officer Joining Date</div>
+                        <div class="text-body1">{{ formatDate(user.officer_joining_date) }}</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Educational Qualification</div>
+                        <div class="text-body1">{{ user.educational_qualification || 'N/A' }}</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Last Education Institution</div>
+                        <div class="text-body1">{{ user.last_education_institution || 'N/A' }}</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Spouse Profession</div>
+                        <div class="text-body1">{{ user.spouse_profession || 'N/A' }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </q-tab-panel>
+
+                <!-- Contact -->
+                <q-tab-panel name="contact" class="q-pa-lg">
+                  <div class="text-h6 text-weight-bold q-mb-md">Contact Information</div>
+                  <div class="row q-col-gutter-md">
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Email Address</div>
+                        <a v-if="user.email" :href="`mailto:${user.email}`" class="text-primary text-body1">
+                          {{ user.email }}
+                        </a>
+                        <div v-else class="text-body1">N/A</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Mobile Number</div>
+                        <a v-if="user.mobile" :href="`tel:${user.mobile}`" class="text-primary text-body1">
+                          {{ user.mobile }}
+                        </a>
+                        <div v-else class="text-body1">N/A</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Address</div>
+                        <div class="text-body1">{{ user.address || 'N/A' }}</div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="q-mb-md">
+                        <div class="text-caption text-grey-7">Social Media</div>
+                        <a v-if="user.social_media_link" :href="user.social_media_link" target="_blank" class="text-primary text-body1">
+                          {{ formatSocialLink(user.social_media_link) }}
+                        </a>
+                        <div v-else class="text-body1">N/A</div>
+                      </div>
+                    </div>
+                  </div>
+                </q-tab-panel>
+
+                <!-- Office -->
+                <q-tab-panel name="office" class="q-pa-lg">
+                  <div class="text-h6 text-weight-bold q-mb-md">Office Information</div>
+                  
+                  <div class="q-mb-lg">
+                    <div class="text-subtitle1 text-weight-medium q-mb-sm">Administrative Hierarchy</div>
+                    <div class="row q-col-gutter-md">
+                      <div class="col-12 col-sm-6">
+                        <div class="q-mb-md">
+                          <div class="text-caption text-grey-7">Commissionerate</div>
+                          <div class="text-body1">{{ user.commissionerate?.data?.name || 'N/A' }}</div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="q-mb-md">
+                          <div class="text-caption text-grey-7">Division</div>
+                          <div class="text-body1">{{ user.division?.data?.name || 'N/A' }}</div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="q-mb-md">
+                          <div class="text-caption text-grey-7">Circle</div>
+                          <div class="text-body1">{{ user.circle?.data?.name || 'N/A' }}</div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="q-mb-md">
+                          <div class="text-caption text-grey-7">District</div>
+                          <div class="text-body1">{{ user.district?.data?.name || 'N/A' }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </q-tab-panel>
+              </q-tab-panels>
+            </q-card>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- No Data State -->
-    <div v-else class="no-data-container column items-center justify-center q-pa-xl">
-      <q-icon name="person_off" size="80px" color="blue-grey-4" />
-      <div class="text-h5 q-mt-md text-blue-grey-7 text-weight-medium">No Profile Data Available</div>
-      <q-btn 
-        unelevated 
-        color="primary" 
-        @click="$router.back()" 
-        class="q-mt-lg" 
-        icon="arrow_back"
-      >
-        Go Back
-      </q-btn>
+      <!-- No Data -->
+      <div v-else class="text-center q-pt-xl">
+        <q-icon name="person_off" size="80px" color="grey-4" />
+        <div class="text-h6 q-mt-md text-grey-6">No Member Data Available</div>
+        <q-btn 
+          unelevated 
+          color="primary" 
+          @click="$router.back()" 
+          class="q-mt-md" 
+          icon="arrow_back"
+          label="Go Back"
+        />
+      </div>
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useQuasar } from 'quasar';
-import { api } from 'boot/axios';
-import { useStore } from 'stores/store';
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useQuasar } from "quasar";
+import { api } from "boot/axios";
 
-const route = useRoute();
-const router = useRouter();
 const $q = useQuasar();
-const store = useStore();
+const route = useRoute();
+const baseUrl = process.env.DEV_WEB_URL;
 
+const tab = ref("personal");
 const loading = ref(true);
 const error = ref(null);
-const imageError = ref(false);
-const defaultImage = ref('/src/assets/user-profile.jpg');
-const imageLoaded = ref(false);
-
-// Member data
-const member = ref({
-  id: null,
+const user = ref({
   name: "",
   name_bangla: "",
-  member_id: "",
-  designation: "",
   email: "",
   mobile: "",
+  designation: "",
   address: "",
-  social_media_link: "",
   dob: "",
-  blood_group: "",
-  spouse_profession: "",
+  verified_at: "",
+  photo: null,
+  commissionerate: null,
+  division: null,
+  circle: null,
+  district: null,
+  created_at: "",
+  id: null,
+  member_id: "",
   officer_joining_date: "",
+  blood_group: "",
+  social_media_link: "",
   educational_qualification: "",
   last_education_institution: "",
-  commissionerate_id: null,
-  division_id: null,
-  circle_id: null,
-  district_id: null,
-  photo: null,
-  verified_at: ""
+  spouse_profession: ""
 });
 
-// Helper functions
-const path = process.env.DEV ? process.env.WEB_DEV_URL : process.env.WEB_BUILD_URL;
+const designationOptions = [
+  { label: "RO (Revenue Officer)", value: "RO" },
+  { label: "ARO (Assistant Revenue Officer)", value: "ARO" },
+];
 
-function imageURL(url) {
-  if (!url || imageError.value) {
-    return defaultImage.value;
-  }
-  if (url.startsWith("http")) {
-    return url;
-  }
-  if (url.startsWith("data:image") || url.startsWith("/")) {
-    return url;
-  }
-  const baseUrl = path || 'http://localhost:8000';
-  return `${baseUrl}${url.startsWith('/') ? url : '/' + url}`;
-}
-
-function handleImageError() {
-  imageError.value = true;
-  console.log('Image load failed, using default');
-}
-
-function handleImageLoad() {
-  imageLoaded.value = true;
-}
-
-const formatUrl = (url) => {
-  if (!url) return '';
-  return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-};
-
-const formatDate = (dateString) => {
-  if (!dateString) return 'Not provided';
+// Methods (keep existing logic)
+const fetchUserProfile = async () => {
   try {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  } catch (e) {
-    return dateString;
-  }
-};
-
-const calculateAge = (dateString) => {
-  if (!dateString) return '—';
-  try {
-    const birthDate = new Date(dateString);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
+    loading.value = true;
+    error.value = null;
     
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  } catch (e) {
-    return '—';
-  }
-};
-
-const getCommissionerateName = (id) => {
-  if (!id) return 'Not assigned';
-  const item = store.getCommissionerate?.find(item => item.value == id);
-  return item ? item.label : `Commissionerate ${id}`;
-};
-
-const getDivisionName = (id) => {
-  if (!id) return 'Not assigned';
-  const item = store.getDivision?.find(item => item.value == id);
-  return item ? item.label : `Division ${id}`;
-};
-
-const getCircleName = (id) => {
-  if (!id) return 'Not assigned';
-  const item = store.getCircle?.find(item => item.value == id);
-  return item ? item.label : `Circle ${id}`;
-};
-
-const getDistrictName = (id) => {
-  if (!id) return 'Not assigned';
-  const item = store.getDistrict?.find(item => item.value == id);
-  return item ? item.label : `District ${id}`;
-};
-
-// Data loading
-const loadMemberData = async () => {
-  loading.value = true;
-  error.value = null;
-  imageError.value = false;
-  imageLoaded.value = false;
-  
-  try {
     const memberId = route.params.id;
     
-    // Try route state first
-    if (route.state?.memberData) {
-      Object.assign(member.value, route.state.memberData);
-    }
+    const { data } = await api.get(`/v1/users/${memberId}`, {
+      params: { include: "commissionerate,division,circle,district" }
+    });
     
-    // Fetch from API
-    const response = await api.get(`v1/users/${memberId}`);
-    let memberData = response.data;
-    
-    // Handle response structure
-    if (response.data.data) memberData = response.data.data;
-    else if (response.data.user) memberData = response.data.user;
-    else if (response.data.member) memberData = response.data.member;
-    
-    // Update member data
-    Object.assign(member.value, memberData);
+    if (data.data) user.value = data.data;
+    else if (data.user) user.value = data.user;
+    else user.value = data;
     
   } catch (err) {
-    console.error('Error loading member data:', err);
-    error.value = err.response?.data?.message || err.message || 'Failed to load profile';
+    console.error("Error loading member:", err);
+    error.value = err.response?.data?.message || err.message || "Failed to load member";
     
-    // Fallback to route state
-    if (!member.value.id && route.state?.memberData) {
-      Object.assign(member.value, route.state.memberData);
-    }
+    $q.notify({
+      type: "negative",
+      message: "Failed to load member details",
+      caption: error.value,
+    });
   } finally {
     loading.value = false;
   }
 };
 
-// Load store data
-const ensureStoreData = async () => {
+const getImageUrl = (photoPath) => {
+  if (!photoPath) return '';
+  if (photoPath.startsWith('http') || photoPath.startsWith('data:image')) return photoPath;
+  const base = baseUrl || 'http://localhost:8000';
+  return photoPath.startsWith('storage/') ? `${base}/${photoPath}` : `${base}/storage/${photoPath}`;
+};
+
+const handleImageError = (event) => {
+  event.target.style.display = 'none';
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
   try {
-    if (!store.getCommissionerate?.length) await store.storeCommissionerate();
-    if (!store.getDivision?.length) await store.storeDivision();
-    if (!store.getCircle?.length) await store.storeCircle();
-    if (!store.getDistrict?.length) await store.storeDistrict();
-  } catch (err) {
-    console.error('Error loading store data:', err);
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+  } catch {
+    return dateString;
   }
 };
 
-// Initialize
-onMounted(async () => {
-  try {
-    await ensureStoreData();
-    await loadMemberData();
-  } catch (err) {
-    console.error('Initialization error:', err);
-    error.value = 'Initialization failed: ' + err.message;
-    loading.value = false;
-  }
-});
+const getDesignationLabel = (designationValue) => {
+  const found = designationOptions.find(opt => opt.value === designationValue);
+  return found ? found.label : designationValue || "N/A";
+};
+
+const formatSocialLink = (url) => {
+  if (!url) return "";
+  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+};
+
+onMounted(fetchUserProfile);
 </script>
 
-<style scoped lang="scss">
-.profile-form-page {
-  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-  min-height: 100vh;
+<style scoped>
+/* Profile avatar styling */
+.profile-avatar {
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.form-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 123, 255, 0.08);
-  padding: 40px;
-  border: 1px solid #e1e5eb;
+.verified-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  border-radius: 50%;
+  padding: 4px;
+  border: 2px solid white;
 }
 
-/* Profile Header Section */
-.profile-header-section {
-  text-align: center;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #e1e5eb;
-  margin-bottom: 40px;
-  
-  .profile-image-wrapper {
-    display: flex;
-    justify-content: center;
-    
-    .profile-image-frame {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 8px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-      
-      .profile-img {
-        border-radius: 50%;
-        border: 4px solid white;
-        overflow: hidden;
-        background: #f8fafc;
-        
-        :deep(.q-img__image) {
-          background-size: cover;
-          background-position: center;
-        }
-      }
-      
-      .verified-badge {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
-        background: #4caf50;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        border: 3px solid white;
-        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-      }
-    }
-  }
-  
-  .profile-title-section {
-    .text-h3 {
-      font-size: 2.5rem;
-      color: #1a237e;
-      margin-bottom: 8px;
-    }
-    
-    .text-h5 {
-      font-size: 1.5rem;
-      color: #546e7a;
-      margin-bottom: 16px;
-    }
-    
-    .member-id-badge {
-      display: inline-flex;
-      align-items: center;
-      background: #e8eaf6;
-      color: #3949ab;
-      padding: 10px 24px;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: 500;
-      margin-bottom: 12px;
-      border: 1px solid #c5cae9;
-      
-      .q-icon {
-        color: #3949ab;
-      }
-    }
-    
-    .designation-badge {
-      display: inline-flex;
-      align-items: center;
-      background: #e3f2fd;
-      color: #1565c0;
-      padding: 10px 24px;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: 500;
-      
-      .q-icon {
-        color: #1565c0;
-      }
-    }
-  }
-}
-
-/* Form Section Cards */
-.form-section-card {
-  background: white;
+/* Blood group styling */
+.blood-group {
+  display: inline-block;
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 4px 12px;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e1e5eb;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
-    border-color: #bbdefb;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid #fecaca;
+}
+
+/* Tab styling */
+:deep(.q-tab) {
+  padding: 12px 20px;
+  text-transform: none;
+  font-weight: 500;
+  min-width: 120px;
+}
+
+:deep(.q-tab--active) {
+  color: #1976d2;
+  border-bottom: 3px solid #1976d2;
+}
+
+/* Card styling */
+.q-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Responsive design */
+@media (max-width: 1023px) {
+  .q-card-section {
+    padding: 16px;
   }
   
-  .section-header {
-    padding: 24px 32px;
-    background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
-    border-radius: 16px 16px 0 0;
-    
-    .section-title {
-      color: #1a237e;
-      display: flex;
-      align-items: center;
-      
-      .q-icon {
-        color: #3949ab;
-      }
-    }
-  }
-  
-  .q-separator {
-    background: linear-gradient(to right, transparent, #bbdefb, transparent);
-  }
-  
-  .form-field {
-    padding: 16px 0;
-    
-    .field-label {
-      display: flex;
-      align-items: center;
-      color: #546e7a;
-      font-size: 15px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      
-      .q-icon {
-        color: #3949ab;
-        font-size: 20px;
-      }
-    }
-    
-    .field-value {
-      color: #263238;
-      font-size: 17px;
-      font-weight: 500;
-      line-height: 1.6;
-      padding-left: 32px;
-      
-      .contact-link {
-        color: #3949ab;
-        text-decoration: none;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        transition: all 0.3s ease;
-        
-        &:hover {
-          color: #1a237e;
-          text-decoration: underline;
-          transform: translateX(2px);
-        }
-      }
-      
-      .blood-group-chip {
-        display: inline-block;
-        background: linear-gradient(135deg, #ff5252 0%, #ff1744 100%);
-        color: white;
-        padding: 6px 16px;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 15px;
-        box-shadow: 0 4px 12px rgba(255, 23, 68, 0.2);
-      }
-    }
+  :deep(.q-tab) {
+    padding: 10px 16px;
+    min-width: 100px;
   }
 }
 
-/* Bottom Actions */
-.bottom-actions {
-  border-top: 1px solid #e1e5eb;
-  padding-top: 40px;
+@media (max-width: 599px) {
+  /* Mobile adjustments */
+  .text-h5 {
+    font-size: 1.25rem;
+  }
   
-  .action-btn {
-    min-width: 220px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    
-    &.q-btn--unelevated.bg-primary {
-      background: linear-gradient(135deg, #3949ab 0%, #1a237e 100%);
-      box-shadow: 0 6px 20px rgba(57, 73, 171, 0.3);
-      
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(57, 73, 171, 0.4);
-      }
-    }
-    
-    &.q-btn--outline.text-blue-grey-6 {
-      border: 2px solid #90a4ae;
-      
-      &:hover {
-        background: #f5f7fa;
-        border-color: #546e7a;
-        color: #37474f;
-      }
-    }
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .q-pa-lg {
+    padding: 16px;
+  }
+  
+  :deep(.q-tab) {
+    padding: 8px 12px;
+    font-size: 14px;
+    min-width: auto;
+  }
+  
+  .row.q-col-gutter-lg {
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+  }
+  
+  .col-12 {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
 }
 
-/* Loading & Error States */
-.loading-container,
-.error-container,
-.no-data-container {
-  min-height: 70vh;
+@media (max-width: 399px) {
+  /* Small mobile */
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
   
-  .text-h5,
   .text-h6 {
-    letter-spacing: 0.5px;
+    font-size: 1rem;
+  }
+  
+  .text-body1 {
+    font-size: 14px;
+  }
+  
+  .text-caption {
+    font-size: 12px;
+  }
+  
+  :deep(.q-tab) {
+    padding: 6px 10px;
+    font-size: 13px;
   }
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
-  .form-container {
+/* Desktop optimization */
+@media (min-width: 1440px) {
+  .profile-avatar {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .q-card-section {
     padding: 24px;
-  }
-  
-  .profile-header-section {
-    .profile-image-frame {
-      width: 160px !important;
-      height: 160px !important;
-    }
-    
-    .text-h3 {
-      font-size: 2rem !important;
-    }
-    
-    .text-h5 {
-      font-size: 1.25rem !important;
-    }
-  }
-  
-  .form-section-card {
-    .section-header {
-      padding: 20px 24px;
-      
-      .section-title {
-        font-size: 1.25rem;
-      }
-    }
-  }
-  
-  .bottom-actions {
-    .action-btn {
-      min-width: 180px;
-      margin-bottom: 12px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .profile-form-page {
-    padding: 16px !important;
-  }
-  
-  .form-container {
-    padding: 20px;
-    border-radius: 16px;
-  }
-  
-  .profile-header-section {
-    padding-bottom: 30px;
-    margin-bottom: 30px;
-    
-    .profile-image-frame {
-      width: 140px !important;
-      height: 140px !important;
-    }
-    
-    .text-h3 {
-      font-size: 1.75rem !important;
-    }
-  }
-  
-  .form-section-card {
-    .field-value {
-      font-size: 16px;
-      padding-left: 28px;
-    }
-  }
-  
-  .bottom-actions {
-    flex-direction: column;
-    gap: 12px;
-    
-    .action-btn {
-      width: 100%;
-    }
-  }
-}
-
-/* Print Styles */
-@media print {
-  .profile-form-page {
-    background: white !important;
-    padding: 0 !important;
-  }
-  
-  .q-btn,
-  .bottom-actions,
-  .verified-badge {
-    display: none !important;
-  }
-  
-  .form-container {
-    box-shadow: none !important;
-    border: none !important;
-    padding: 20px !important;
-  }
-  
-  .profile-header-section {
-    border-bottom: 2px solid #000 !important;
-  }
-  
-  .form-section-card {
-    break-inside: avoid;
-    box-shadow: none !important;
-    border: 1px solid #ddd !important;
-    margin-bottom: 20px;
   }
 }
 </style>
