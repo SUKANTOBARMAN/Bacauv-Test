@@ -16,6 +16,12 @@ const routes = [
     component: () => import('src/pages/MemberList.vue'),
     meta: { requiresAuth: false }
   },
+      {
+    path:'/member-details/:id',
+    name:'MemberDetails',
+    component: () => import('src/pages/MemberDetails.vue'),
+    meta: { requiresAuth: false }
+  },
   // {
   //   path:'/commissionerate',
   //   name:'Commissionerate',

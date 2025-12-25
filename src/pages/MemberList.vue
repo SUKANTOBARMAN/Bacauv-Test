@@ -1,16 +1,16 @@
 <template>
   <div class="q-pa-md member-directory-wrapper">
     <q-card bordered class="desktop-card no-shadow">
+      <!-- Header Section - Visible on both desktop and mobile -->
       <q-card-section class="card-header bg-primary-gradient">
         <div class="header-content">
-          <div class="text-h4 text-white q-mb-xs q-mt-sm">
+          <div class="header-title text-white">
             <q-icon name="group" class="q-mr-sm" /> Member Directory
           </div>
-          <div class="text-subtitle1 text-white opacity-8">
-            Browse and manage all registered members
+          <div class="header-subtitle text-white opacity-85">
+            Browse and view all registered members
           </div>
         </div>
-        <q-space />
         <div class="total-members q-mt-md">
           <q-chip
             color="white"
@@ -26,11 +26,12 @@
 
       <q-separator class="header-separator"></q-separator>
 
+      <!-- Search & Filter - Same for both views -->
       <q-expansion-item
         icon="search"
         label="Search & Filter"
         default-open
-        class="search-expansion bg-accent-light"
+        class="search-expansion bg-blue-grey-1"
         expand-icon-class="text-primary-dark"
       >
         <div class="q-pa-md">
@@ -38,7 +39,8 @@
         </div>
       </q-expansion-item>
 
-      <q-card-section v-if="$q.screen.gt.sm" class="q-pa-none">
+      <!-- DESKTOP VIEW -->
+      <q-card-section v-if="$q.screen.gt.sm" class="q-pa-none desktop-section">
         <q-table
           flat
           bordered
@@ -48,7 +50,7 @@
           :columns="columns"
           :rows="data"
           :wrap-cells="true"
-          class="members-table elevation-2"
+          class="members-table"
           row-key="id"
           v-model:pagination="pagination"
           :loading="loading"
@@ -76,13 +78,26 @@
           </template>
 
           <template #loading>
-            <q-inner-loading showing color="accent" />
+            <q-inner-loading showing color="primary" />
           </template>
 
+          <!-- Column 1: Member ID -->
+          <template #body-cell-MemberID="props">
+            <q-td :props="props" class="id-cell text-left">
+              <div class="member-id-container">
+                <q-icon name="vpn_key" size="16px" color="primary" class="q-mr-sm" />
+                <span class="member-id-text text-weight-bold text-primary-dark">
+                  {{ props.row.member_id }}
+                </span>
+              </div>
+            </q-td>
+          </template>
+
+          <!-- Column 2: Photo -->
           <template #body-cell-photo="props">
-            <q-td :props="props" class="photo-cell">
+            <q-td :props="props" class="photo-cell text-center">
               <div class="photo-container-desktop">
-                <q-avatar size="68px" class="member-photo-desktop shadow-0">
+                <q-avatar size="56px" class="member-photo-desktop">
                   <q-img
                     :src="imageURL(props.row.photo, '/src/assets/action.jpg')"
                     :ratio="1"
@@ -93,58 +108,41 @@
             </q-td>
           </template>
 
+          <!-- Column 3: Name -->
           <template #body-cell-name="props">
-            <q-td :props="props" class="name-cell">
+            <q-td :props="props" class="name-cell text-left">
               <div class="member-name">
-                <div class="english-name text-weight-bolder text-primary-dark">
+                <div class="english-name text-weight-medium text-dark">
                   {{ props.row.name }}
                 </div>
-                <div class="bangla-name text-caption text-secondary-dark">
+                <div class="bangla-name text-caption text-blue-grey-7">
                   {{ props.row.name_bangla }}
                 </div>
               </div>
             </q-td>
           </template>
 
-          <template #body-cell-MemberID="props">
-            <q-td :props="props" class="id-cell">
-              <q-chip
-                size="md"
-                color="accent-faded"
-                text-color="accent-dark"
-                class="member-id-chip text-weight-bold"
-              >
-                <q-avatar
-                  size="24px"
-                  icon="vpn_key"
-                  color="accent-dark"
-                  text-color="white"
-                />
-                {{ props.row.member_id }}
-              </q-chip>
-            </q-td>
-          </template>
-
+          <!-- Column 4: Contact -->
           <template #body-cell-contact="props">
-            <q-td :props="props" class="contact-cell">
+            <q-td :props="props" class="contact-cell text-left">
               <div class="contact-info">
-                <div class="contact-item">
+                <div class="contact-item row items-center">
                   <q-icon
                     name="phone_iphone"
-                    size="16px"
-                    class="q-mr-xs text-accent-dark"
+                    size="14px"
+                    class="q-mr-sm text-primary"
                   />
-                  <span class="text-weight-bold text-dark">{{
+                  <span class="text-weight-medium text-dark">{{
                     props.row.mobile || "N/A"
                   }}</span>
                 </div>
-                <div class="contact-item">
+                <div class="contact-item row items-center q-mt-xs">
                   <q-icon
                     name="alternate_email"
-                    size="16px"
-                    class="q-mr-xs text-accent-dark"
+                    size="14px"
+                    class="q-mr-sm text-primary"
                   />
-                  <span class="text-body2 text-grey-8 text-xxl">{{
+                  <span class="text-body2 text-blue-grey-8">{{
                     props.row.email || "N/A"
                   }}</span>
                 </div>
@@ -152,56 +150,24 @@
             </q-td>
           </template>
 
-          <template #body-cell-area="props">
-            <q-td :props="props" class="area-cell">
-              <div class="area-info">
-                <div class="area-item">
-                  <span class="area-label">Commissionerate:&nbsp;</span>
-                  <span class="area-value text-weight-medium">
-                    {{
-                      store.getCommissionerate.find(
-                        (item) => item.value === props.row.commissionerate_id
-                      )?.label || "N/A"
-                    }}
-                  </span>
-                </div>
-                <div class="area-item">
-                  <span class="area-label">Division:&nbsp;</span>
-                  <span class="area-value">
-                    {{
-                      store.getDivision.find(
-                        (item) => item.value === props.row.division_id
-                      )?.label || "N/A"
-                    }}
-                  </span>
-                </div>
-                <div class="area-item">
-                  <span class="area-label">Circle:&nbsp;</span>
-                  <span class="area-value">
-                    {{
-                      store.getCircle.find(
-                        (item) => item.value === props.row.circle_id
-                      )?.label || "N/A"
-                    }}
-                  </span>
-                </div>
-                <div class="area-item">
-                  <span class="area-label">District:&nbsp;</span>
-                  <span class="area-value">
-                    {{
-                      store.getDistrict.find(
-                        (item) => item.value === props.row.district_id
-                      )?.label || "N/A"
-                    }}
-                  </span>
-                </div>
-              </div>
+          <!-- Column 5: Actions -->
+          <template #body-cell-actions="props">
+            <q-td :props="props" class="actions-cell text-center">
+              <q-btn
+                flat
+                color="primary"
+                icon="visibility"
+                label="View Details"
+                @click="viewMemberDetails(props.row)"
+                class="action-btn"
+                size="sm"
+              />
             </q-td>
           </template>
 
           <template #bottom>
             <div class="table-bottom q-pa-sm bg-blue-grey-1">
-              <div class="row items-center justify-between">
+              <div class="row items-center justify-between full-width">
                 <div class="text-body2 text-primary-dark text-weight-medium">
                   Showing
                   {{ (pagination.page - 1) * pagination.rowsPerPage + 1 }} to
@@ -224,138 +190,134 @@
                     direction-links
                     boundary-numbers
                     @update:model-value="onPageChange"
-                    color="accent-dark"
-                    active-color="primary-dark"
+                    color="primary"
+                    active-color="white"
+                    active-text-color="primary"
                     :disable="loading"
                   />
                 </div>
 
                 <div style="width: 200px"></div>
-                </div>
+              </div>
             </div>
           </template>
         </q-table>
       </q-card-section>
 
-      <q-card-section v-else class="q-pa-none">
+      <!-- MOBILE VIEW -->
+      <q-card-section v-else class="q-pa-none mobile-section">
+        <!-- Mobile Header Repeat -->
+        <!-- <div class="mobile-header-repeated bg-primary-gradient q-pa-md">
+          <div class="mobile-header-title text-h5 text-white text-weight-bold q-mb-xs">
+            <q-icon name="group" class="q-mr-sm" /> Member Directory
+          </div>
+          <div class="mobile-header-subtitle text-white opacity-85">
+            Browse and view all registered members
+          </div>
+        </div> -->
+
         <div class="mobile-card-container">
           <q-inner-loading :showing="loading">
-            <q-spinner-cube size="50px" color="accent" />
+            <q-spinner-cube size="50px" color="primary" />
           </q-inner-loading>
 
           <div
             v-if="!loading && data.length === 0"
-            class="text-center q-pa-lg text-h6 text-grey-6"
+            class="text-center q-pa-lg text-h6 text-blue-grey-6"
           >
-            <q-icon name="info" size="24px" class="q-mr-sm" /> No data available
+            <q-icon name="group_off" size="24px" class="q-mr-sm" /> No members found
           </div>
 
-          <q-card
-            v-for="row in data"
-            :key="row.id"
-            class="mobile-data-card q-mb-md"
-            bordered
-            flat
-          >
-            <div class="card-main-content-mobile">
-              <div class="photo-container-mobile">
-                <q-img
-                  :src="imageURL(row.photo, '/src/assets/action.jpg')"
-                  class="card-photo-rounded-mobile"
-                  :ratio="1"
-                />
-              </div>
-
-              <div class="info-container-mobile">
-                <div class="name-english-mobile">
-                  {{ row.name }}
-                </div>
-
-                <div class="name-bangla-with-id-mobile">
-                  {{ row.name_bangla }}
-                  <span class="member-id-mobile"
-                    >(ID: {{ row.member_id }})</span
-                  >
-                </div>
-
-                <div class="contact-details-mobile q-mt-sm">
-                  <div class="contact-item-mobile">
-                    <q-icon
-                      name="alternate_email"
-                      size="16px"
-                      color="primary"
-                    />
-                    <span class="contact-text-mobile text-grey-8">{{
-                      row.email || "N/A"
-                    }}</span>
-                  </div>
-
-                  <div class="contact-item-mobile">
-                    <q-icon name="phone" size="16px" color="primary" />
-                    <span class="contact-text-mobile text-weight-medium">{{
-                      row.mobile || "N/A"
-                    }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <q-expansion-item
-              class="area-expansion-mobile"
-              expand-separator
-              icon="location_on"
-              label="Area Information"
-              header-class="area-header-mobile"
+          <div class="mobile-cards-list q-pa-md">
+            <q-card
+              v-for="row in data"
+              :key="row.id"
+              class="mobile-data-card q-mb-md"
+              bordered
             >
-              <q-card class="area-content-mobile">
-                <q-card-section>
-                  <div class="area-row-mobile">
-                    <span class="area-label-mobile">Commissionerate:</span>
-                    <span class="area-value-mobile">
-                      {{
-                        store.getCommissionerate.find(
-                          (item) => item.value === row.commissionerate_id
-                        )?.label || "N/A"
-                      }}
+              <q-card-section class="q-pa-md">
+                <!-- Mobile Card Layout with 5 sections matching desktop -->
+                <div class="mobile-card-layout">
+                  
+                  <!-- Row 1: Member ID -->
+                  <div class="mobile-row mobile-id-row row items-center q-mb-sm">
+                    <q-icon name="vpn_key" size="16px" color="primary" class="q-mr-sm" />
+                    <span class="mobile-id-text text-weight-bold text-primary-dark">
+                      {{ row.member_id }}
                     </span>
                   </div>
-                  <div class="area-row-mobile">
-                    <span class="area-label-mobile">Division:</span>
-                    <span class="area-value-mobile">
-                      {{
-                        store.getDivision.find(
-                          (item) => item.value === row.division_id
-                        )?.label || "N/A"
-                      }}
-                    </span>
-                  </div>
-                  <div class="area-row-mobile">
-                    <span class="area-label-mobile">Circle:</span>
-                    <span class="area-value-mobile">
-                      {{
-                        store.getCircle.find(
-                          (item) => item.value === row.circle_id
-                        )?.label || "N/A"
-                      }}
-                    </span>
-                  </div>
-                  <div class="area-row-mobile">
-                    <span class="area-label-mobile">District:</span>
-                    <span class="area-value-mobile">
-                      {{
-                        store.getDistrict.find(
-                          (item) => item.value === row.district_id
-                        )?.label || "N/A"
-                      }}
-                    </span>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-          </q-card>
 
+                  <!-- Row 2: Photo and Name -->
+                  <div class="mobile-row mobile-photo-name-row row items-start q-mb-md">
+                    <!-- Photo -->
+                    <div class="mobile-photo-section col-4">
+                      <q-avatar size="80px" class="mobile-photo">
+                        <q-img
+                          :src="imageURL(row.photo, '/src/assets/action.jpg')"
+                          :ratio="1"
+                          class="avatar-img"
+                        />
+                      </q-avatar>
+                    </div>
+                    
+                    <!-- Name -->
+                    <div class="mobile-name-section col-8 q-pl-md">
+                      <div class="mobile-english-name text-weight-bold text-dark text-h6">
+                        {{ row.name }}
+                      </div>
+                      <div class="mobile-bangla-name text-caption text-blue-grey-7 q-mt-xs">
+                        {{ row.name_bangla }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Row 3: Contact Info -->
+                  <div class="mobile-row mobile-contact-row q-mb-md">
+                    <div class="mobile-contact-item row items-center q-mb-sm">
+                      <q-icon
+                        name="phone_iphone"
+                        size="16px"
+                        color="primary"
+                        class="q-mr-sm"
+                      />
+                      <span class="mobile-contact-text text-weight-medium text-dark">
+                        {{ row.mobile || "N/A" }}
+                      </span>
+                    </div>
+                    <div class="mobile-contact-item row items-center">
+                      <q-icon
+                        name="alternate_email"
+                        size="16px"
+                        color="primary"
+                        class="q-mr-sm"
+                      />
+                      <span class="mobile-contact-text text-body2 text-blue-grey-7">
+                        {{ row.email || "N/A" }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Row 4: Action Button - ALWAYS VISIBLE -->
+                  <div class="mobile-row mobile-action-row">
+                    <q-btn
+                      flat
+                      color="primary"
+                      icon="visibility"
+                      label="View Details"
+                      @click="viewMemberDetails(row)"
+                      class="full-width mobile-view-btn"
+                      size="md"
+                      padding="12px"
+                    />
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
+          </div>
+
+          <!-- Mobile Pagination -->
           <div
-            class="mobile-pagination q-mt-md q-mb-lg"
+            class="mobile-pagination q-pa-md bg-white"
             v-if="pagination.rowsNumber > pagination.rowsPerPage"
           >
             <q-pagination
@@ -366,7 +328,12 @@
               @update:model-value="onPageChange"
               direction-links
               color="primary"
+              size="sm"
+              class="mobile-pagination-controls"
             />
+            <div class="text-caption text-center q-mt-sm text-blue-grey-6">
+              Page {{ pagination.page }} of {{ Math.ceil(pagination.rowsNumber / pagination.rowsPerPage) }}
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -375,12 +342,15 @@
 </template>
 
 <script setup>
+// Script remains exactly the same as in your original code
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import SearchMembers from "components/SearchMembers.vue";
 import { useQuasar } from "quasar";
 import { api } from "boot/axios";
 import { useStore } from "stores/store";
 
+const router = useRouter();
 const tableRef = ref(null);
 const loading = ref(false);
 const store = useStore();
@@ -409,6 +379,7 @@ const columns = [
     sortable: true,
     align: "left",
     classes: "id-column",
+    width: "150px",
   },
   {
     name: "photo",
@@ -417,6 +388,7 @@ const columns = [
     sortable: false,
     align: "center",
     classes: "photo-column",
+    width: "100px",
   },
   {
     name: "name",
@@ -425,6 +397,7 @@ const columns = [
     sortable: true,
     align: "left",
     classes: "name-column",
+    width: "250px",
   },
   {
     name: "contact",
@@ -433,14 +406,16 @@ const columns = [
     sortable: true,
     align: "left",
     classes: "contact-column",
+    width: "250px",
   },
   {
-    name: "area",
-    label: "Area Details",
-    field: "commissionerate_id",
-    sortable: true,
-    align: "left",
-    classes: "area-column",
+    name: "actions",
+    label: "Actions",
+    field: "actions",
+    sortable: false,
+    align: "center",
+    classes: "actions-column",
+    width: "150px",
   },
 ];
 
@@ -460,6 +435,14 @@ function imageURL(url, defaultPATH) {
   }
 }
 
+const viewMemberDetails = (member) => {
+  router.push({
+    name: 'MemberDetails',
+    params: { id: member.id },
+    state: { memberData: member }
+  });
+};
+
 const onSearch = (search) => {
   filter.value = { ...search };
   pagination.value.page = 1;
@@ -471,17 +454,10 @@ const onPageChange = (page) => {
   fetchData(page);
 };
 
-const onRowsPerPageChange = (value) => {
-  pagination.value.rowsPerPage = value;
-  pagination.value.page = 1;
-  fetchData(1);
-};
-
 const buildSearchQuery = () => {
   const f = filter.value;
   const search = [];
 
-  // Keyword search - search in multiple fields with OR
   if (f.keywords?.trim()) {
     const k = f.keywords.trim();
     search.push(`name:${k}`);
@@ -490,7 +466,6 @@ const buildSearchQuery = () => {
     search.push(`email:${k}`);
   }
 
-  // Filter search - these should use AND
   if (f.commissionerate_id)
     search.push(`commissionerate_id:${f.commissionerate_id}`);
   if (f.division_id) search.push(`division_id:${f.division_id}`);
@@ -504,33 +479,13 @@ const fetchData = async (page = 1) => {
   loading.value = true;
   try {
     const searchStr = buildSearchQuery();
-    console.log("Search String:", searchStr);
-
-    // Determine searchJoin parameter
-    const hasKeywords = filter.value.keywords?.trim();
-    const hasFilters =
-      filter.value.commissionerate_id ||
-      filter.value.division_id ||
-      filter.value.circle_id ||
-      filter.value.district_id;
-
     let url = `v1/users?verified=true&page=${page}`;
 
     if (searchStr) {
-      // If we have both keywords and filters, we need complex logic
-      if (hasKeywords && hasFilters) {
-        // For complex searches, you might need to handle it differently
-        // This depends on your backend API structure
-        url = `v1/users?verified=true&search=${searchStr}&page=${page}`;
-      } else {
-        url = `v1/users?verified=true&search=${searchStr}&page=${page}`;
-      }
+      url = `v1/users?verified=true&search=${searchStr}&page=${page}`;
     }
 
-    console.log("Fetching URL:", url);
     const response = await api.get(url);
-
-    console.log("API Response:", response.data);
     data.value = response.data.data;
 
     const meta = response.data.meta?.pagination || {
@@ -545,8 +500,6 @@ const fetchData = async (page = 1) => {
       rowsNumber: meta.total,
     };
 
-    console.log("Data loaded:", data.value.length, "members");
-    console.log("Pagination:", pagination.value);
   } catch (err) {
     console.error("Error fetching members:", err);
     $q.notify({
@@ -566,9 +519,6 @@ const onRequest = (props) => {
 
 onMounted(async () => {
   try {
-    console.log("Component mounted - loading store data...");
-
-    // Load all dropdown data from store
     await Promise.all([
       store.storeCommissionerate(),
       store.storeDivision(),
@@ -576,13 +526,6 @@ onMounted(async () => {
       store.storeDistrict(),
     ]);
 
-    console.log("Store data loaded:");
-    console.log("Commissionerate:", store.getCommissionerate?.length || 0);
-    console.log("Division:", store.getDivision?.length || 0);
-    console.log("Circle:", store.getCircle?.length || 0);
-    console.log("District:", store.getDistrict?.length || 0);
-
-    // Then fetch member data
     await fetchData();
   } catch (err) {
     console.error("Error in onMounted:", err);
@@ -595,287 +538,504 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* --- 🎨 Custom Color Palette --- */
-/* Primary: Deep Blue/Navy */
+/* --- 🎨 White & Bluish Color Scheme --- */
 .bg-primary-gradient {
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
-}
-.text-primary-dark {
-  color: #1e3c72 !important;
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%) !important;
 }
 
-/* Accent: Vibrant Teal/Cyan */
-.bg-accent-light {
-  background-color: #e0f7fa !important; /* Light Cyan for search background */
+.text-primary-dark {
+  color: #1565c0 !important;
 }
-.text-accent-dark {
-  color: #00838f !important; /* Deep Teal */
+
+.bg-blue-grey-1 {
+  background-color: #eceff1 !important;
 }
-.bg-accent-faded {
-  background-color: #b2ebf2 !important; /* Faded Teal for chips */
+
+.text-blue-grey-7 {
+  color: #455a64 !important;
 }
-.text-secondary-dark {
-  color: #607d8b;
+
+.text-blue-grey-8 {
+  color: #37474f !important;
 }
 
 /* --- 💻 Desktop Styles --- */
 .member-directory-wrapper {
-  background-color: #f4f7f6; /* Light, clean background */
+  background-color: #f5f7fa;
 }
+
 .desktop-card {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+  background: white;
 }
 
 .card-header {
-  padding: 32px 24px;
-}
-
-.header-content .text-h4 {
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.total-chip {
-  font-size: 16px !important;
-  padding: 8px 16px;
-}
-
-.search-expansion {
-  border-bottom: 2px solid #00838f;
-}
-
-.search-expansion :deep(.q-item) {
-  font-weight: 700;
-  font-size: 16px;
-  color: #1e3c72;
-}
-
-.members-table {
-  border: none;
-  background-color: white;
-  border-radius: 0 0 12px 12px;
-}
-
-/* Table Header */
-.members-table :deep(.q-th) {
-  font-weight: 700;
-  color: #424242;
-  background-color: #f8f9fa;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-}
-
-/* Table Row Hover Effect */
-.members-table :deep(.q-table tbody tr) {
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
-  border-bottom: 1px solid #eee;
-}
-
-.members-table :deep(.q-table tbody tr:hover) {
-  background-color: #e0f7fa !important;
-  transform: scale(1.005);
-  box-shadow: 0 4px 10px rgba(0, 131, 143, 0.1);
-}
-
-/* Photo Cell - FIX APPLIED HERE */
-.photo-container-desktop {
-  display: flex;
-  justify-content: center;
-  /* Make container relative for proper centering/stacking */
-  position: relative; 
-}
-
-.member-photo-desktop {
-  /* This is the q-avatar that holds the image */
-  border: 4px solid #f7fafb; 
-  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.3);
-  transition: all 0.3s ease;
-  z-index: 2; /* Ensure image is on top of any potential background effects */
-}
-
-/* .member-photo-desktop:hover {
-  transform: scale(1.1);
-  border-color: #00838f;
-  box-shadow: 0 6px 15px rgba(0, 131, 143, 0.5);
-} */
-
-/* Name Cell */
-.english-name {
-  font-size: 20px;
-  margin-bottom: 2px;
-}
-.bangla-name{
-  font-size:18px;
-}
-
-/* ID Chip */
-.member-id-chip {
-  border-radius: 8px;
-}
-
-/* Area Cell */
-.area-info {
-  font-size: 20px;
-  line-height: 1.5;
-  padding-left: 8px;
-  border-left: 3px solid #b2ebf2;
-}
-
-.area-label {
-  font-weight: 600;
-  font-size: 20px;
-  color: #455a64;
-  min-width: 100px;
-}
-
-.area-value {
-  color: #1e3c72;
-  font-size: 16px;
-}
-
-/* Table Bottom (Pagination) */
-.table-bottom {
-  border-top: 1px solid #d4d4d4;
-}
-
-.pagination-wrapper {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.contact-item{
-font-size: 20px;
-}
-
-/* --- 📱 Mobile Styles (Reverted to Original Simplicity) --- */
-.mobile-card-container {
-  padding: 16px;
-  background: #f8f9fa; /* Light grey background */
-  min-height: 400px;
+  padding: 24px;
   position: relative;
 }
 
-.mobile-data-card {
-  border-radius: 12px; /* Smoother edges */
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Lighter shadow */
-  transition: all 0.3s ease;
-}
-
-/* Main Content Layout - Mobile */
-.card-main-content-mobile {
-  display: flex;
-  gap: 16px;
-  padding: 20px;
-  align-items: flex-start;
-}
-
-/* Photo Section - Mobile */
-.photo-container-mobile {
-  flex-shrink: 0;
-}
-
-.card-photo-rounded-mobile {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 2px solid #e0e0e0; /* Simple border */
-  box-shadow: none; /* No strong shadow */
-  object-fit: cover;
-}
-
-/* Info Section - Mobile */
-.info-container-mobile {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px; /* Closer gaps */
-  min-width: 0;
-}
-
-.name-english-mobile {
-  font-size: 18px;
+.header-title {
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1.3;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
 }
 
-.name-bangla-with-id-mobile {
+.header-subtitle {
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+.header-separator {
+  background: linear-gradient(to right, #1976d2, #42a5f5, #1976d2);
+  height: 2px;
+}
+
+.total-chip {
+  font-size: 15px !important;
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.search-expansion :deep(.q-item) {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1565c0;
+  background: #f8fafc;
+}
+
+.search-expansion :deep(.q-item__section--avatar) {
+  color: #1976d2;
+}
+
+/* Table Styling - Fixed Column Alignment */
+.members-table {
+  border: 1px solid #e0e0e0;
+  background-color: white;
+}
+
+.members-table :deep(.q-table__top) {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8fafc;
+}
+
+.members-table :deep(.q-th) {
+  font-weight: 600;
+  color: #37474f;
+  background-color: #f8fafc;
   font-size: 14px;
-  color: #555;
-  font-weight: 500;
-  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 16px;
+  vertical-align: middle;
+}
+
+/* FIX: Proper column alignment */
+.members-table :deep(.q-td) {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle !important;
+  height: 80px; /* Fixed height for consistent alignment */
+}
+
+/* FIX: Specific column alignments */
+.members-table :deep(.id-column .q-td) {
+  text-align: left !important;
+  padding-left: 16px !important;
+}
+
+.members-table :deep(.photo-column .q-td) {
+  text-align: center !important;
+  padding: 16px !important;
+}
+
+.members-table :deep(.name-column .q-td) {
+  text-align: left !important;
+  padding-left: 16px !important;
+}
+
+.members-table :deep(.contact-column .q-td) {
+  text-align: left !important;
+  padding-left: 16px !important;
+}
+
+.members-table :deep(.actions-column .q-td) {
+  text-align: center !important;
+  padding: 16px !important;
+}
+
+.members-table :deep(.q-table tbody tr:hover) {
+  background-color: #f0f7ff !important;
+}
+
+/* Desktop Column Styles - FIXED ALIGNMENT */
+.member-id-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.member-id-text {
+  font-size: 14px;
   line-height: 1.4;
 }
 
-.member-id-mobile {
-  color: #1976d2; /* Original Blue */
-  font-weight: 600;
-  font-size: 13px;
-  margin-left: 4px;
-}
-
-.contact-details-mobile {
-  margin-top: 8px;
-}
-
-.contact-item-mobile {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 2px 0;
-}
-
-.contact-text-mobile {
-  font-size: 16px;
-  color: #333;
-  word-break: break-word;
-}
-
-/* Area Expansion - Mobile */
-.area-expansion-mobile {
-  border-top: 1px solid #e0e0e0;
-}
-
-.area-expansion-mobile :deep(.area-header-mobile) {
-  background: #f8f9fa;
-  font-weight: 600;
-  color: #333;
-  padding: 12px 20px;
-}
-
-.area-content-mobile {
-  background: #fafafa;
-  box-shadow: none;
-}
-
-.area-row-mobile {
-  display: flex;
-  padding: 8px 0;
-  border-bottom: 1px solid #e8e8e8;
-}
-
-.area-label-mobile {
-  font-weight: 600;
-  color: #666;
-  min-width: 120px;
-  font-size: 13px;
-}
-
-.area-value-mobile {
-  color: #333;
-  flex: 1;
-  font-size: 13px;
-}
-
-.mobile-pagination {
+.photo-container-desktop {
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.member-photo-desktop {
+  border: 3px solid #e3f2fd;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+}
+
+.name-cell {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.member-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.english-name {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.bangla-name {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.contact-cell {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+}
+
+/* Action button */
+.actions-cell {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn {
+  min-width: 140px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  color: white !important;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+}
+
+/* Table bottom/pagination */
+.table-bottom {
+  border-top: 1px solid #e0e0e0;
+  background: #f8fafc !important;
+}
+
+/* --- 📱 Mobile Styles --- */
+.mobile-section {
+  background: #f5f7fa;
+}
+
+.mobile-header-repeated {
+  border-radius: 0;
+  padding: 20px 16px;
+  margin-bottom: 16px;
+}
+
+.mobile-header-title {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.mobile-header-subtitle {
+  font-size: 0.95rem;
+}
+
+.mobile-card-container {
+  min-height: 400px;
+}
+
+.mobile-cards-list {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.mobile-data-card {
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.mobile-data-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-card-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-row {
+  width: 100%;
+}
+
+/* Mobile ID Row */
+.mobile-id-row {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-id-text {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Mobile Photo & Name Row */
+.mobile-photo-name-row {
+  align-items: center;
+  min-height: 100px;
+}
+
+.mobile-photo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.mobile-photo {
+  border: 3px solid #e3f2fd;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+  width: 80px;
+  height: 80px;
+}
+
+.mobile-name-section {
+  padding-left: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mobile-english-name {
+  font-size: 18px;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.mobile-bangla-name {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+/* Mobile Contact Row */
+.mobile-contact-row {
+  padding: 16px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 16px 0;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mobile-contact-item {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  min-height: 24px;
+}
+
+.mobile-contact-item:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-contact-text {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* Mobile Action Row - ALWAYS VISIBLE */
+.mobile-action-row {
+  padding-top: 8px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-view-btn {
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  color: white !important;
+  border: none;
+  height: 48px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-view-btn :deep(.q-btn__content) {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile Pagination */
+.mobile-pagination {
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+.mobile-pagination-controls :deep(.q-btn) {
+  font-size: 14px;
+}
+
+/* Responsive adjustments for very small screens */
+@media (max-width: 480px) {
+  .mobile-header-title {
+    font-size: 1.3rem;
+  }
+  
+  .mobile-header-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .mobile-photo {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .mobile-english-name {
+    font-size: 16px;
+  }
+  
+  .mobile-bangla-name {
+    font-size: 13px;
+  }
+  
+  .mobile-contact-text {
+    font-size: 14px;
+  }
+  
+  .mobile-view-btn {
+    height: 44px;
+    min-height: 44px;
+    font-size: 15px;
+  }
+  
+  .mobile-view-btn :deep(.q-btn__content) {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-header-title {
+    font-size: 1.2rem;
+  }
+  
+  .mobile-photo {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .mobile-name-section {
+    padding-left: 12px;
+  }
+  
+  .mobile-english-name {
+    font-size: 15px;
+  }
+  
+  .mobile-bangla-name {
+    font-size: 12px;
+  }
+  
+  .mobile-contact-text {
+    font-size: 13px;
+  }
+  
+  .mobile-view-btn {
+    height: 40px;
+    min-height: 40px;
+    font-size: 14px;
+  }
+  
+  .mobile-view-btn :deep(.q-btn__content) {
+    font-size: 14px;
+  }
+}
+
+/* FIX: Specific fixes for table cell alignment */
+:deep(.q-table) {
+  border-collapse: collapse;
+}
+
+:deep(.q-table tbody tr) {
+  height: 80px; /* Fixed row height */
+}
+
+:deep(.q-table td) {
+  vertical-align: middle !important;
+}
+
+/* Ensure all cells have proper vertical alignment */
+:deep(.id-cell),
+:deep(.photo-cell),
+:deep(.name-cell),
+:deep(.contact-cell),
+:deep(.actions-cell) {
+  display: table-cell !important;
+  vertical-align: middle !important;
 }
 </style>

@@ -17,12 +17,16 @@
 
         <!-- App Logo & Title -->
         <div class="row items-center">
-          <div class="app-logo q-mr-sm">
-            <q-icon name="account_circle" size="28px" color="white" />
-          </div>
-          <q-toolbar-title class="app-title">
-            <span class="text-h20 text-weight-bold">Bangladesh Customs & VAT Officers' Association (BACAUV)</span>
-          </q-toolbar-title>
+<q-toolbar-title class="app-title">
+  <span
+    class="text-weight-bold text-h6 text-md-h5 text-lg-h4"
+    style="white-space: normal; line-height: 1.3;"
+  >
+    Bangladesh Customs & VAT Officers' Association (BACAUV)
+  </span>
+</q-toolbar-title>
+
+
         </div>
 
         <q-space />

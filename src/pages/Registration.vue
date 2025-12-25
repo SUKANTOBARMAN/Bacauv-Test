@@ -5,11 +5,21 @@
         <div class="registration-container">
           <q-card class="registration-card shadow-24 q-pa-lg" flat bordered>
             
-            <q-card-section class="text-center q-pb-md">
-              <div class="logo-container q-mb-md">
-                <img src="../assets/logo.jpg" alt="Corporation Logo" class="corporation-logo">
+           <!-- Header -->
+            <q-card-section class="text-center q-pb-sm">
+              <img
+                src="../assets/logo.jpg"
+                alt="Logo"
+                class="corporation-logo"
+              />
+
+              <div class="text-subtitle1 text-size text-weight-bold text-primary q-mt-sm">
+                Bangladesh Customs & VAT Officers' Association
               </div>
-              <div class="text-subtitle2 text-grey-7">Create your Account</div>
+
+              <div class="text-caption text-grey-7 q-mt-xs">
+                Create Your Account
+              </div>
             </q-card-section>
 
             <!-- Error Banner -->
@@ -251,10 +261,22 @@
                       </template>
                     </q-select>
                   </div>
+                  <q-input
+                  filled
+                  v-model="formData.address"
+                  label="Address *"
+                  lazy-rules
+                  class="custom-input, full-width"
+                  :rules="[(val) => !!val || 'Address is required']"
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="home" color="primary" />
+                  </template>
+                </q-input>
                 </div>
 
                 <!-- Address Section -->
-                <q-input
+                <!-- <q-input
                   filled
                   v-model="formData.address"
                   label="Address *"
@@ -265,7 +287,7 @@
                   <template v-slot:prepend>
                     <q-icon name="home" color="primary" />
                   </template>
-                </q-input>
+                </q-input> -->
 
                 <!-- Educational Information -->
                 <div class="section-header q-mt-xl">
@@ -323,7 +345,7 @@
                     <q-input
                       filled
                       v-model="formData.social_media_link"
-                      label="Social Media ID"
+                      label="Social Media Link"
                       class="custom-input"
                     >
                       <template v-slot:prepend>
@@ -801,6 +823,10 @@ const handleRegister = async () => {
 .required-field :deep(.q-field__label)::after {
   content: " *";
   color: #f44336;
+}
+
+.text-size{
+  font-size: x-large;
 }
 
 @media (max-width: 600px) {

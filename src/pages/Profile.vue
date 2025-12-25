@@ -1,31 +1,31 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-page-container>
-      <q-page class="q-pa-lg bg-grey-2">
+      <q-page class="q-pa-md q-pa-sm-lg bg-grey-2">
         <!-- Page Header -->
-        <div class="row items-center justify-between q-mb-xl">
-          <div>
-            <div class="text-h4 text-weight-bold text-indigo-9">প্রোফাইল</div>
-            <div class="text-subtitle1 text-grey-7">আপনার ব্যক্তিগত এবং প্রশাসনিক তথ্য</div>
+        <div class="row items-center justify-between q-mb-lg q-mb-md-xl">
+          <div class="col-12">
+            <div class="text-h4 text-h5-sm text-weight-bold text-indigo-9 q-mb-xs">প্রোফাইল</div>
+            <div class="text-subtitle1 text-subtitle2-sm text-grey-7">আপনার ব্যক্তিগত এবং প্রশাসনিক তথ্য</div>
           </div>
         </div>
 
         <!-- Main Content -->
-        <div class="row q-col-gutter-xl">
+        <div class="row q-col-gutter-lg q-col-gutter-md-xl">
           <!-- Left Side - Profile Picture -->
-          <div class="col-md-4 col-sm-12">
-            <q-card class="shadow-5 rounded-borders" style="border-radius: 16px;">
+          <div class="col-12 col-md-4">
+            <q-card class="shadow-5 rounded-borders profile-card">
               <q-card-section class="bg-indigo-8 text-white">
-                <div class="text-h6 text-center">
+                <div class="text-h6 text-subtitle1-sm text-center">
                   <q-icon name="photo" class="q-mr-sm" />
                   প্রোফাইল ছবি
                 </div>
               </q-card-section>
               
-              <q-card-section class="text-center q-pa-xl">
+              <q-card-section class="text-center q-pa-xl q-pa-md-lg">
                 <!-- Clickable Profile Picture -->
                 <div class="profile-image-container q-mb-lg" @click="triggerPhotoUpload">
-                  <q-avatar size="200px" class="profile-avatar">
+                  <q-avatar size="200px" size-md="150px" class="profile-avatar">
                     <img 
                       v-if="user.photo || photoPreview" 
                       :src="photoPreview || `${baseUrl}${user.photo}`" 
@@ -33,19 +33,19 @@
                       class="profile-img"
                     >
                     <div v-else class="profile-placeholder">
-                      <q-icon name="person" size="90px" color="grey-6" />
+                      <q-icon name="person" size="90px" size-md="60px" color="grey-6" />
                     </div>
                     
                     <!-- Hover Overlay -->
                     <div class="profile-overlay">
-                      <q-icon name="camera_alt" size="40px" />
-                      <div class="text-subtitle2 q-mt-sm">ছবি পরিবর্তন করুন</div>
+                      <q-icon name="camera_alt" size="40px" size-md="30px" />
+                      <div class="text-subtitle2 text-caption-sm q-mt-sm">ছবি পরিবর্তন করুন</div>
                     </div>
                   </q-avatar>
                   
                   <!-- Upload Status Badge -->
                   <div v-if="user.verified_at" class="verified-badge">
-                    <q-icon name="verified" size="16px" />
+                    <q-icon name="verified" size="16px" size-md="14px" />
                   </div>
                 </div>
 
@@ -68,45 +68,49 @@
                   />
                   
                   <div class="row q-col-gutter-sm">
-                    <div class="col-6">
+                    <div class="col-12 col-sm-6">
                       <q-btn
                         label="আপলোড"
                         color="indigo-7"
-                        class="full-width text-white"
+                        class="full-width text-white q-mb-sm q-mb-sm-none"
                         :loading="uploadingPhoto"
                         @click="uploadPhoto"
                         icon="cloud_upload"
+                        size="sm"
+                        size-md="md"
                       />
                     </div>
-                    <div class="col-6">
+                    <div class="col-12 col-sm-6">
                       <q-btn
                         label="বাতিল"
                         color="negative"
                         outline
                         class="full-width"
                         @click="cancelUpload"
+                        size="sm"
+                        size-md="md"
                       />
                     </div>
                   </div>
                 </div>
 
                 <!-- User Quick Info -->
-                <div class="q-mt-xl">
-                  <div class="text-h6 text-weight-bold text-grey-9">{{ user.name_bangla || user.name }}</div>
-                  <div class="text-subtitle1 text-indigo-7 q-mb-md">{{ getDesignationLabel(user.designation) }}</div>
+                <div class="q-mt-xl q-mt-md-lg">
+                  <div class="text-h6 text-subtitle1-sm text-weight-bold text-grey-9 q-mb-xs">{{ user.name_bangla || user.name }}</div>
+                  <div class="text-subtitle1 text-body2-sm text-indigo-7 q-mb-md">{{ getDesignationLabel(user.designation) }}</div>
                   
-                  <div class="text-left q-gutter-y-md">
+                  <div class="text-left q-gutter-y-md user-info-grid">
                     <div class="row items-center">
                       <q-icon name="email" size="sm" color="grey-6" class="q-mr-sm" />
-                      <div class="text-caption text-grey-7">{{ user.email }}</div>
+                      <div class="text-caption text-body2-sm text-grey-7 text-truncate">{{ user.email }}</div>
                     </div>
                     <div class="row items-center">
                       <q-icon name="phone" size="sm" color="grey-6" class="q-mr-sm" />
-                      <div class="text-caption text-grey-7">{{ user.mobile || 'N/A' }}</div>
+                      <div class="text-caption text-body2-sm text-grey-7">{{ user.mobile || 'N/A' }}</div>
                     </div>
                     <div class="row items-center">
                       <q-icon name="calendar_today" size="sm" color="grey-6" class="q-mr-sm" />
-                      <div class="text-caption text-grey-7">{{ formatDate(user.created_at) }}</div>
+                      <div class="text-caption text-body2-sm text-grey-7">{{ formatDate(user.created_at) }}</div>
                     </div>
                   </div>
                 </div>
@@ -115,13 +119,13 @@
           </div>
 
           <!-- Right Side - Profile Information -->
-          <div class="col-md-8 col-sm-12">
-            <q-card class="shadow-5 rounded-borders" style="border-radius: 16px;">
+          <div class="col-12 col-md-8">
+            <q-card class="shadow-5 rounded-borders info-card">
               <!-- Tabs -->
               <q-tabs
                 v-model="tab"
                 dense
-                class="text-grey-7 q-mt-sm"
+                class="text-grey-7 q-mt-sm tabs-container"
                 active-color="indigo-8"
                 indicator-color="indigo-8"
                 align="left"
@@ -137,10 +141,10 @@
               <q-tab-panels v-model="tab" animated class="q-pa-none">
                 <!-- Personal Information -->
                 <q-tab-panel name="personal">
-                  <div class="q-pa-lg">
-                    <div class="section-header q-mb-lg">
-                      <q-icon name="person" size="24px" color="indigo-7" class="q-mr-sm" />
-                      <span class="text-h5 text-weight-bold text-grey-9">ব্যক্তিগত তথ্য</span>
+                  <div class="q-pa-lg q-pa-md-md">
+                    <div class="section-header q-mb-lg q-mb-md-md">
+                      <q-icon name="person" size="24px" size-md="20px" color="indigo-7" class="q-mr-sm" />
+                      <span class="text-h5 text-h6-sm text-weight-bold text-grey-9">ব্যক্তিগত তথ্য</span>
                     </div>
 
                     <div class="form-grid">
@@ -153,6 +157,7 @@
                           readonly
                           dense
                           bg-color="grey-3"
+                          class="form-input"
                         />
                       </div>
 
@@ -164,6 +169,7 @@
                           readonly
                           dense
                           bg-color="grey-3"
+                          class="form-input"
                         />
                       </div>
 
@@ -177,6 +183,7 @@
                           readonly
                           dense
                           bg-color="grey-3"
+                          class="form-input"
                         />
                       </div>
 
@@ -189,6 +196,7 @@
                           readonly
                           dense
                           bg-color="grey-3"
+                          class="form-input"
                         />
                       </div>
 
@@ -205,6 +213,7 @@
                           map-options
                           dense
                           color="indigo"
+                          class="form-input"
                         />
                       </div>
 
@@ -215,7 +224,7 @@
                           v-model="editForm.officer_joining_date"
                           dense
                           color="indigo"
-                          class="full-width"
+                          class="full-width form-input"
                           :rules="['date']"
                         >
                           <template v-slot:append>
@@ -245,7 +254,7 @@
                           map-options
                           dense
                           color="indigo"
-                          class="full-width"
+                          class="full-width form-input"
                           clearable
                         />
                       </div>
@@ -257,7 +266,7 @@
                           v-model="editForm.social_media_link"
                           dense
                           color="indigo"
-                          class="full-width"
+                          class="full-width form-input"
                           placeholder="https://facebook.com/username"
                         />
                       </div>
@@ -271,7 +280,7 @@
                           dense
                           color="indigo"
                           autogrow
-                          class="full-width"
+                          class="full-width form-input"
                         />
                       </div>
 
@@ -283,7 +292,7 @@
                           v-model="editForm.educational_qualification"
                           dense
                           color="indigo"
-                          class="full-width"
+                          class="full-width form-input"
                           placeholder="যেমন: মাস্টার্স, বিএসসি ইঞ্জিনিয়ারিং"
                         />
                       </div>
@@ -295,7 +304,7 @@
                           v-model="editForm.last_education_institution"
                           dense
                           color="indigo"
-                          class="full-width"
+                          class="full-width form-input"
                           placeholder="যেমন: ঢাকা বিশ্ববিদ্যালয়"
                         />
                       </div>
@@ -308,7 +317,7 @@
                           v-model="editForm.spouse_profession"
                           dense
                           color="indigo"
-                          class="full-width"
+                          class="full-width form-input"
                           placeholder="যেমন: সরকারি কর্মকর্তা, শিক্ষক"
                         />
                       </div>
@@ -322,6 +331,7 @@
                           readonly
                           dense
                           bg-color="grey-3"
+                          class="form-input"
                         />
                       </div>
 
@@ -333,19 +343,21 @@
                           readonly
                           dense
                           bg-color="grey-3"
+                          class="form-input"
                         />
                       </div>
                     </div>
 
                     <!-- Save Button at Bottom of Personal Info -->
-                    <div class="text-right q-mt-xl">
+                    <div class="text-right q-mt-xl q-mt-md-lg">
                       <q-btn
                         color="indigo-7"
-                        class="text-white"
+                        class="text-white save-btn"
                         icon="save"
                         label="সংরক্ষণ করুন"
                         :loading="updatingProfile"
                         @click="updateProfile"
+                        size="md"
                       />
                     </div>
                   </div>
@@ -353,19 +365,21 @@
 
                 <!-- Administrative Information -->
                 <q-tab-panel name="admin">
-                  <div class="q-pa-lg">
-                    <div class="section-header q-mb-lg">
-                      <q-icon name="account_balance" size="24px" color="indigo-7" class="q-mr-sm" />
-                      <span class="text-h5 text-weight-bold text-grey-9">প্রশাসনিক তথ্য</span>
-                      <div class="text-caption text-grey-7 q-mt-xs"> (এই তথ্যগুলি পরিবর্তনযোগ্য নয়)</div>
+                  <div class="q-pa-lg q-pa-md-md">
+                    <div class="section-header q-mb-lg q-mb-md-md">
+                      <q-icon name="account_balance" size="24px" size-md="20px" color="indigo-7" class="q-mr-sm" />
+                      <div>
+                        <span class="text-h5 text-h6-sm text-weight-bold text-grey-9">প্রশাসনিক তথ্য</span>
+                        <div class="text-caption text-body2-sm text-grey-7 q-mt-xs"> (এই তথ্যগুলি পরিবর্তনযোগ্য নয়)</div>
+                      </div>
                     </div>
 
                     <div class="admin-grid">
                       <!-- Administrative Hierarchy -->
                       <div class="admin-section">
                         <div class="admin-section-header">
-                          <q-icon name="business" size="20px" color="indigo-6" class="q-mr-sm" />
-                          <span class="text-subtitle1 text-weight-bold">প্রশাসনিক কাঠামো</span>
+                          <q-icon name="business" size="20px" size-md="18px" color="indigo-6" class="q-mr-sm" />
+                          <span class="text-subtitle1 text-subtitle2-sm text-weight-bold">প্রশাসনিক কাঠামো</span>
                         </div>
                         
                         <div class="hierarchy-grid">
@@ -406,14 +420,14 @@
                       <!-- Account Information -->
                       <div class="admin-section">
                         <div class="admin-section-header">
-                          <q-icon name="info" size="20px" color="indigo-6" class="q-mr-sm" />
-                          <span class="text-subtitle1 text-weight-bold">অ্যাকাউন্ট তথ্য</span>
+                          <q-icon name="info" size="20px" size-md="18px" color="indigo-6" class="q-mr-sm" />
+                          <span class="text-subtitle1 text-subtitle2-sm text-weight-bold">অ্যাকাউন্ট তথ্য</span>
                         </div>
                         
                         <div class="account-grid">
                           <div class="account-item">
                             <div class="account-label">ইউজার আইডি</div>
-                            <div class="account-value text-weight-bold">{{ user.member_id || 'N/A' }}</div>
+                            <div class="account-value text-weight-bold text-truncate">{{ user.member_id || 'N/A' }}</div>
                           </div>
                           
                           <div class="account-item">
@@ -690,7 +704,37 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Profile Image Styles */
+/* ========== GLOBAL RESPONSIVE UTILITIES ========== */
+/* Text size utilities for mobile */
+.text-h5-sm {
+  font-size: 1.25rem !important;
+}
+
+.text-h6-sm {
+  font-size: 1.125rem !important;
+}
+
+.text-subtitle1-sm {
+  font-size: 1rem !important;
+}
+
+.text-subtitle2-sm {
+  font-size: 0.875rem !important;
+}
+
+.text-body1-sm {
+  font-size: 0.9375rem !important;
+}
+
+.text-body2-sm {
+  font-size: 0.8125rem !important;
+}
+
+.text-caption-sm {
+  font-size: 0.75rem !important;
+}
+
+/* ========== PROFILE IMAGE STYLES ========== */
 .profile-image-container {
   position: relative;
   display: inline-block;
@@ -701,6 +745,8 @@ onMounted(() => {
   border: 4px solid white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+  width: 200px;
+  height: 200px;
 }
 
 .profile-img {
@@ -735,6 +781,7 @@ onMounted(() => {
   color: white;
   opacity: 0;
   transition: opacity 0.3s ease;
+  padding: 20px;
 }
 
 .profile-image-container:hover .profile-overlay {
@@ -777,7 +824,7 @@ onMounted(() => {
   }
 }
 
-/* Form Styles */
+/* ========== FORM STYLES ========== */
 .section-header {
   display: flex;
   align-items: center;
@@ -808,7 +855,7 @@ onMounted(() => {
   display: block;
 }
 
-/* Admin Information Styles */
+/* ========== ADMIN INFORMATION STYLES ========== */
 .admin-grid {
   display: flex;
   flex-direction: column;
@@ -902,12 +949,19 @@ onMounted(() => {
   border-radius: 20px;
 }
 
-/* Tabs Styling */
+/* ========== TABS STYLING ========== */
+.tabs-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
 :deep(.q-tab) {
   padding: 12px 24px;
   font-weight: 600;
   text-transform: none;
   transition: all 0.3s ease;
+  min-width: auto;
 }
 
 :deep(.q-tab--active) {
@@ -923,31 +977,35 @@ onMounted(() => {
   border-bottom: 1px solid #e0e0e0;
 }
 
-/* Card Styling */
-.q-card {
+/* ========== CARD STYLING ========== */
+.profile-card,
+.info-card {
   border-radius: 16px;
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
-.q-card:hover {
+.profile-card:hover,
+.info-card:hover {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Save Button Styling */
-.text-right .q-btn {
+/* ========== SAVE BUTTON STYLING ========== */
+.save-btn {
   padding: 10px 24px;
   font-weight: 600;
   border-radius: 8px;
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 200px;
 }
 
-.text-right .q-btn:hover {
+.save-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
 }
 
-/* Input field styling for better alignment */
+/* ========== INPUT FIELD STYLING ========== */
 :deep(.q-field--outlined .q-field__control) {
   border-radius: 8px;
 }
@@ -956,16 +1014,18 @@ onMounted(() => {
   border-color: #4f46e5 !important;
 }
 
-/* Date picker styling */
+/* ========== DATE PICKER STYLING ========== */
 :deep(.q-date) {
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive Design */
+/* ========== RESPONSIVE DESIGN ========== */
+/* Tablet and below */
 @media (max-width: 1023px) {
   .form-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
   
   .form-section.full-width {
@@ -975,36 +1035,207 @@ onMounted(() => {
   .hierarchy-grid,
   .account-grid {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 599px) {
-  .text-h4 {
-    font-size: 1.5rem;
-  }
-  
-  .text-h5 {
-    font-size: 1.25rem;
-  }
-  
-  .q-pa-lg {
-    padding: 16px;
-  }
-  
-  .profile-avatar {
-    width: 160px;
-    height: 160px;
-  }
-  
-  .form-grid {
-    gap: 16px;
+    gap: 12px;
   }
   
   .admin-section {
     padding: 16px;
   }
+  
+  .profile-avatar {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .profile-overlay :deep(.q-icon) {
+    font-size: 30px !important;
+  }
+  
+  .user-info-grid {
+    max-width: 300px;
+    margin: 0 auto;
+  }
 }
 
+/* Mobile (below 600px) */
+@media (max-width: 599px) {
+  /* Text sizes */
+  .text-h4 {
+    font-size: 1.5rem !important;
+  }
+  
+  .text-h5 {
+    font-size: 1.25rem !important;
+  }
+  
+  .text-h6 {
+    font-size: 1.125rem !important;
+  }
+  
+  /* Layout */
+  .row.q-col-gutter-lg {
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+  }
+  
+  .col-12 {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  
+  /* Profile card */
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .profile-placeholder :deep(.q-icon) {
+    font-size: 60px !important;
+  }
+  
+  .verified-badge {
+    width: 28px;
+    height: 28px;
+    bottom: 5px;
+    right: 5px;
+  }
+  
+  .verified-badge :deep(.q-icon) {
+    font-size: 14px !important;
+  }
+  
+  /* Form adjustments */
+  .form-grid {
+    gap: 12px;
+  }
+  
+  .form-label {
+    font-size: 13px;
+  }
+  
+  .form-input :deep(.q-field__control) {
+    min-height: 40px;
+  }
+  
+  /* Admin sections */
+  .admin-section {
+    padding: 12px;
+  }
+  
+  .hierarchy-item,
+  .account-item {
+    padding: 12px;
+  }
+  
+  .hierarchy-label,
+  .account-label {
+    font-size: 12px;
+  }
+  
+  .hierarchy-value,
+  .account-value {
+    font-size: 14px;
+  }
+  
+  /* Tabs */
+  :deep(.q-tab) {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  :deep(.q-tab__icon) {
+    font-size: 18px;
+  }
+  
+  /* Save button */
+  .save-btn {
+    width: 100%;
+    max-width: none;
+    margin-top: 16px;
+  }
+  
+  /* Upload buttons */
+  .upload-actions .q-btn {
+    height: 40px;
+  }
+  
+  /* Profile overlay text */
+  .profile-overlay .text-caption-sm {
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  
+  .profile-overlay :deep(.q-icon) {
+    font-size: 24px !important;
+  }
+  
+  /* User info alignment */
+  .user-info-grid {
+    max-width: 100%;
+  }
+  
+  .user-info-grid .text-truncate {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* Very small mobile (below 400px) */
+@media (max-width: 399px) {
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .profile-placeholder :deep(.q-icon) {
+    font-size: 50px !important;
+  }
+  
+  :deep(.q-tab) {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  :deep(.q-tab__icon) {
+    font-size: 16px;
+  }
+  
+  .form-label {
+    font-size: 12px;
+  }
+  
+  .hierarchy-label,
+  .account-label {
+    font-size: 11px;
+  }
+  
+  .hierarchy-value,
+  .account-value {
+    font-size: 13px;
+  }
+  
+  .status-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+}
+
+/* Large desktop (above 1440px) */
+@media (min-width: 1440px) {
+  .form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+  
+  .profile-avatar {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* ========== ANIMATIONS ========== */
 /* Animation for form sections */
 .form-section {
   animation: fadeInUp 0.5s ease forwards;
