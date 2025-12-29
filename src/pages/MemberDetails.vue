@@ -35,7 +35,7 @@
               class="q-mr-sm"
             />
             <div>
-              <div class="text-h5 text-weight-bold text-dark">Member Details</div>
+              <div class="text-h5 text-weight-bold" style="color: #1976d2;">Member Details</div>
               <div class="text-body2 text-grey-7">{{ user.name }}'s complete information</div>
             </div>
           </div>
@@ -45,7 +45,7 @@
           <!-- Left Column - Profile -->
           <div class="col-12 col-md-4">
             <q-card class="shadow-1 rounded-borders">
-              <q-card-section class="bg-primary text-white">
+              <q-card-section style="background-color: #1976d2; color: white;">
                 <div class="text-center text-h6">Profile</div>
               </q-card-section>
               
@@ -98,167 +98,168 @@
 
           <!-- Right Column - Tabs -->
           <div class="col-12 col-md-8">
-            <q-card class="shadow-1 rounded-borders">
-              <!-- Tabs -->
-              <q-tabs
-                v-model="tab"
-                dense
-                class="text-grey-7"
-                active-color="primary"
-                indicator-color="primary"
-                align="left"
-              >
-                <q-tab name="personal" label="Personal" />
-                <q-tab name="contact" label="Contact" />
-                <q-tab name="office" label="Office" />
-              </q-tabs>
+  <q-card class="shadow-1 rounded-borders">
+    <q-card-section class="text-white q-py-md" style="background-color: #1976d2;">
+  <div class="text-h6 text-weight-bold">
+    <q-icon name="account_circle" class="q-mr-sm" size="28px" />
+    Full Profile Information
+  </div>
+</q-card-section>
 
-              <q-separator />
-
-              <!-- Tab Content -->
-              <q-tab-panels v-model="tab" class="q-pa-none">
-                <!-- Personal -->
-                <q-tab-panel name="personal" class="q-pa-lg">
-                  <div class="text-h6 text-weight-bold q-mb-md">Personal Information</div>
-                  <div class="row q-col-gutter-md">
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Full Name (English)</div>
-                        <div class="text-body1 text-weight-medium">{{ user.name || 'N/A' }}</div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Full Name (Bangla)</div>
-                        <div class="text-body1 text-weight-medium">{{ user.name_bangla || 'N/A' }}</div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Designation</div>
-                        <div class="text-body1">{{ getDesignationLabel(user.designation) }}</div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Date of Birth</div>
-                        <div class="text-body1">{{ formatDate(user.dob) }}</div>
-                      </div>
-                    </div>
-                    
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Blood Group</div>
-                        <div class="text-body1">
-                          <span v-if="user.blood_group" class="blood-group">{{ user.blood_group }}</span>
-                          <span v-else>N/A</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Officer Joining Date</div>
-                        <div class="text-body1">{{ formatDate(user.officer_joining_date) }}</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Educational Qualification</div>
-                        <div class="text-body1">{{ user.educational_qualification || 'N/A' }}</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Last Education Institution</div>
-                        <div class="text-body1">{{ user.last_education_institution || 'N/A' }}</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Spouse Profession</div>
-                        <div class="text-body1">{{ user.spouse_profession || 'N/A' }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </q-tab-panel>
-
-                <!-- Contact -->
-                <q-tab-panel name="contact" class="q-pa-lg">
-                  <div class="text-h6 text-weight-bold q-mb-md">Contact Information</div>
-                  <div class="row q-col-gutter-md">
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Email Address</div>
-                        <a v-if="user.email" :href="`mailto:${user.email}`" class="text-primary text-body1">
-                          {{ user.email }}
-                        </a>
-                        <div v-else class="text-body1">N/A</div>
-                      </div>
-                    </div>
-                    <div class="col-12 col-sm-6">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Mobile Number</div>
-                        <a v-if="user.mobile" :href="`tel:${user.mobile}`" class="text-primary text-body1">
-                          {{ user.mobile }}
-                        </a>
-                        <div v-else class="text-body1">N/A</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Address</div>
-                        <div class="text-body1">{{ user.address || 'N/A' }}</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="q-mb-md">
-                        <div class="text-caption text-grey-7">Social Media</div>
-                        <a v-if="user.social_media_link" :href="user.social_media_link" target="_blank" class="text-primary text-body1">
-                          {{ formatSocialLink(user.social_media_link) }}
-                        </a>
-                        <div v-else class="text-body1">N/A</div>
-                      </div>
-                    </div>
-                  </div>
-                </q-tab-panel>
-
-                <!-- Office -->
-                <q-tab-panel name="office" class="q-pa-lg">
-                  <div class="text-h6 text-weight-bold q-mb-md">Office Information</div>
-                  
-                  <div class="q-mb-lg">
-                    <div class="text-subtitle1 text-weight-medium q-mb-sm">Administrative Hierarchy</div>
-                    <div class="row q-col-gutter-md">
-                      <div class="col-12 col-sm-6">
-                        <div class="q-mb-md">
-                          <div class="text-caption text-grey-7">Commissionerate</div>
-                          <div class="text-body1">{{ user.commissionerate?.data?.name || 'N/A' }}</div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="q-mb-md">
-                          <div class="text-caption text-grey-7">Division</div>
-                          <div class="text-body1">{{ user.division?.data?.name || 'N/A' }}</div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="q-mb-md">
-                          <div class="text-caption text-grey-7">Circle</div>
-                          <div class="text-body1">{{ user.circle?.data?.name || 'N/A' }}</div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="q-mb-md">
-                          <div class="text-caption text-grey-7">District</div>
-                          <div class="text-body1">{{ user.district?.data?.name || 'N/A' }}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </q-tab-panel>
-              </q-tab-panels>
-            </q-card>
+    <q-card-section class="q-pa-lg">
+      <div class="section-container q-mb-xl">
+        <div class="row items-center q-mb-md">
+          <q-icon name="person" size="24px" class="q-mr-sm" style="color: #1976d2;" />
+          <div class="text-h6 text-weight-bold" style="color: #1976d2;">Personal Information</div>
+        </div>
+        
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Full Name (English)</div>
+              <div class="text-body1 text-weight-medium">{{ user.name || 'N/A' }}</div>
+            </div>
           </div>
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Full Name (Bangla)</div>
+              <div class="text-body1 text-weight-medium">{{ user.name_bangla || 'N/A' }}</div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Designation</div>
+              <div class="text-body1">{{ getDesignationLabel(user.designation) }}</div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Date of Birth</div>
+              <div class="text-body1">{{ formatDate(user.dob) }}</div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Blood Group</div>
+              <div class="text-body1">
+                <span v-if="user.blood_group" class="blood-group">{{ user.blood_group }}</span>
+                <span v-else>N/A</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Officer Joining Date</div>
+              <div class="text-body1">{{ formatDate(user.officer_joining_date) }}</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Educational Qualification</div>
+              <div class="text-body1">{{ user.educational_qualification || 'N/A' }}</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Last Education Institution</div>
+              <div class="text-body1">{{ user.last_education_institution || 'N/A' }}</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Spouse Profession</div>
+              <div class="text-body1">{{ user.spouse_profession || 'N/A' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <q-separator class="q-my-lg" />
+
+      <div class="section-container q-mb-xl">
+        <div class="row items-center q-mb-md">
+          <q-icon name="contacts" size="24px" class="q-mr-sm" style="color: #1976d2;" />
+          <div class="text-h6 text-weight-bold" style="color: #1976d2;">Contact Information</div>
+        </div>
+
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Email Address</div>
+              <a v-if="user.email" :href="`mailto:${user.email}`" class="text-primary text-body1">
+                {{ user.email }}
+              </a>
+              <div v-else class="text-body1">N/A</div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Mobile Number</div>
+              <a v-if="user.mobile" :href="`tel:${user.mobile}`" class="text-primary text-body1">
+                {{ user.mobile }}
+              </a>
+              <div v-else class="text-body1">N/A</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Address</div>
+              <div class="text-body1">{{ user.address || 'N/A' }}</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="q-mb-md">
+              <div class="text-caption text-grey-7">Social Media</div>
+              <a v-if="user.social_media_link" :href="user.social_media_link" target="_blank" class="text-primary text-body1">
+                {{ formatSocialLink(user.social_media_link) }}
+              </a>
+              <div v-else class="text-body1">N/A</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <q-separator class="q-my-lg" />
+
+      <div class="section-container">
+        <div class="row items-center q-mb-md">
+          <q-icon name="business" size="24px" class="q-mr-sm" style="color: #1976d2;" />
+          <div class="text-h6 text-weight-bold" style="color: #1976d2;">Office Information</div>
+        </div>
+
+        <div class="q-mb-md">
+          <div class="text-subtitle1 text-weight-medium q-mb-sm text-grey-8">Administrative Hierarchy</div>
+          <div class="row q-col-gutter-md">
+            <div class="col-12 col-sm-6">
+              <div class="q-mb-md">
+                <div class="text-caption text-grey-7">Commissionerate</div>
+                <div class="text-body1">{{ user.commissionerate?.data?.name || 'N/A' }}</div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div class="q-mb-md">
+                <div class="text-caption text-grey-7">Division</div>
+                <div class="text-body1">{{ user.division?.data?.name || 'N/A' }}</div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div class="q-mb-md">
+                <div class="text-caption text-grey-7">Circle</div>
+                <div class="text-body1">{{ user.circle?.data?.name || 'N/A' }}</div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <div class="q-mb-md">
+                <div class="text-caption text-grey-7">District</div>
+                <div class="text-body1">{{ user.district?.data?.name || 'N/A' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </q-card-section>
+  </q-card>
+</div>
         </div>
       </div>
 

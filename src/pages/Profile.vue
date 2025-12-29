@@ -5,7 +5,11 @@
         <!-- Page Header -->
         <div class="row items-center justify-between q-mb-lg q-mb-md-xl">
           <div class="col-12">
-            <div class="text-h4 text-h5-sm text-weight-bold text-indigo-9 q-mb-xs">প্রোফাইল</div>
+            <div class="text-h4 text-h5-sm text-weight-bold q-mb-xs"
+     style="color: #1976d2;">
+  প্রোফাইল
+</div>
+
             <div class="text-subtitle1 text-subtitle2-sm text-grey-7">আপনার ব্যক্তিগত এবং প্রশাসনিক তথ্য</div>
           </div>
         </div>
@@ -15,12 +19,13 @@
           <!-- Left Side - Profile Picture -->
           <div class="col-12 col-md-4">
             <q-card class="shadow-5 rounded-borders profile-card">
-              <q-card-section class="bg-indigo-8 text-white">
-                <div class="text-h6 text-subtitle1-sm text-center">
-                  <q-icon name="photo" class="q-mr-sm" />
-                  প্রোফাইল ছবি
-                </div>
-              </q-card-section>
+              <q-card-section style="background-color: #1976d2; color: white;">
+  <div class="text-h6 text-subtitle1-sm text-center">
+    <q-icon name="photo" class="q-mr-sm" />
+    প্রোফাইল ছবি
+  </div>
+</q-card-section>
+
               
               <q-card-section class="text-center q-pa-xl q-pa-md-lg">
                 <!-- Clickable Profile Picture -->
