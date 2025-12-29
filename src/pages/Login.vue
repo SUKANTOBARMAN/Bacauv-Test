@@ -85,14 +85,13 @@
                 </div>
 
                 <!-- Forgot Password - Also Centered -->
-                <div class="flex justify-center q-mt-sm">
+                <div class="flex justify-center q-mt-sm forgot">
                   <q-btn
                     to="/forgot-password"
                     label="Forgot password?"
                     flat
                     dense
                     no-caps
-                    color="secondary"
                   />
                 </div>
 
@@ -213,7 +212,7 @@ const handleLogin = async () => {
 }
 
 .custom-submit-btn {
-  background: #004d40 !important;
+  background: #1977D3 !important;
   color: white;
   font-weight: 600;
   border-radius: 10px;
@@ -225,5 +224,9 @@ const handleLogin = async () => {
 .custom-submit-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 20px rgba(0, 77, 64, 0.5);
+}
+
+.forgot{
+  color: #1977D3;
 }
 </style>
