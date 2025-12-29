@@ -386,7 +386,7 @@ const baseUrl = process.env.DEV_WEB_URL;
 
 const pagination = ref({
   page: 1,
-  rowsPerPage: 10,
+  rowsPerPage: 30,
   rowsNumber: 0,
 });
 
@@ -507,10 +507,10 @@ const fetchData = async (page = 1) => {
   loading.value = true;
   try {
     const searchStr = buildSearchQuery();
-    let url = `v1/users?verified=true&page=${page}`;
+    let url = `v1/users?verified=true&page=${page}&limit=30`;
 
     if (searchStr) {
-      url = `v1/users?verified=true&search=${searchStr}&page=${page}`;
+      url = `v1/users?verified=true&search=${searchStr}&page=${page}&limit=30`;
     }
 
     const response = await api.get(url);
@@ -518,7 +518,7 @@ const fetchData = async (page = 1) => {
 
     const meta = response.data.meta?.pagination || {
       current_page: 1,
-      per_page: 10,
+      per_page: 30,
       total: data.value.length,
     };
 
