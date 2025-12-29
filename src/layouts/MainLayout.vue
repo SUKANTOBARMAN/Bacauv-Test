@@ -19,7 +19,7 @@
         <div class="row items-center">
           <q-toolbar-title class="app-title">
   <span class="app-title-text">
-    Bangladesh Customs & VAT Officers' Association (BACAUV)
+    Bangladesh Customs & VAT Officers' Association (BACUAV)
   </span>
 </q-toolbar-title>
 

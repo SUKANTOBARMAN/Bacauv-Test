@@ -114,64 +114,72 @@
         </div>
         
         <div class="row q-col-gutter-md">
-          <div class="col-12 col-sm-6">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Full Name (English)</div>
-              <div class="text-body1 text-weight-medium">{{ user.name || 'N/A' }}</div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Full Name (Bangla)</div>
-              <div class="text-body1 text-weight-medium">{{ user.name_bangla || 'N/A' }}</div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Designation</div>
-              <div class="text-body1">{{ getDesignationLabel(user.designation) }}</div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Date of Birth</div>
-              <div class="text-body1">{{ formatDate(user.dob) }}</div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Blood Group</div>
-              <div class="text-body1">
-                <span v-if="user.blood_group" class="blood-group">{{ user.blood_group }}</span>
-                <span v-else>N/A</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Officer Joining Date</div>
-              <div class="text-body1">{{ formatDate(user.officer_joining_date) }}</div>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Educational Qualification</div>
-              <div class="text-body1">{{ user.educational_qualification || 'N/A' }}</div>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Last Education Institution</div>
-              <div class="text-body1">{{ user.last_education_institution || 'N/A' }}</div>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Spouse Profession</div>
-              <div class="text-body1">{{ user.spouse_profession || 'N/A' }}</div>
-            </div>
-          </div>
-        </div>
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Full Name (English)</div>
+      <div class="text-body1 text-weight-medium">{{ user.name || 'N/A' }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Full Name (Bangla)</div>
+      <div class="text-body1 text-weight-medium">{{ user.name_bangla || 'N/A' }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Designation</div>
+      <div class="text-body1">{{ getDesignationLabel(user.designation) }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Date of Birth</div>
+      <div class="text-body1">{{ formatDate(user.dob) }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Blood Group</div>
+      <div class="text-body1">
+        <span v-if="user.blood_group" class="blood-group">{{ user.blood_group }}</span>
+        <span v-else>N/A</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Officer Joining Date</div>
+      <div class="text-body1">{{ formatDate(user.officer_joining_date) }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Educational Qualification</div>
+      <div class="text-body1">{{ user.educational_qualification || 'N/A' }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Last Education Institution</div>
+      <div class="text-body1">{{ user.last_education_institution || 'N/A' }}</div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="q-mb-md">
+      <div class="text-caption text-grey-7">Spouse Profession</div>
+      <div class="text-body1">{{ user.spouse_profession || 'N/A' }}</div>
+    </div>
+  </div>
+</div>
       </div>
 
       <q-separator class="q-my-lg" />
@@ -209,7 +217,7 @@
           </div>
           <div class="col-12">
             <div class="q-mb-md">
-              <div class="text-caption text-grey-7">Social Media</div>
+              <div class="text-caption text-grey-7">Facebook Profile Link</div>
               <a v-if="user.social_media_link" :href="user.social_media_link" target="_blank" class="text-primary text-body1">
                 {{ formatSocialLink(user.social_media_link) }}
               </a>
