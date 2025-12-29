@@ -151,7 +151,7 @@
                       ]"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="lock_outline" color="secondary" />
+                        <q-icon name="lock_outline" color="primary"/>
                       </template>
                       <template v-slot:append>
                         <q-icon
@@ -202,7 +202,7 @@
                       class="custom-input"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="date_range" color="primary" />
+                        <q-icon name="date_range" color="primary"/>
                       </template>
                       <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer" color="grey-5">
@@ -280,10 +280,40 @@
                   </div>
                 </div>
 
+                   <div class="row q-col-gutter-md">
+                    <div class="col-12">
+                    <q-select
+                      filled
+                      v-model="formData.district_id"
+                      :options="filteredDistricts"
+                      option-label="name"
+                      option-value="id"
+                      label="District"
+                      emit-value
+                      map-options
+                      use-input
+                      class="custom-input"
+                      @filter="filterDistricts"
+                      :loading="districtLoading"
+                    >
+                      <template v-slot:prepend>
+                        <q-icon name="map" color="primary" />
+                      </template>
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No districts found
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                    </div>
+                  </div>
+
                 <!-- Educational Information -->
                 <div class="section-header q-mt-xl">
-                  <q-icon name="school" color="teal" size="24px" />
-                  <span class="text-h6 text-weight-medium q-ml-sm text-teal">Educational Information</span>
+                  <q-icon name="school" color="primary" size="24px" />
+                  <span class="text-h6 text-weight-medium q-ml-sm text-primary">Educational Information</span>
                 </div>
 
                 <div class="row q-col-gutter-md">
@@ -306,7 +336,7 @@
                       :loading="degreeLoading"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="school" color="teal" />
+                        <q-icon name="school" color="primary" />
                       </template>
                       
                       <!-- Custom dropdown with categories -->
@@ -360,7 +390,7 @@
                       placeholder="e.g., University of Dhaka"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="account_balance" color="teal" />
+                        <q-icon name="account_balance" color="primary" />
                       </template>
                     </q-input>
                   </div>
@@ -368,8 +398,8 @@
 
                 <!-- Family Information -->
                 <div class="section-header q-mt-xl">
-                  <q-icon name="family_restroom" color="deep-orange" size="24px" />
-                  <span class="text-h6 text-weight-medium q-ml-sm text-deep-orange">Family Information</span>
+                  <q-icon name="family_restroom" color="black" size="24px" />
+                  <span class="text-h6 text-weight-medium q-ml-sm text-black">Family Information</span>
                 </div>
 
                 <div class="row q-col-gutter-md">
@@ -382,7 +412,7 @@
                       placeholder="e.g., Government Officer, Teacher"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="work_outline" color="deep-orange" />
+                        <q-icon name="work_outline" color="primary" />
                       </template>
                     </q-input>
                   </div>
@@ -390,12 +420,12 @@
                     <q-input
                       filled
                       v-model="formData.social_media_link"
-                      label="Social Media Link"
+                      label="Facebook Profile Link"
                       class="custom-input"
                       placeholder="https://facebook.com/username"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="share" color="deep-orange" />
+                        <q-icon name="share" color="primary" />
                       </template>
                     </q-input>
                   </div>
@@ -403,8 +433,8 @@
 
                 <!-- Location Information Section -->
                 <div class="section-header q-mt-xl">
-                  <q-icon name="location_on" color="secondary" size="24px" />
-                  <span class="text-h6 text-weight-medium q-ml-sm text-secondary">Location Information (Optional)</span>
+                  <q-icon name="location_on" color="primary" size="24px" />
+                  <span class="text-h6 text-weight-medium q-ml-sm text-primary">Office Information (Optional)</span>
                 </div>
                 
                 <div class="row q-col-gutter-md">
@@ -425,7 +455,7 @@
                       :loading="commissionerateLoading"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="location_city" color="secondary" />
+                        <q-icon name="location_city" color="primary" />
                       </template>
                       <template v-slot:no-option>
                         <q-item>
@@ -455,7 +485,7 @@
                       :loading="divisionLoading"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="account_balance" color="secondary" />
+                        <q-icon name="account_balance" color="primary" />
                       </template>
                       <template v-slot:no-option>
                         <q-item>
@@ -490,7 +520,7 @@
                       :loading="circleLoading"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="maps_home_work" color="secondary" />
+                        <q-icon name="maps_home_work" color="primary" />
                       </template>
                       <template v-slot:no-option>
                         <q-item>
@@ -522,7 +552,7 @@
                       :loading="districtLoading"
                     >
                       <template v-slot:prepend>
-                        <q-icon name="map" color="secondary" />
+                        <q-icon name="map" color="primary" />
                       </template>
                       <template v-slot:no-option>
                         <q-item>
@@ -988,7 +1018,7 @@ const handleRegister = async () => {
 
 <style scoped>
 .bg-gradient {
-  background: linear-gradient(135deg, #36839d 0%, #2a5b6e 100%);
+  background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
   min-height: 100vh;
   padding: 20px;
 }
