@@ -870,12 +870,8 @@ const getDistrictName = () => {
 // On mounted - FETCH PROFILE DATA
 onMounted(async () => {
   try {
-    // Fetch user profile first
+    
     await fetchUserProfile();
-
-    // You can also fetch other initial data if needed
-    // await officeStore.fetchOfficeInfo();
-    // await categoryStore.fetchCategories();
   } catch (error) {
     console.error("Error in MainLayout mounted:", error);
   }

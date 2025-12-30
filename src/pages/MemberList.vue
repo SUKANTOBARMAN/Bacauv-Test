@@ -26,7 +26,6 @@
 
       <q-separator class="header-separator"></q-separator>
 
-      <!-- Search & Filter - Same for both views -->
       <q-expansion-item
         icon="search"
         label="Search & Filter"
@@ -81,6 +80,20 @@
             <q-inner-loading showing color="primary" />
           </template>
 
+          <template #no-data>
+            <div
+              class="full-width row flex-center text-blue-grey-6"
+              style="height: 500px"
+            >
+              <div class="text-center">
+                <q-icon name="group_off" size="48px" class="q-mb-md" />
+                <div class="text-h5 q-mb-sm">No members found</div>
+                <div class="text-body1">
+                  Try adjusting your search or filter criteria
+                </div>
+              </div>
+            </div>
+          </template>
           <!-- Column 1: Member ID -->
           <template #body-cell-MemberID="props">
             <q-td :props="props" class="id-cell text-left">
@@ -229,10 +242,13 @@
 
           <div
             v-if="!loading && data.length === 0"
-            class="text-center q-pa-lg text-h6 text-blue-grey-6"
+            class="full-height row flex-center"
+            style="min-height: 300px"
           >
-            <q-icon name="group_off" size="24px" class="q-mr-sm" /> No members
-            found
+            <div class="text-center q-pa-lg text-h6 text-blue-grey-6">
+              <q-icon name="group_off" size="24px" class="q-mr-sm" /> No members
+              found
+            </div>
           </div>
 
           <div class="mobile-cards-list q-pa-md">
@@ -396,6 +412,7 @@ const filter = ref({
   division_id: null,
   circle_id: null,
   district_id: null,
+  blood_group: null,
 });
 
 const data = ref([]);
@@ -499,6 +516,7 @@ const buildSearchQuery = () => {
   if (f.division_id) search.push(`division_id:${f.division_id}`);
   if (f.circle_id) search.push(`circle_id:${f.circle_id}`);
   if (f.district_id) search.push(`district_id:${f.district_id}`);
+  if (f.blood_group) search.push(`blood_group:${f.blood_group}`);
 
   return search.join(";");
 };
@@ -550,7 +568,6 @@ onMounted(async () => {
       store.storeCommissionerate(),
       store.storeDivision(),
       store.storeCircle(),
-      store.storeDistrict(),
     ]);
 
     await fetchData();
@@ -565,7 +582,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* --- 🎨 White & Bluish Color Scheme --- */
+
 .bg-primary-gradient {
   background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%) !important;
 }
@@ -637,7 +654,6 @@ onMounted(async () => {
   color: #1976d2;
 }
 
-/* Table Styling - Fixed Column Alignment */
 .members-table {
   border: 1px solid #e0e0e0;
   background-color: white;
@@ -660,15 +676,13 @@ onMounted(async () => {
   vertical-align: middle;
 }
 
-/* FIX: Proper column alignment */
 .members-table :deep(.q-td) {
   padding: 16px;
   border-bottom: 1px solid #f0f0f0;
   vertical-align: middle !important;
-  height: 80px; /* Fixed height for consistent alignment */
+  height: 80px; 
 }
 
-/* FIX: Specific column alignments */
 .members-table :deep(.id-column .q-td) {
   text-align: left !important;
   padding-left: 16px !important;
@@ -698,7 +712,6 @@ onMounted(async () => {
   background-color: #f0f7ff !important;
 }
 
-/* Desktop Column Styles - FIXED ALIGNMENT */
 .member-id-container {
   display: flex;
   align-items: center;
@@ -765,7 +778,6 @@ onMounted(async () => {
   line-height: 1.4;
 }
 
-/* Action button */
 .actions-cell {
   height: 100%;
   display: flex;
@@ -790,13 +802,11 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
 }
 
-/* Table bottom/pagination */
 .table-bottom {
   border-top: 1px solid #e0e0e0;
   background: #f8fafc !important;
 }
 
-/* --- 📱 Mobile Styles --- */
 .mobile-section {
   background: #f5f7fa;
 }
@@ -973,7 +983,7 @@ onMounted(async () => {
   .header-title {
     font-size: 1.2rem;
   }
-   .header-subtitle {
+  .header-subtitle {
     font-size: 0.9rem;
   }
   .mobile-header-title {
@@ -1049,20 +1059,18 @@ onMounted(async () => {
   }
 }
 
-/* FIX: Specific fixes for table cell alignment */
 :deep(.q-table) {
   border-collapse: collapse;
 }
 
 :deep(.q-table tbody tr) {
-  height: 80px; /* Fixed row height */
+  height: 80px; 
 }
 
 :deep(.q-table td) {
   vertical-align: middle !important;
 }
 
-/* Ensure all cells have proper vertical alignment */
 :deep(.id-cell),
 :deep(.photo-cell),
 :deep(.name-cell),

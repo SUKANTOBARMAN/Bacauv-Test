@@ -23,7 +23,10 @@
                 dense
                 icon="clear"
                 size="sm"
-                @click="searchData.keywords = ''; onSearch()"
+                @click="
+                  searchData.keywords = '';
+                  onSearch();
+                "
               />
             </template>
           </q-input>
@@ -108,8 +111,36 @@
                 :disable="!searchData.division_id"
               />
             </div>
-            
-            <!-- Filter Button (Shows when any filter is selected) -->
+
+            <!-- District -->
+            <div class="col-12 col-md-3">
+              <q-select
+                dense
+                filled
+                v-model="searchData.district_id"
+                :options="districtOptions"
+                label="District"
+                map-options
+                emit-value
+                clearable
+                :loading="districtLoading"
+              />
+            </div>
+
+            <!-- Blood Group Filter -->
+            <div class="col-12 col-md-3">
+              <q-select
+                dense
+                filled
+                v-model="searchData.blood_group"
+                :options="bloodGroupOptions"
+                label="Blood Group"
+                map-options
+                emit-value
+                clearable
+              />
+            </div>
+
             <div class="col-12 col-md-3 text-center" v-if="hasActiveFilters">
               <q-btn
                 color="primary"
@@ -128,12 +159,15 @@
 </template>
 
 <script setup>
-import { useStore } from "src/stores/store"
-import { ref, computed } from "vue"
+import { useStore } from "src/stores/store";
+import { ref, computed, onMounted } from "vue";
+import { api } from "boot/axios";
 
-const emit = defineEmits(['search'])
-const store = useStore()
-const expanded = ref(true)
+const emit = defineEmits(["search"]);
+const store = useStore();
+const expanded = ref(true);
+const districtLoading = ref(false);
+const districtOptions = ref([]);
 
 const searchData = ref({
   keywords: "",
@@ -141,63 +175,95 @@ const searchData = ref({
   division_id: null,
   circle_id: null,
   district_id: null,
-})
+  blood_group: null,
+});
 
-// Computed properties for filtered options
+// Blood Group Options
+const bloodGroupOptions = [
+  { label: "A+", value: "A+" },
+  { label: "A-", value: "A-" },
+  { label: "B+", value: "B+" },
+  { label: "B-", value: "B-" },
+  { label: "AB+", value: "AB+" },
+  { label: "AB-", value: "AB-" },
+  { label: "O+", value: "O+" },
+  { label: "O-", value: "O-" },
+];
+
+
+const loadDistricts = async () => {
+  districtLoading.value = true;
+  try {
+    const response = await api.get("/v1/categories?limit=0&search=type:district");
+    
+
+    districtOptions.value = response.data.data.map(item => ({
+      label: item.name,
+      value: item.id,
+      ...item 
+    }));
+    
+    console.log("Districts loaded:", districtOptions.value.length);
+  } catch (error) {
+    console.error("Error loading districts:", error);
+    districtOptions.value = [];
+  } finally {
+    districtLoading.value = false;
+  }
+};
+
 const filteredDivisions = computed(() => {
   if (!searchData.value.commissionerate_id) {
-    return []
+    return [];
   }
   return store.getDivision.filter(
-    item => item.parent_id === searchData.value.commissionerate_id
-  )
-})
+    (item) => item.parent_id === searchData.value.commissionerate_id
+  );
+});
 
 const filteredCircles = computed(() => {
   if (!searchData.value.division_id) {
-    return []
+    return [];
   }
   return store.getCircle.filter(
-    item => item.parent_id === searchData.value.division_id
-  )
-})
+    (item) => item.parent_id === searchData.value.division_id
+  );
+});
 
-// Check if any filter is active (excluding keywords)
+
 const hasActiveFilters = computed(() => {
   return (
     searchData.value.commissionerate_id ||
     searchData.value.division_id ||
     searchData.value.circle_id ||
-    searchData.value.district_id
-  )
-})
+    searchData.value.district_id ||
+    searchData.value.blood_group
+  );
+});
 
-
-// Handle cascading dropdown changes
 const onCommissionerateChange = (value) => {
   if (!value) {
-    searchData.value.division_id = null
-    searchData.value.circle_id = null
+    searchData.value.division_id = null;
+    searchData.value.circle_id = null;
   }
-}
+};
 
 const onDivisionChange = (value) => {
   if (!value) {
-    searchData.value.circle_id = null
+    searchData.value.circle_id = null;
   }
-}
+};
 
 // Apply filters button click
 const applyFilters = () => {
-  console.log('Applying filters:', searchData.value)
-  emit("search", { ...searchData.value })
-}
-
+  console.log("Applying filters:", searchData.value);
+  emit("search", { ...searchData.value });
+};
 
 const onSearch = () => {
-  console.log('Searching with:', searchData.value)
-  emit("search", { ...searchData.value })
-}
+  console.log("Searching with:", searchData.value);
+  emit("search", { ...searchData.value });
+};
 
 const onReset = () => {
   searchData.value = {
@@ -206,8 +272,12 @@ const onReset = () => {
     division_id: null,
     circle_id: null,
     district_id: null,
-  }
-  emit("search", { ...searchData.value })
-}
-</script>
+    blood_group: null,
+  };
+  emit("search", { ...searchData.value });
+};
 
+onMounted(() => {
+  loadDistricts();
+});
+</script>
