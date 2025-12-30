@@ -983,12 +983,6 @@ const handleRegister = async () => {
       return;
     }
 
-    if (!termsAccepted.value) {
-      error.value = "You must accept the Terms & Conditions";
-      loading.value = false;
-      return;
-    }
-
     const params = new URLSearchParams();
 
     // Required fields
