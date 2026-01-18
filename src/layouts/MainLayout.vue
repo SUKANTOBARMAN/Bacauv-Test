@@ -3,7 +3,6 @@
     <!-- Enhanced Header -->
     <q-header class="bg-gradient-header">
       <q-toolbar class="glassy-toolbar">
-        <!-- Animated Menu Button -->
         <q-btn
           flat
           dense
@@ -18,11 +17,10 @@
         <!-- App Logo & Title -->
         <div class="row items-center">
           <q-toolbar-title class="app-title">
-  <span class="app-title-text">
-    Bangladesh Customs & VAT Officers' Association (BACUAV)
-  </span>
-</q-toolbar-title>
-
+            <span class="app-title-text">
+              Bangladesh Customs & VAT Officers' Association (BACUAV)
+            </span>
+          </q-toolbar-title>
         </div>
 
         <q-space />
@@ -106,7 +104,7 @@
                   <q-item-section avatar>
                     <q-icon name="person" color="primary" />
                   </q-item-section>
-                  <q-item-section>প্রোফাইল দেখুন</q-item-section>
+                  <q-item-section>See Profile</q-item-section>
                 </q-item>
 
                 <q-separator v-if="userStore.getHighestRole !== 'admin'" />
@@ -122,7 +120,7 @@
                     <q-icon name="logout" color="negative" />
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label class="text-negative">লগআউট</q-item-label>
+                    <q-item-label class="text-negative">Logout</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -637,21 +635,16 @@ import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import { useOfficeStore } from "src/stores/officeStore";
 import { useUserStore } from "stores/userStore";
-import { useCategoryStore } from "stores/category";
 import { useEmployeeStore } from "src/stores/employeeStore";
 import { api } from "boot/axios";
 
-// Stores
 const userStore = useUserStore();
-const categoryStore = useCategoryStore();
 const officeStore = useOfficeStore();
 const employeeStore = useEmployeeStore();
 
-// Quasar + Router
 const $q = useQuasar();
 const router = useRouter();
 
-// User Profile Data - YOUR PROFILE COMPONENT STYLE
 const userProfile = ref({
   id: null,
   name: "",
@@ -669,13 +662,11 @@ const userProfile = ref({
   district: null,
 });
 
-// Drawer control
 const leftDrawerOpen = ref(false);
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 
-// Fetch User Profile - EXACTLY SAME AS YOUR PROFILE COMPONENT
 const fetchUserProfile = async () => {
   try {
     const { data } = await api.get("/v1/profile", {
@@ -684,12 +675,10 @@ const fetchUserProfile = async () => {
       },
     });
 
-    // Store the complete response data
     userProfile.value = data.data;
 
     console.log("PROFILE RESPONSE in MainLayout:", data.data);
 
-    // Your existing data mapping
     userProfile.value = {
       ...userProfile.value,
       id: data.data.id,
@@ -717,7 +706,6 @@ const fetchUserProfile = async () => {
   }
 };
 
-// Get designation label - SAME AS PROFILE COMPONENT
 const getDesignationLabel = (designationValue) => {
   const designationOptions = [
     {
@@ -735,23 +723,11 @@ const getDesignationLabel = (designationValue) => {
   ];
 
   const found = designationOptions.find(
-    (opt) => opt.value === designationValue
+    (opt) => opt.value === designationValue,
   );
   return found ? found.label : designationValue;
 };
 
-// Format date for display - SAME AS PROFILE COMPONENT
-const formatDate = (dateString) => {
-  if (!dateString) return "N/A";
-  const date = new Date(dateString);
-  return date.toLocaleDateString("bn-BD", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
-
-// View Profile - Navigate to my-profile route
 const viewProfile = async () => {
   try {
     await router.push("/my-profile");
@@ -764,20 +740,20 @@ const viewProfile = async () => {
   }
 };
 
-// Logout
 const logout = async () => {
   $q.dialog({
-    title: "লগআউট নিশ্চিতকরণ",
-    message: "আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?",
+    title: "Logout Confirmation",
+    message: "Are you sure you want to logout?",
+
     cancel: true,
     persistent: true,
     ok: {
-      label: "লগআউট",
+      label: "Logout",
       color: "negative",
       flat: true,
     },
     cancel: {
-      label: "বাতিল",
+      label: "Cancel",
       color: "primary",
       flat: true,
     },
@@ -789,7 +765,7 @@ const logout = async () => {
 
       $q.notify({
         type: "positive",
-        message: "সফলভাবে লগআউট করা হয়েছে",
+        message: "Successfully logged out",
         position: "top",
         timeout: 1500,
       });
@@ -798,91 +774,38 @@ const logout = async () => {
       console.error(error);
       $q.notify({
         type: "negative",
-        message: "লগআউট ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+        message: "Logout failed. Please try again.",
         position: "top",
       });
     }
   });
 };
 
-// Current year for footer
+
 const currentYear = computed(() => new Date().getFullYear());
 
-// Employee photo URL - UPDATED TO MATCH YOUR PROFILE COMPONENT
 const employeePhotoUrl = computed(() => {
   if (userProfile.value.photo) {
-    // Your base URL from profile component
-    const baseUrl = process.env.DEV_WEB_URL || "https://yshr_app.dyd-govbd.com";
+    const baseUrl = process.env.DEV_WEB_URL || process.env.BUILD_WEB_URL || process.env.DEV_API_URL|| process.env.BUILD_API_URL|| "https://yshr_app.dyd-govbd.com";
     return `${baseUrl}${userProfile.value.photo}`;
   }
   return "https://cdn.quasar.dev/img/boy-avatar.png";
 });
 
-// Helper functions to extract names safely - UPDATED
-const getCommissionerateName = () => {
-  if (!userProfile.value.commissionerate) return null;
-  // Handle both object structures
-  if (
-    userProfile.value.commissionerate.data &&
-    userProfile.value.commissionerate.data.name
-  ) {
-    return userProfile.value.commissionerate.data.name;
-  }
-  if (userProfile.value.commissionerate.name) {
-    return userProfile.value.commissionerate.name;
-  }
-  return null;
-};
 
-const getDivisionName = () => {
-  if (!userProfile.value.division) return null;
-  if (userProfile.value.division.data && userProfile.value.division.data.name) {
-    return userProfile.value.division.data.name;
-  }
-  if (userProfile.value.division.name) {
-    return userProfile.value.division.name;
-  }
-  return null;
-};
-
-const getCircleName = () => {
-  if (!userProfile.value.circle) return null;
-  if (userProfile.value.circle.data && userProfile.value.circle.data.name) {
-    return userProfile.value.circle.data.name;
-  }
-  if (userProfile.value.circle.name) {
-    return userProfile.value.circle.name;
-  }
-  return null;
-};
-
-const getDistrictName = () => {
-  if (!userProfile.value.district) return null;
-  if (userProfile.value.district.data && userProfile.value.district.data.name) {
-    return userProfile.value.district.data.name;
-  }
-  if (userProfile.value.district.name) {
-    return userProfile.value.district.name;
-  }
-  return null;
-};
-
-// On mounted - FETCH PROFILE DATA
 onMounted(async () => {
   try {
-    
     await fetchUserProfile();
   } catch (error) {
     console.error("Error in MainLayout mounted:", error);
   }
 });
 
-// Watch for route changes or other events if needed
 watch(
   () => router.currentRoute.value,
   () => {
     // You can add logic here if needed
-  }
+  },
 );
 </script>
 
@@ -1134,9 +1057,9 @@ watch(
 }
 
 .app-title-text {
-  white-space: nowrap;       
-  overflow: hidden;          
-  text-overflow: ellipsis;  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   display: block;
   font-weight: 700;
   line-height: 1.3;
@@ -1146,8 +1069,7 @@ watch(
 /* Mobile responsive */
 @media (max-width: 600px) {
   .app-title-text {
-    font-size: 11px;  /* মোবাইলে ছোট হবে */
+    font-size: 11px; 
   }
 }
-
 </style>

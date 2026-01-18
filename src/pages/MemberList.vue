@@ -2,7 +2,7 @@
   <div class="q-pa-md member-directory-wrapper">
     <q-card bordered class="desktop-card no-shadow">
       <!-- Header Section - Visible on both desktop and mobile -->
-      <q-card-section class="card-header bg-primary-gradient">
+      <!-- <q-card-section class="card-header bg-primary-gradient">
         <div class="header-content">
           <div class="header-title text-white">
             <q-icon name="group" class="q-mr-sm" /> Member Directory
@@ -22,7 +22,7 @@
             Total Members: {{ pagination.rowsNumber }}
           </q-chip>
         </div>
-      </q-card-section>
+      </q-card-section> -->
 
       <q-separator class="header-separator"></q-separator>
 
@@ -61,7 +61,7 @@
           binary-state-sort
         >
           <template #top>
-            <div class="table-top row items-center q-pb-md">
+            <div class="table-top row items-center">
               <div class="text-h6 text-primary-dark text-weight-bold">
                 Member List Overview
               </div>
@@ -99,6 +99,7 @@
             <q-td :props="props" class="id-cell text-left">
               <div class="member-id-container">
                 <q-icon
+                  v-if="props.row.member_id"
                   name="vpn_key"
                   size="16px"
                   color="primary"
@@ -193,7 +194,7 @@
                   {{
                     Math.min(
                       pagination.page * pagination.rowsPerPage,
-                      pagination.rowsNumber
+                      pagination.rowsNumber,
                     )
                   }}
                   of {{ pagination.rowsNumber }} members
@@ -225,16 +226,6 @@
 
       <!-- MOBILE VIEW -->
       <q-card-section v-else class="q-pa-none mobile-section">
-        <!-- Mobile Header Repeat -->
-        <!-- <div class="mobile-header-repeated bg-primary-gradient q-pa-md">
-          <div class="mobile-header-title text-h5 text-white text-weight-bold q-mb-xs">
-            <q-icon name="group" class="q-mr-sm" /> Member Directory
-          </div>
-          <div class="mobile-header-subtitle text-white opacity-85">
-            Browse and view all registered members
-          </div>
-        </div> -->
-
         <div class="mobile-card-container">
           <q-inner-loading :showing="loading">
             <q-spinner-cube size="50px" color="primary" />
@@ -251,115 +242,88 @@
             </div>
           </div>
 
-          <div class="mobile-cards-list q-pa-md">
-            <q-card
+          <div class="mobile-cards-list">
+            <div
               v-for="row in data"
               :key="row.id"
-              class="mobile-data-card q-mb-md"
-              bordered
+              class="mobile-data-card"
+              @click="viewMemberDetails(row)"
             >
-              <q-card-section class="q-pa-md">
-                <!-- Mobile Card Layout with 5 sections matching desktop -->
-                <div class="mobile-card-layout">
-                  <!-- Row 1: Member ID -->
-                  <div
-                    class="mobile-row mobile-id-row row items-center q-mb-sm"
-                  >
+              <!-- Photo Section -->
+              <div class="mobile-photo-section">
+                <q-avatar class="mobile-photo">
+                  <q-img
+                    v-if="row.photo || photoPreview"
+                    :src="photoPreview || `${baseUrl}${row.photo}`"
+                    :ratio="1"
+                    class="avatar-img"
+                  />
+                </q-avatar>
+              </div>
+
+              <!-- Content Section -->
+              <div class="mobile-content-section">
+                <!-- Member ID -->
+                <div class="mobile-id-row">
+                  <q-icon
+                    v-if="row.member_id"
+                    name="vpn_key"
+                    size="14px"
+                    color="primary"
+                    class="q-mr-xs"
+                  />
+                  <span class="mobile-id-text">{{ row.member_id }}</span>
+                </div>
+
+                <!-- Name -->
+                <div class="mobile-name-row">
+                  <div class="mobile-english-name">{{ row.name }}</div>
+                  <div class="mobile-bangla-name">{{ row.name_bangla }}</div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="mobile-contact-row">
+                  <div class="mobile-contact-item">
                     <q-icon
-                      name="vpn_key"
-                      size="16px"
+                      name="phone_iphone"
+                      size="14px"
                       color="primary"
-                      class="q-mr-sm"
+                      class="q-mr-xs"
                     />
-                    <span
-                      class="mobile-id-text text-weight-bold text-primary-dark"
-                    >
-                      {{ row.member_id }}
-                    </span>
+                    <span class="mobile-contact-text">{{
+                      row.mobile || "N/A"
+                    }}</span>
                   </div>
-
-                  <!-- Row 2: Photo and Name -->
-                  <div
-                    class="mobile-row mobile-photo-name-row row items-start q-mb-md"
-                  >
-                    <!-- Photo -->
-                    <div class="mobile-photo-section col-4">
-                      <q-avatar size="80px" class="mobile-photo">
-                        <q-img
-                          v-if="row.photo || photoPreview"
-                          :src="photoPreview || `${baseUrl}${row.photo}`"
-                          :ratio="1"
-                          class="avatar-img"
-                        />
-                      </q-avatar>
-                    </div>
-
-                    <!-- Name -->
-                    <div class="mobile-name-section col-8 q-pl-md">
-                      <div
-                        class="mobile-english-name text-weight-bold text-dark text-h6"
-                      >
-                        {{ row.name }}
-                      </div>
-                      <div
-                        class="mobile-bangla-name text-caption text-blue-grey-7 q-mt-xs"
-                      >
-                        {{ row.name_bangla }}
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Row 3: Contact Info -->
-                  <div class="mobile-row mobile-contact-row q-mb-md">
-                    <div class="mobile-contact-item row items-center q-mb-sm">
-                      <q-icon
-                        name="phone_iphone"
-                        size="16px"
-                        color="primary"
-                        class="q-mr-sm"
-                      />
-                      <span
-                        class="mobile-contact-text text-weight-medium text-dark"
-                      >
-                        {{ row.mobile || "N/A" }}
-                      </span>
-                    </div>
-                    <div class="mobile-contact-item row items-center">
-                      <q-icon
-                        name="alternate_email"
-                        size="16px"
-                        color="primary"
-                        class="q-mr-sm"
-                      />
-                      <span
-                        class="mobile-contact-text text-body2 text-blue-grey-7"
-                      >
-                        {{ row.email || "N/A" }}
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- Row 4: Action Button - ALWAYS VISIBLE -->
-                  <div class="mobile-row mobile-action-row">
-                    <q-btn
-                      flat
+                  <div class="mobile-contact-item">
+                    <q-icon
+                      name="alternate_email"
+                      size="14px"
                       color="primary"
-                      icon="visibility"
-                      label="View Details"
-                      @click="viewMemberDetails(row)"
-                      class="full-width mobile-view-btn"
-                      size="md"
-                      padding="12px"
+                      class="q-mr-xs"
                     />
+                    <span class="mobile-contact-text">{{
+                      row.email || "N/A"
+                    }}</span>
                   </div>
                 </div>
-              </q-card-section>
-            </q-card>
+              </div>
+
+              <!-- Action Button -->
+              <div class="mobile-action-row">
+                <q-btn
+                  flat
+                  round
+                  color="primary"
+                  icon="chevron_right"
+                  class="mobile-view-btn"
+                />
+              </div>
+            </div>
           </div>
 
           <!-- Mobile Pagination -->
           <div
-            class="mobile-pagination q-pa-md bg-white"
+            class="mobile-pagination"
             v-if="pagination.rowsNumber > pagination.rowsPerPage"
           >
             <q-pagination
@@ -394,11 +358,14 @@ import { api } from "boot/axios";
 import { useStore } from "stores/store";
 
 const router = useRouter();
-const tableRef = ref(null);
 const loading = ref(false);
 const store = useStore();
 const $q = useQuasar();
-const baseUrl = process.env.DEV_WEB_URL;
+const baseUrl =
+  process.env.DEV_WEB_URL ||
+  process.env.BUILD_WEB_URL ||
+  process.env.BUILD_API_URL ||
+  process.env.BUILD_API_URL;
 
 const pagination = ref({
   page: 1,
@@ -582,7 +549,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
 .bg-primary-gradient {
   background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%) !important;
 }
@@ -615,10 +581,10 @@ onMounted(async () => {
   background: white;
 }
 
-.card-header {
-  padding: 24px;
+/* .card-header {
+  padding: 20px;
   position: relative;
-}
+} */
 
 .header-title {
   font-size: 1.75rem;
@@ -680,7 +646,7 @@ onMounted(async () => {
   padding: 16px;
   border-bottom: 1px solid #f0f0f0;
   vertical-align: middle !important;
-  height: 80px; 
+  height: 80px;
 }
 
 .members-table :deep(.id-column .q-td) {
@@ -807,237 +773,233 @@ onMounted(async () => {
   background: #f8fafc !important;
 }
 
+/* 📱 MOBILE VIEW - REDESIGNED */
 .mobile-section {
   background: #f5f7fa;
-}
-
-.mobile-header-repeated {
-  border-radius: 0;
-  padding: 20px 16px;
-  margin-bottom: 16px;
-}
-
-.mobile-header-title {
-  font-size: 1.5rem;
-  line-height: 1.2;
-}
-
-.mobile-header-subtitle {
-  font-size: 0.95rem;
+  padding: 0 !important;
 }
 
 .mobile-card-container {
   min-height: 400px;
+  position: relative;
 }
 
 .mobile-cards-list {
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .mobile-data-card {
   border-radius: 12px;
   background: white;
   border: 1px solid #e0e0e0;
-  margin-bottom: 16px;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin: 0 !important;
+  display: flex;
+  flex-direction: row;
+  padding: 12px;
+  align-items: center;
+  height: 120px;
+  cursor: pointer;
+  position: relative;
 }
 
 .mobile-data-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: #1976d2;
+  transform: translateY(-2px);
 }
 
-.mobile-card-layout {
-  display: flex;
-  flex-direction: column;
-}
-
-.mobile-row {
-  width: 100%;
-}
-
-/* Mobile ID Row */
-.mobile-id-row {
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e0e0e0;
-  margin-bottom: 16px;
-  min-height: 40px;
-  display: flex;
-  align-items: center;
-}
-
-.mobile-id-text {
-  font-size: 16px;
-  line-height: 1.4;
-}
-
-/* Mobile Photo & Name Row */
-.mobile-photo-name-row {
-  align-items: center;
-  min-height: 100px;
-}
-
+/* Mobile Card Layout - Compact Design */
 .mobile-photo-section {
+  flex-shrink: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100%;
-}
-
-.mobile-photo {
-  border: 3px solid #e3f2fd;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
+  justify-content: center;
   width: 80px;
   height: 80px;
 }
 
-.mobile-name-section {
-  padding-left: 16px;
-  height: 100%;
+.mobile-photo {
+  width: 100% !important;
+  height: 100% !important;
+  border: 3px solid #e3f2fd;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.1);
+  border-radius: 10px;
+}
+
+.mobile-content-section {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 100%;
+  overflow: hidden;
+  padding: 0 12px;
+}
+
+/* Member ID - Top Row */
+.mobile-id-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.mobile-id-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1565c0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Member Name */
+.mobile-name-row {
+  margin-bottom: 8px;
 }
 
 .mobile-english-name {
-  font-size: 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #37474f;
   line-height: 1.3;
-  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
 }
 
 .mobile-bangla-name {
-  font-size: 14px;
+  font-size: 13px;
+  color: #78909c;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Mobile Contact Row */
+/* Contact Info */
 .mobile-contact-row {
-  padding: 16px 0;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-  margin: 16px 0;
-  min-height: 80px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 4px;
 }
 
 .mobile-contact-item {
-  margin-bottom: 12px;
   display: flex;
   align-items: center;
-  min-height: 24px;
-}
-
-.mobile-contact-item:last-child {
-  margin-bottom: 0;
+  line-height: 1.2;
 }
 
 .mobile-contact-text {
-  font-size: 15px;
-  line-height: 1.4;
+  font-size: 12px;
+  color: #546e7a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
-/* Mobile Action Row - ALWAYS VISIBLE */
+/* View Button - Right */
 .mobile-action-row {
-  padding-top: 8px;
-  min-height: 60px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .mobile-view-btn {
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
+  height: 36px;
+  min-height: 36px;
+  width: 36px;
+  min-width: 36px;
+  border-radius: 50%;
   background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
   color: white !important;
   border: none;
-  height: 48px;
-  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.mobile-view-btn :deep(.q-btn__content) {
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.mobile-view-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+}
+
+.mobile-view-btn :deep(.q-icon) {
+  font-size: 20px;
 }
 
 /* Mobile Pagination */
 .mobile-pagination {
+  padding: 16px 12px;
   border-top: 1px solid #e0e0e0;
   background: white;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+}
+
+.mobile-pagination-controls {
+  display: flex;
+  justify-content: center;
 }
 
 .mobile-pagination-controls :deep(.q-btn) {
   font-size: 14px;
+  height: 32px;
+  min-height: 32px;
+  width: 32px;
+  min-width: 32px;
+  margin: 0 2px;
 }
 
-/* Responsive adjustments for very small screens */
+/* Loading and Empty States */
+.mobile-card-container .q-inner-loading {
+  min-height: 300px;
+}
+
+.mobile-card-container .text-center {
+  padding: 40px 20px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 480px) {
-  .header-title {
-    font-size: 1.2rem;
-  }
-  .header-subtitle {
-    font-size: 0.9rem;
-  }
-  .mobile-header-title {
-    font-size: 1.3rem;
+  /* .card-header {
+    padding: 8px;
+  } */
+  .mobile-cards-list {
+    gap: 10px;
+    padding: 10px;
   }
 
-  .mobile-header-subtitle {
-    font-size: 0.9rem;
+  .mobile-data-card {
+    height: 110px;
+    padding: 10px;
   }
 
-  .mobile-photo {
+  .mobile-photo-section {
     width: 70px;
     height: 70px;
   }
 
+  .mobile-content-section {
+    padding: 0 10px;
+  }
+
   .mobile-english-name {
-    font-size: 16px;
-  }
-
-  .mobile-bangla-name {
-    font-size: 13px;
-  }
-
-  .mobile-contact-text {
     font-size: 14px;
-  }
-
-  .mobile-view-btn {
-    height: 44px;
-    min-height: 44px;
-    font-size: 15px;
-  }
-
-  .mobile-view-btn :deep(.q-btn__content) {
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 360px) {
-  .mobile-header-title {
-    font-size: 1.2rem;
-  }
-
-  .mobile-photo {
-    width: 60px;
-    height: 60px;
-  }
-
-  .mobile-name-section {
-    padding-left: 12px;
-  }
-
-  .mobile-english-name {
-    font-size: 15px;
   }
 
   .mobile-bangla-name {
@@ -1045,26 +1007,115 @@ onMounted(async () => {
   }
 
   .mobile-contact-text {
-    font-size: 13px;
+    font-size: 11px;
+    max-width: 150px;
+  }
+
+  .mobile-id-text {
+    font-size: 12px;
   }
 
   .mobile-view-btn {
-    height: 40px;
-    min-height: 40px;
-    font-size: 14px;
+    height: 32px;
+    min-height: 32px;
+    width: 32px;
+    min-width: 32px;
   }
 
-  .mobile-view-btn :deep(.q-btn__content) {
-    font-size: 14px;
+  .mobile-view-btn :deep(.q-icon) {
+    font-size: 18px;
   }
 }
 
+@media (max-width: 380px) {
+  /* .card-header {
+    padding: 10px;
+  } */
+  .mobile-data-card {
+    height: 100px;
+    padding: 8px;
+  }
+
+  .mobile-photo-section {
+    width: 60px;
+    height: 60px;
+  }
+
+  .mobile-english-name {
+    font-size: 13px;
+  }
+
+  .mobile-bangla-name {
+    font-size: 11px;
+  }
+
+  .mobile-contact-text {
+    font-size: 10px;
+    max-width: 130px;
+  }
+
+  .mobile-id-text {
+    font-size: 11px;
+  }
+
+  .mobile-view-btn {
+    height: 30px;
+    min-height: 30px;
+    width: 30px;
+    min-width: 30px;
+  }
+
+  .mobile-view-btn :deep(.q-icon) {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 320px) {
+  /* .card-header {
+    padding: 10px;
+  } */
+  .mobile-data-card {
+    height: 90px;
+    padding: 6px;
+  }
+
+  .mobile-photo-section {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mobile-english-name {
+    font-size: 12px;
+  }
+
+  .mobile-bangla-name {
+    font-size: 10px;
+  }
+
+  .mobile-contact-text {
+    font-size: 9px;
+    max-width: 110px;
+  }
+
+  .mobile-id-text {
+    font-size: 10px;
+  }
+
+  .mobile-view-btn {
+    height: 28px;
+    min-height: 28px;
+    width: 28px;
+    min-width: 28px;
+  }
+}
+
+/* Ensure proper table styling */
 :deep(.q-table) {
   border-collapse: collapse;
 }
 
 :deep(.q-table tbody tr) {
-  height: 80px; 
+  height: 80px;
 }
 
 :deep(.q-table td) {
@@ -1078,5 +1129,17 @@ onMounted(async () => {
 :deep(.actions-cell) {
   display: table-cell !important;
   vertical-align: middle !important;
+}
+
+/* Avatar image styling */
+.avatar-img {
+  object-fit: cover;
+}
+
+/* Empty state styling */
+.full-height.row.flex-center {
+  background: white;
+  border-radius: 12px;
+  margin: 20px;
 }
 </style>
