@@ -145,6 +145,12 @@ const routes = [
     meta: { requiresAuth: false }
 
   },
+  {
+    path:'/privacy-policy',
+    name:'PrivacyPolicy',
+    component: () => import('src/pages/PrivacyPolicy.vue'),
+    meta: { requiresAuth: false }
+  },
   // {
   //   path:'/member-request',
   //   name:'MemberRequest',
