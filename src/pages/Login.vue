@@ -101,10 +101,11 @@
             <q-separator />
 
             <!-- Footer -->
-            <q-card-section class="text-center q-pt-sm">
+            <q-card-section class="text-center q-pt-sm " >
               <div class="text-caption text-grey-7">
                 Don't have an account?
               </div>
+              <div class="q-mt-xs text-caption text-grey-7">
               <q-btn
                 to="/register"
                 label="Create Account"
@@ -114,6 +115,7 @@
                 color="primary"
                 class="text-weight-bold"
               />
+              </div>
             </q-card-section>
 
           </q-card>
