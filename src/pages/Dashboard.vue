@@ -104,7 +104,8 @@
                 <div class="icon-bg-circle"></div>
               </div>
               <div class="stat-content">
-                <div class="stat-label">Commissionerate</div>
+                <div class="stat-label">Member</div>
+                <!-- <div class="stat-label">Commissionerate</div> -->
                 <div class="stat-value">
                   <span class="counting-number">{{
                     animatedStats.totalCommissionerates
@@ -112,7 +113,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_city" size="16px" />
-                 Active Area
+                  Area
                 </div>
               </div>
               <div class="card-glow commissionerate-glow"></div>
@@ -158,7 +159,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_on" size="16px" />
-                 Active Area
+                  Area
                 </div>
               </div>
               <div class="card-glow district-glow"></div>
@@ -229,7 +230,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="hub" size="16px" />
-                  Administrative Division
+                   Division
                 </div>
               </div>
               <div class="card-glow division-glow"></div>
@@ -254,7 +255,7 @@
                 </div>
                 <div class="stat-info">
                   <q-icon name="donut_small" size="16px" />
-                 Executive Area
+                  Area
                 </div>
               </div>
               <div class="card-glow circle-glow"></div>
