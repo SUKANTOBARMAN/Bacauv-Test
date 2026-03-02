@@ -8,14 +8,18 @@
             <!-- Header -->
             <q-card-section class="text-center q-pb-sm">
               <img
-                src="../assets/logo.jpg"
+                src="../assets/dummy.png"
                 alt="Logo"
                 class="corporation-logo"
               />
 
               <div class="text-subtitle1 text-weight-bold text-primary q-mt-sm">
-                Bangladesh Customs & VAT Officers' Association
+                BACUAV Association
               </div>
+
+              <!-- <div class="text-subtitle1 text-weight-bold text-primary q-mt-sm">
+                Bangladesh Customs & VAT Officers' Association
+              </div> -->
 
               <div class="text-caption text-grey-7 q-mt-xs">
                 Sign in to your account

@@ -13,7 +13,7 @@
             </div>
 
             <div class="text-subtitle1 text-subtitle2-sm text-grey-7">
-              আপনার ব্যক্তিগত এবং প্রশাসনিক তথ্য
+              আপনার ব্যক্তিগত তথ্য
             </div>
           </div>
         </div>
@@ -122,7 +122,7 @@
                   <div
                     class="text-subtitle1 text-body2-sm text-indigo-7 q-mb-md"
                   >
-                    {{ getDesignationLabel(user.designation) }}
+                    <!-- {{ getDesignationLabel(user.designation) }} -->
                   </div>
 
                   <div class="text-left q-gutter-y-md user-info-grid">
@@ -173,7 +173,7 @@
                 <q-tab
                   name="admin"
                   icon="account_balance"
-                  label="প্রশাসনিক তথ্য"
+                  label="তথ্য"
                 />
               </q-tabs>
 
@@ -252,7 +252,7 @@
                       </div>
 
                       <!-- Row 3: Designation -->
-                      <div class="form-section">
+                      <!-- <div class="form-section">
                         <div class="form-label">পদবি</div>
                         <q-select
                           outlined
@@ -269,7 +269,7 @@
                             markFieldAsChanged('designation')
                           "
                         />
-                      </div>
+                      </div> -->
 
                       <div class="form-section">
                         <div class="form-label">যোগদানের তারিখ</div>
@@ -465,7 +465,7 @@
                       <div>
                         <span
                           class="text-h5 text-h6-sm text-weight-bold text-grey-9"
-                          >প্রশাসনিক তথ্য</span
+                          >তথ্য</span
                         >
                         <div
                           class="text-caption text-body2-sm text-grey-7 q-mt-xs"
@@ -488,7 +488,7 @@
                           />
                           <span
                             class="text-subtitle1 text-subtitle2-sm text-weight-bold"
-                            >প্রশাসনিক কাঠামো</span
+                            >কাঠামো</span
                           >
                         </div>
 
@@ -500,10 +500,10 @@
                                 size="sm"
                                 class="q-mr-xs"
                               />
-                              কমিশনারেট
+                              <!-- কমিশনারেট -->
                             </div>
                             <div class="hierarchy-value">
-                              {{ user.commissionerate?.data?.name || "N/A" }}
+                              <!-- {{ user.commissionerate?.data?.name || "N/A" }} -->
                             </div>
                           </div>
 
@@ -528,7 +528,7 @@
                                 size="sm"
                                 class="q-mr-xs"
                               />
-                              সার্কেল
+                            
                             </div>
                             <div class="hierarchy-value">
                               {{ user.circle?.data?.name || "N/A" }}

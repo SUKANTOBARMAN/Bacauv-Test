@@ -14,11 +14,11 @@
         >
         </q-btn>
 
-        <!-- App Logo & Title -->
+        <!-- App Logo & Title (Bangladesh Customs & VAT Officers' Association (BACUAV))-->
         <div class="row items-center">
           <q-toolbar-title class="app-title">
             <span class="app-title-text">
-              Bangladesh Customs & VAT Officers' Association (BACUAV)
+              BACAUV Association
             </span>
           </q-toolbar-title>
         </div>
@@ -71,10 +71,10 @@
                       {{ userProfile.name || "ব্যবহারকারী" }}
                     </q-item-label>
                     <q-item-label caption>
-                      {{
+                      <!-- {{
                         getDesignationLabel(userProfile.designation) ||
                         "কর্মচারী"
-                      }}
+                      }} -->
                     </q-item-label>
                     <q-item-label
                       caption
@@ -149,7 +149,7 @@
               {{ userProfile.name || "" }}
             </div>
             <div class="text-caption text-blue-1">
-              {{ getDesignationLabel(userProfile.designation) || "" }}
+              <!-- {{ getDesignationLabel(userProfile.designation) || "" }} -->
             </div>
             <div
               v-if="userProfile.email"
