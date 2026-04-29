@@ -1,13 +1,11 @@
 <template>
   <q-page class="dashboard-page">
-    <!-- Animated Background -->
     <div class="animated-background">
       <div class="gradient-orb orb-1"></div>
       <div class="gradient-orb orb-2"></div>
       <div class="gradient-orb orb-3"></div>
     </div>
 
-    <!-- Welcome Header -->
     <div class="welcome-header">
       <div class="welcome-content">
         <div class="welcome-icon-animated">
@@ -25,7 +23,6 @@
       </div>
     </div>
 
-    <!-- Quick Actions with Enhanced Design -->
     <div class="actions-section">
       <div class="section-title">
         <div class="title-icon-wrapper">
@@ -37,7 +34,7 @@
         <div
           v-for="(card, index) in actionCards"
           :key="index"
-          class="col-12 col-sm-6 col-md-4 col-lg-3"
+          class="col-4 col-sm-4 col-md-4 col-lg-3"
         >
           <q-card
             class="action-card glassmorphism"
@@ -61,7 +58,6 @@
       </div>
     </div>
 
-    <!-- Stats Cards with Real Data -->
     <div class="stats-section">
       <div class="section-title">
         <div class="title-icon-wrapper">
@@ -70,8 +66,7 @@
         <span>Info</span>
       </div>
       <div class="row q-col-gutter-md">
-        <!-- Total Members Card -->
-        <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-6 col-sm-6 col-md-3">
           <q-card class="stat-card members-card" flat>
             <q-card-section>
               <div class="stat-icon-wrapper">
@@ -81,9 +76,7 @@
               <div class="stat-content">
                 <div class="stat-label">Total User</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{
-                    animatedStats.totalMembers
-                  }}</span>
+                  <span class="counting-number">{{ animatedStats.totalMembers }}</span>
                 </div>
                 <div class="stat-change positive">
                   <q-icon name="trending_up" size="16px" />
@@ -95,8 +88,7 @@
           </q-card>
         </div>
 
-        <!-- Commissionerates Count Card -->
-        <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-6 col-sm-6 col-md-3">
           <q-card class="stat-card commissionerate-card" flat>
             <q-card-section>
               <div class="stat-icon-wrapper">
@@ -105,11 +97,8 @@
               </div>
               <div class="stat-content">
                 <div class="stat-label">Member</div>
-                <!-- <div class="stat-label">Commissionerate</div> -->
                 <div class="stat-value">
-                  <span class="counting-number">{{
-                    animatedStats.totalCommissionerates
-                  }}</span>
+                  <span class="counting-number">{{ animatedStats.totalCommissionerates }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_city" size="16px" />
@@ -120,30 +109,8 @@
             </q-card-section>
           </q-card>
         </div>
-        <!-- <div class="col-12 col-sm-6 col-md-3">
-          <q-card class="stat-card ro-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="admin_panel_settings" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
-              </div>
-              <div class="stat-content">
-                <div class="stat-label">মোট RO</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalRO }}</span>
-                </div>
-                <div class="stat-info">
-                  <q-icon name="verified" size="16px" />
-                  নিবন্ধিত অফিসার
-                </div>
-              </div>
-              <div class="card-glow ro-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div> -->
 
-        <!-- Districts Count Card -->
-        <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-6 col-sm-6 col-md-3">
           <q-card class="stat-card district-card" flat>
             <q-card-section>
               <div class="stat-icon-wrapper">
@@ -153,9 +120,7 @@
               <div class="stat-content">
                 <div class="stat-label">District</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{
-                    animatedStats.totalDistricts
-                  }}</span>
+                  <span class="counting-number">{{ animatedStats.totalDistricts }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="location_on" size="16px" />
@@ -166,30 +131,8 @@
             </q-card-section>
           </q-card>
         </div>
-        <!-- <div class="col-12 col-sm-6 col-md-3">
-          <q-card class="stat-card aro-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="people_alt" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
-              </div>
-              <div class="stat-content">
-                <div class="stat-label">মোট ARO</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalARO }}</span>
-                </div>
-                <div class="stat-info">
-                  <q-icon name="badge" size="16px" />
-                  সহকারী অফিসার
-                </div>
-              </div>
-              <div class="card-glow aro-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div> -->
 
-        <!-- Verified Members Card -->
-        <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-6 col-sm-6 col-md-3">
           <q-card class="stat-card verified-card" flat>
             <q-card-section>
               <div class="stat-icon-wrapper">
@@ -199,9 +142,7 @@
               <div class="stat-content">
                 <div class="stat-label">Verified User</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{
-                    animatedStats.verifiedMembers
-                  }}</span>
+                  <span class="counting-number">{{ animatedStats.verifiedMembers }}</span>
                 </div>
                 <div class="stat-change positive">
                   <q-icon name="check_circle" size="16px" />
@@ -213,8 +154,7 @@
           </q-card>
         </div>
 
-        <!-- Division Card -->
-        <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-6 col-sm-6 col-md-3">
           <q-card class="stat-card division-card" flat>
             <q-card-section>
               <div class="stat-icon-wrapper">
@@ -224,13 +164,11 @@
               <div class="stat-content">
                 <div class="stat-label">Division</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{
-                    animatedStats.totalDivisions
-                  }}</span>
+                  <span class="counting-number">{{ animatedStats.totalDivisions }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="hub" size="16px" />
-                   Division
+                  Division
                 </div>
               </div>
               <div class="card-glow division-glow"></div>
@@ -238,8 +176,7 @@
           </q-card>
         </div>
 
-        <!-- Circle Card -->
-        <div class="col-12 col-sm-6 col-md-3">
+        <div class="col-6 col-sm-6 col-md-3">
           <q-card class="stat-card circle-card" flat>
             <q-card-section>
               <div class="stat-icon-wrapper">
@@ -249,9 +186,7 @@
               <div class="stat-content">
                 <div class="stat-label">Circle</div>
                 <div class="stat-value">
-                  <span class="counting-number">{{
-                    animatedStats.totalCircles
-                  }}</span>
+                  <span class="counting-number">{{ animatedStats.totalCircles }}</span>
                 </div>
                 <div class="stat-info">
                   <q-icon name="donut_small" size="16px" />
@@ -265,16 +200,14 @@
       </div>
     </div>
 
-    <!-- Charts Section -->
     <div class="charts-section">
       <div class="row q-col-gutter-md">
-        <!-- RO vs ARO Bar Chart -->
         <div class="col-12 col-md-4">
           <q-card class="chart-card glassmorphism" flat>
             <div class="chart-header">
               <div class="chart-title">
                 <q-icon name="bar_chart" size="24px" color="primary" />
-                <span>Designation-wise Breakdown</span>
+                <span>Designation Breakdown</span>
               </div>
             </div>
             <q-separator />
@@ -305,7 +238,7 @@
                           v-if="activeBar === index"
                           class="bar-hover-tooltip"
                         >
-                          {{ bar.percentage }}% of Total User 
+                          {{ bar.percentage.toFixed(1) }}% of Total User
                         </div>
                       </transition>
                     </div>
@@ -317,7 +250,6 @@
           </q-card>
         </div>
 
-        <!-- Member Distribution Pie Chart -->
         <div class="col-12 col-md-4">
           <q-card class="chart-card glassmorphism" flat>
             <div class="chart-header">
@@ -372,7 +304,7 @@
                     text-anchor="middle"
                     class="pie-total-value"
                   >
-                    {{ animatedStats.totalMembers }}
+                    {{ distributionData.reduce((sum, item) => sum + item.value, 0) }}
                   </text>
                 </svg>
               </div>
@@ -401,7 +333,6 @@
           </q-card>
         </div>
 
-        <!-- Growth Trend Chart -->
         <div class="col-12 col-md-4">
           <q-card class="chart-card glassmorphism" flat>
             <div class="chart-header">
@@ -463,7 +394,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import { api } from "boot/axios";
@@ -522,27 +453,13 @@ const actionCards = ref([
     description: "View User Details",
     gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
-   {
+  {
     title: "Notice",
     icon: "settings",
     route: "/notices",
     description: "View Notice",
     gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
-  // {
-  //   title: "রিপোর্ট",
-  //   icon: "assessment",
-  //   route: "/reports",
-  //   description: "বিস্তারিত রিপোর্ট দেখুন",
-  //   gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-  // },
-  // {
-  //   title: "কমিশনারেট",
-  //   icon: "business",
-  //   route: "/commissionerates",
-  //   description: "কমিশনারেট ব্যবস্থাপনা",
-  //   gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-  // },
 ]);
 
 // Computed properties
@@ -585,7 +502,7 @@ const pieSegments = computed(() => {
   });
 });
 
-// Bar chart data - will be updated with real RO/ARO counts
+// Bar chart data
 const barChartData = computed(() => {
   const maxValue = Math.max(stats.value.totalRO, stats.value.totalARO, 1);
   return [
@@ -608,48 +525,27 @@ const barChartData = computed(() => {
 const fetchDashboardData = async () => {
   loading.value = true;
   try {
-    // Fetch total members count
     const membersResponse = await api.get("/v1/users?verified=true&limit=1");
     const totalMembers = membersResponse.data.meta?.pagination?.total || 0;
 
-    // Fetch RO count
-    const roResponse = await api.get(
-      "/v1/users?verified=true&search=role:RO&limit=1"
-    );
+    const roResponse = await api.get("/v1/users?verified=true&search=role:RO&limit=1");
     const totalRO = roResponse.data.meta?.pagination?.total || 0;
 
-    // Fetch ARO count
-    const aroResponse = await api.get(
-      "/v1/users?verified=true&search=role:ARO&limit=1"
-    );
+    const aroResponse = await api.get("/v1/users?verified=true&search=role:ARO&limit=1");
     const totalARO = aroResponse.data.meta?.pagination?.total || 0;
 
-    // Fetch commissionerate count
-    const commissionerateResponse = await api.get(
-      "/v1/categories?search=type:commissionerate&limit=1"
-    );
-    const totalCommissionerates =
-      commissionerateResponse.data.meta?.pagination?.total || 0;
+    const commissionerateResponse = await api.get("/v1/categories?search=type:commissionerate&limit=1");
+    const totalCommissionerates = commissionerateResponse.data.meta?.pagination?.total || 0;
 
-    // Fetch district count
-    const districtResponse = await api.get(
-      "/v1/categories?search=type:district&limit=1"
-    );
+    const districtResponse = await api.get("/v1/categories?search=type:district&limit=1");
     const totalDistricts = districtResponse.data.meta?.pagination?.total || 0;
 
-    // Fetch division count
-    const divisionResponse = await api.get(
-      "/v1/categories?search=type:division&limit=1"
-    );
+    const divisionResponse = await api.get("/v1/categories?search=type:division&limit=1");
     const totalDivisions = divisionResponse.data.meta?.pagination?.total || 0;
 
-    // Fetch circle count
-    const circleResponse = await api.get(
-      "/v1/categories?search=type:circle&limit=1"
-    );
+    const circleResponse = await api.get("/v1/categories?search=type:circle&limit=1");
     const totalCircles = circleResponse.data.meta?.pagination?.total || 0;
 
-    // Update stats
     stats.value = {
       totalMembers,
       totalRO,
@@ -658,29 +554,27 @@ const fetchDashboardData = async () => {
       totalDistricts,
       totalDivisions,
       totalCircles,
-      verifiedMembers: totalMembers, // Assuming all fetched members are verified
-      newMembers: Math.round(totalMembers * 0.036), // 3.6% estimate
+      verifiedMembers: totalMembers,
+      newMembers: Math.round(totalMembers * 0.036),
       growthRate: 12.5,
       activeRate: 94.6,
     };
 
-    // Animate counting
     animateNumbers();
     animateBars();
   } catch (error) {
     console.error("Dashboard load error:", error);
 
-    // Fallback demo data
     stats.value = {
       totalMembers: 1247,
-      totalRO: 420,
-      totalARO: 380,
+      totalRO: 17, // Changed based on your screenshot
+      totalARO: 17, // Changed based on your screenshot
       totalCommissionerates: 8,
       totalDistricts: 64,
       totalDivisions: 8,
       totalCircles: 45,
       verifiedMembers: 1180,
-      newMembers: 45,
+      newMembers: 1, // Changed based on your screenshot
       growthRate: 12.5,
       activeRate: 94.6,
     };
@@ -703,7 +597,6 @@ const animateNumbers = () => {
   const duration = 1500;
   const steps = 60;
   const interval = duration / steps;
-
   let currentStep = 0;
 
   const timer = setInterval(() => {
@@ -714,9 +607,7 @@ const animateNumbers = () => {
       totalMembers: Math.round(stats.value.totalMembers * progress),
       totalRO: Math.round(stats.value.totalRO * progress),
       totalARO: Math.round(stats.value.totalARO * progress),
-      totalCommissionerates: Math.round(
-        stats.value.totalCommissionerates * progress
-      ),
+      totalCommissionerates: Math.round(stats.value.totalCommissionerates * progress),
       totalDistricts: Math.round(stats.value.totalDistricts * progress),
       totalDivisions: Math.round(stats.value.totalDivisions * progress),
       totalCircles: Math.round(stats.value.totalCircles * progress),
@@ -739,9 +630,10 @@ const animateBars = () => {
   });
 };
 
+// Fixed getPercentage function to show correct pie chart percentage
 const getPercentage = (value) => {
-  const total = animatedStats.value.totalMembers || 1;
-  return Math.round((value / total) * 100);
+  const pieTotal = distributionData.value.reduce((sum, item) => sum + item.value, 0);
+  return Math.round((value / pieTotal) * 100);
 };
 
 const navigateTo = (route) => {
@@ -792,45 +684,14 @@ onMounted(() => {
   animation: float 20s infinite ease-in-out;
 }
 
-.orb-1 {
-  width: 400px;
-  height: 400px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  top: -100px;
-  left: -100px;
-  animation-delay: 0s;
-}
-
-.orb-2 {
-  width: 500px;
-  height: 500px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  bottom: -150px;
-  right: -150px;
-  animation-delay: 5s;
-}
-
-.orb-3 {
-  width: 350px;
-  height: 350px;
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation-delay: 10s;
-}
+.orb-1 { width: 400px; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); top: -100px; left: -100px; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); bottom: -150px; right: -150px; animation-delay: 5s; }
+.orb-3 { width: 350px; height: 350px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 10s; }
 
 @keyframes float {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(30px, -30px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
 }
 
 /* Dashboard Page */
@@ -874,22 +735,11 @@ onMounted(() => {
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.1) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
   animation: rotate 20s linear infinite;
 }
 
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 .welcome-content {
   display: flex;
@@ -920,748 +770,320 @@ onMounted(() => {
   animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 0;
-  }
-}
+@keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
 
-.welcome-title {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0;
-  line-height: 1.2;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.welcome-subtitle {
-  font-size: 16px;
-  margin: 8px 0 0 0;
-  opacity: 0.95;
-}
-
-.welcome-date {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-size: 15px;
-  font-weight: 500;
-  backdrop-filter: blur(10px);
-  z-index: 1;
-}
+.welcome-title { font-size: 32px; font-weight: 700; margin: 0; line-height: 1.2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }
+.welcome-subtitle { font-size: 16px; margin: 8px 0 0 0; opacity: 0.95; }
+.welcome-date { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 30px; font-size: 15px; font-weight: 500; backdrop-filter: blur(10px); z-index: 1; }
 
 /* Stats Section */
-.stats-section {
-  margin-bottom: 32px;
-  z-index: 1;
-  position: relative;
-}
+.stats-section { margin-bottom: 32px; z-index: 1; position: relative; }
+.stat-card { border-radius: 20px; overflow: visible; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); height: 100%; background: white; position: relative; }
+.stat-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); }
+.stat-card .q-card-section { padding: 28px !important; display: flex; align-items: flex-start; gap: 20px; position: relative; z-index: 1; }
+.stat-icon-wrapper { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); position: relative; overflow: hidden; }
+.icon-bg-circle { position: absolute; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.2); border-radius: 50%; animation: ripple 2s infinite; }
 
-.stat-card {
-  border-radius: 20px;
-  overflow: visible;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  height: 100%;
-  background: white;
-  position: relative;
-}
+@keyframes ripple { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
 
-.stat-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-}
+.members-card .stat-icon-wrapper { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.verified-card .stat-icon-wrapper { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.commissionerate-card .stat-icon-wrapper { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.district-card .stat-icon-wrapper { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+.division-card .stat-icon-wrapper { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+.circle-card .stat-icon-wrapper { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
 
-.stat-card .q-card-section {
-  padding: 28px !important;
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  position: relative;
-  z-index: 1;
-}
+.stat-content { flex: 1; }
+.stat-label { font-size: 14px; color: #64748b; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value { font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 10px; line-height: 1; }
+.counting-number { display: inline-block; animation: countUp 0.5s ease-out; }
 
-.stat-icon-wrapper {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  padding: 16px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-  position: relative;
-  overflow: hidden;
-}
+@keyframes countUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.icon-bg-circle {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  animation: ripple 2s infinite;
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(0.8);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
-
-.members-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.ro-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.aro-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.verified-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
-
-.commissionerate-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-}
-
-.district-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-}
-
-.division-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-}
-
-.circle-card .stat-icon-wrapper {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-}
-
-.stat-content {
-  flex: 1;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #64748b;
-  font-weight: 600;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.stat-value {
-  font-size: 36px;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 10px;
-  line-height: 1;
-}
-
-.counting-number {
-  display: inline-block;
-  animation: countUp 0.5s ease-out;
-}
-
-@keyframes countUp {
-  from {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.stat-change,
-.stat-info {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.stat-change.positive {
-  color: #10b981;
-}
-
-.stat-info {
-  color: #64748b;
-}
-
-.card-glow {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.stat-card:hover .card-glow {
-  opacity: 1;
-}
-
-.members-glow {
-  background: linear-gradient(90deg, #667eea, #764ba2);
-}
-.ro-glow {
-  background: linear-gradient(90deg, #f093fb, #f5576c);
-}
-.aro-glow {
-  background: linear-gradient(90deg, #4facfe, #00f2fe);
-}
-.verified-glow {
-  background: linear-gradient(90deg, #43e97b, #38f9d7);
-}
-.commissionerate-glow {
-  background: linear-gradient(90deg, #fa709a, #fee140);
-}
-.district-glow {
-  background: linear-gradient(90deg, #30cfd0, #330867);
-}
-.division-glow {
-  background: linear-gradient(90deg, #a8edea, #fed6e3);
-}
-.circle-glow {
-  background: linear-gradient(90deg, #ff9a9e, #fecfef);
-}
+.stat-change, .stat-info { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+.stat-change.positive { color: #10b981; }
+.stat-info { color: #64748b; }
+.card-glow { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; opacity: 0; transition: opacity 0.3s; }
+.stat-card:hover .card-glow { opacity: 1; }
+.members-glow { background: linear-gradient(90deg, #667eea, #764ba2); }
+.verified-glow { background: linear-gradient(90deg, #43e97b, #38f9d7); }
+.commissionerate-glow { background: linear-gradient(90deg, #fa709a, #fee140); }
+.district-glow { background: linear-gradient(90deg, #30cfd0, #330867); }
+.division-glow { background: linear-gradient(90deg, #a8edea, #fed6e3); }
+.circle-glow { background: linear-gradient(90deg, #ff9a9e, #fecfef); }
 
 /* Charts Section */
-.charts-section {
-  margin-bottom: 32px;
-  z-index: 1;
-  position: relative;
-}
-
-.chart-card {
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  background: white;
-  transition: transform 0.3s ease;
-}
-
-.chart-card:hover {
-  transform: translateY(-4px);
-}
-
-.chart-header {
-  padding: 24px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.chart-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1e293b;
-}
+.charts-section { margin-bottom: 32px; z-index: 1; position: relative; }
+.chart-card { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); background: white; transition: transform 0.3s ease; }
+.chart-card:hover { transform: translateY(-4px); }
+.chart-header { padding: 24px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); display: flex; justify-content: space-between; align-items: center; }
+.chart-title { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; color: #1e293b; }
 
 /* Bar Chart */
-.simple-bar-chart {
-  height: 320px;
-  padding: 20px 0;
-}
+.simple-bar-chart { height: 320px; padding: 20px 0; }
+.bar-chart-container { display: flex; justify-content: space-around; align-items: flex-end; height: 100%; gap: 32px; padding: 0 24px; }
+.bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; height: 100%; }
+.bar-column { flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative; }
+.bar-value-label { position: absolute; top: -30px; font-size: 18px; font-weight: 700; color: #1e293b; z-index: 2; }
+.bar { width: 100%; max-width: 120px; border-radius: 12px 12px 0 0; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); }
+.bar-shine { position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); animation: shine 3s infinite; }
 
-.bar-chart-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  height: 100%;
-  gap: 32px;
-  padding: 0 24px;
-}
+@keyframes shine { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
 
-.bar-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  height: 100%;
-}
-
-.bar-column {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  position: relative;
-}
-
-.bar-value-label {
-  position: absolute;
-  top: -30px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #1e293b;
-  z-index: 2;
-}
-
-.bar {
-  width: 100%;
-  max-width: 120px;
-  border-radius: 12px 12px 0 0;
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.bar-shine {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
-  animation: shine 3s infinite;
-}
-
-@keyframes shine {
-  0% {
-    left: -100%;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-.bar:hover {
-  transform: scaleY(1.05);
-  filter: brightness(1.1);
-}
-
-.bar-hover-tooltip {
-  position: absolute;
-  top: -50px;
-  background: #1e293b;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  white-space: nowrap;
-  z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.bar-hover-tooltip::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 8px solid transparent;
-  border-top-color: #1e293b;
-}
-
-.bar-label {
-  font-size: 15px;
-  font-weight: 600;
-  color: #475569;
-  text-align: center;
-  padding: 12px 4px;
-}
+.bar:hover { transform: scaleY(1.05); filter: brightness(1.1); }
+.bar-hover-tooltip { position: absolute; top: -50px; background: #1e293b; color: white; padding: 8px 16px; border-radius: 8px; font-size: 13px; white-space: nowrap; z-index: 10; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+.bar-hover-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 8px solid transparent; border-top-color: #1e293b; }
+.bar-label { font-size: 15px; font-weight: 600; color: #475569; text-align: center; padding: 12px 4px; }
 
 /* Pie Chart */
-.simple-pie-chart {
-  max-width: 220px;
-  margin: 0 auto 24px;
-}
-
-.pie-svg {
-  width: 100%;
-  height: auto;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-}
-
-.pie-segment {
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.pie-segment:hover,
-.pie-segment.active {
-  opacity: 0.8;
-  filter: brightness(1.2);
-}
-
-.pie-total-label {
-  font-size: 13px;
-  fill: #64748b;
-  font-weight: 600;
-}
-
-.pie-total-value {
-  font-size: 26px;
-  fill: #1e293b;
-  font-weight: 700;
-}
-
-.pie-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px;
-  border-radius: 8px;
-  transition: background 0.3s ease;
-  cursor: pointer;
-}
-
-.legend-item:hover,
-.legend-item.active {
-  background: #f8fafc;
-}
-
-.legend-color {
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.legend-text {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-}
-
-.legend-label {
-  font-size: 14px;
-  color: #475569;
-  font-weight: 500;
-}
-
-.legend-value {
-  font-size: 14px;
-  color: #1e293b;
-  font-weight: 700;
-}
+.simple-pie-chart { max-width: 220px; margin: 0 auto 24px; }
+.pie-svg { width: 100%; height: auto; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1)); }
+.pie-segment { transition: all 0.3s ease; cursor: pointer; }
+.pie-segment:hover, .pie-segment.active { opacity: 0.8; filter: brightness(1.2); }
+.pie-total-label { font-size: 13px; fill: #64748b; font-weight: 600; }
+.pie-total-value { font-size: 26px; fill: #1e293b; font-weight: 700; }
+.pie-legend { display: flex; flex-direction: column; gap: 14px; }
+.legend-item { display: flex; align-items: center; gap: 14px; padding: 8px; border-radius: 8px; transition: background 0.3s ease; cursor: pointer; }
+.legend-item:hover, .legend-item.active { background: #f8fafc; }
+.legend-color { width: 18px; height: 18px; border-radius: 6px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); }
+.legend-text { display: flex; justify-content: space-between; align-items: center; flex: 1; }
+.legend-label { font-size: 14px; color: #475569; font-weight: 500; }
+.legend-value { font-size: 14px; color: #1e293b; font-weight: 700; }
 
 /* Growth Stats */
-.growth-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 8px 0;
-}
-
-.growth-item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-radius: 16px;
-  transition: transform 0.3s ease;
-}
-
-.growth-item:hover {
-  transform: translateX(8px);
-}
-
-.growth-icon {
-  background: white;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.growth-info {
-  flex: 1;
-}
-
-.growth-label {
-  font-size: 13px;
-  color: #64748b;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.growth-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 4px;
-}
-
-.growth-period {
-  font-size: 12px;
-  color: #94a3b8;
-}
+.growth-stats { display: flex; flex-direction: column; gap: 24px; padding: 8px 0; }
+.growth-item { display: flex; align-items: center; gap: 20px; padding: 20px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 16px; transition: transform 0.3s ease; }
+.growth-item:hover { transform: translateX(8px); }
+.growth-icon { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+.growth-info { flex: 1; }
+.growth-label { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 4px; }
+.growth-value { font-size: 28px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+.growth-period { font-size: 12px; color: #94a3b8; }
 
 /* Actions Section */
-.actions-section {
-  margin-bottom: 32px;
-  z-index: 1;
-  position: relative;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 26px;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 24px;
-}
-
-.title-icon-wrapper {
-  background: linear-gradient(135deg, #667eea 0%, #5399d3 100%);
-  padding: 12px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
-
-.action-card {
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-  background: white;
-  height: 100%;
-  position: relative;
-}
-
-.action-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0.4) 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.action-card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-}
-
-.action-card:hover::before {
-  opacity: 1;
-}
-
-.action-card .q-card-section {
-  padding: 28px !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.action-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-  color: white;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.action-icon-pulse {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 18px;
-  animation: pulse 2s infinite;
-}
-
-.action-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 6px;
-}
-
-.action-description {
-  font-size: 13px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.action-arrow {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  color: #cbd5e1;
-  transition: all 0.3s ease;
-}
-
-.action-card:hover .action-arrow {
-  color: #667eea;
-  transform: translateX(6px);
-}
-
-/* Loading Overlay */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(248, 250, 252, 0.95);
-  backdrop-filter: blur(10px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.loading-content {
-  text-align: center;
-}
-
-.loading-spinner {
-  margin-bottom: 20px;
-}
-
-.loading-text {
-  font-size: 18px;
-  font-weight: 600;
-  color: #475569;
-}
+.actions-section { margin-bottom: 32px; z-index: 1; position: relative; }
+.section-title { display: flex; align-items: center; gap: 16px; font-size: 26px; font-weight: 700; color: #1e293b; margin-bottom: 24px; }
+.title-icon-wrapper { background: linear-gradient(135deg, #667eea 0%, #5399d3 100%); padding: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+.action-card { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; background: white; height: 100%; position: relative; }
+.action-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%); opacity: 0; transition: opacity 0.3s; }
+.action-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); }
+.action-card:hover::before { opacity: 1; }
+.action-card .q-card-section { padding: 28px !important; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
+.action-icon { width: 72px; height: 72px; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: white; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); position: relative; overflow: hidden; }
+.action-icon-pulse { position: absolute; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.3); border-radius: 18px; animation: pulse 2s infinite; }
+.action-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+.action-description { font-size: 13px; color: #64748b; margin-bottom: 8px; }
+.action-arrow { position: absolute; top: 16px; right: 16px; color: #cbd5e1; transition: all 0.3s ease; }
+.action-card:hover .action-arrow { color: #667eea; transform: translateX(6px); }
 
 /* Fade Transition */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* Responsive */
+/* Tablet Responsive */
 @media (max-width: 1023px) {
-  .dashboard-page {
-    padding: 20px;
-  }
-
-  .welcome-header {
-    padding: 24px;
-  }
-
-  .welcome-title {
-    font-size: 26px;
-  }
-
-  .stat-value {
-    font-size: 32px;
-  }
+  .dashboard-page { padding: 20px; }
+  .welcome-header { padding: 24px; }
+  .welcome-title { font-size: 26px; }
+  .stat-value { font-size: 32px; }
 }
 
+/* Responsive Mobile App View (Optimized for Space) */
 @media (max-width: 599px) {
   .dashboard-page {
-    padding: 16px;
+    padding: 10px;
   }
 
+  /* Welcome Header Compact */
   .welcome-header {
-    padding: 20px;
-    margin-bottom: 24px;
+    padding: 16px;
+    margin-bottom: 16px;
     flex-direction: column;
     align-items: flex-start;
+    border-radius: 16px;
   }
-
   .welcome-content {
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
+    gap: 10px;
   }
-
+  .welcome-icon-animated {
+    padding: 10px;
+  }
+  .welcome-icon-animated .q-icon {
+    font-size: 28px !important;
+  }
   .welcome-title {
-    font-size: 22px;
+    font-size: 18px;
   }
-
+  .welcome-subtitle {
+    font-size: 12px;
+    margin-top: 4px;
+  }
   .welcome-date {
     width: 100%;
     justify-content: center;
+    padding: 8px;
+    font-size: 12px;
   }
 
-  .stat-value {
-    font-size: 28px;
-  }
-
+  /* Section Titles */
   .section-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  .title-icon-wrapper {
+    padding: 6px;
+  }
+  .title-icon-wrapper .q-icon {
+    font-size: 18px !important;
+  }
+
+  /* Quick Actions - 3 in a Row App Style */
+  .action-card .q-card-section {
+    padding: 12px 4px !important; 
+    justify-content: center;
+  }
+  .action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+  .action-icon .q-icon {
+    font-size: 20px !important; 
+  }
+  .action-title {
+    font-size: 10px;
+    font-weight: 600;
+    white-space: normal;
+    line-height: 1.2;
+    text-align: center;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+  .action-description, 
+  .action-arrow {
+    display: none; 
+  }
+
+  /* Info Stats Cards - 2 in a Row App Style */
+  .stat-card .q-card-section {
+    padding: 12px !important;
+    flex-direction: column; 
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+  .stat-icon-wrapper {
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .stat-icon-wrapper .q-icon {
+    font-size: 24px !important;
+  }
+  .stat-label {
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+  .stat-value {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+  .stat-change, 
+  .stat-info {
+    font-size: 10px;
+    justify-content: center;
+  }
+
+  /* Gutter adjustments */
+  .q-col-gutter-md {
+    margin-left: -10px;
+  }
+  .q-col-gutter-md > * {
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+
+  /* Charts Mobile Adjustment */
+  .chart-header {
+    padding: 12px 16px;
+  }
+  .chart-title {
+    font-size: 14px;
+  }
+  .chart-title .q-icon {
+    font-size: 18px !important;
+  }
+  .chart-card .q-card-section {
+    padding: 12px !important;
+  }
+
+  /* Bar Chart - Height Reduced */
+  .simple-bar-chart {
+    height: 180px;
+    padding: 10px 0;
+  }
+  .bar-value-label {
+    font-size: 14px;
+    top: -22px;
+  }
+  .bar-label {
+    font-size: 12px;
+    padding: 8px 4px 4px;
+  }
+
+  /* Pie Chart - Scaled Down */
+  .simple-pie-chart {
+    max-width: 160px;
+    margin: 0 auto 16px;
+  }
+  .pie-total-value {
     font-size: 22px;
   }
-
-  .bar-chart-container {
-    gap: 16px;
+  .legend-item {
+    padding: 6px;
+    gap: 10px;
+  }
+  .legend-color {
+    width: 14px;
+    height: 14px;
+  }
+  .legend-label, .legend-value {
+    font-size: 12px;
   }
 
+  /* Growth Stats - Made Compact */
+  .growth-stats {
+    gap: 10px;
+    padding: 0;
+  }
   .growth-item {
-    padding: 16px;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 12px;
   }
-
+  .growth-icon {
+    padding: 10px;
+    border-radius: 10px;
+  }
+  .growth-icon .q-icon {
+    font-size: 20px !important;
+  }
+  .growth-label {
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
   .growth-value {
-    font-size: 24px;
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+  .growth-period {
+    font-size: 10px;
   }
 }
 </style>
