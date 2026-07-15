@@ -1,394 +1,256 @@
 <template>
-  <q-page class="dashboard-page">
-    <div class="animated-background">
-      <div class="gradient-orb orb-1"></div>
-      <div class="gradient-orb orb-2"></div>
-      <div class="gradient-orb orb-3"></div>
-    </div>
+  <q-page class="app-dashboard">
+    <!-- Main Content Container -->
+    <div class="dashboard-wrapper">
+      
+      <!-- Premium Welcome Banner -->
+      <div class="welcome-banner">
+        <div class="banner-bg-shapes">
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+        </div>
+        <div class="banner-content">
+          <div class="greeting-box">
+            <h1 class="welcome-title">Welcome to BACUAV</h1>
+            <p class="welcome-subtitle">{{ getCurrentGreeting() }}</p>
+          </div>
+          <div class="date-chip">
+            <q-icon name="event" size="14px" />
+            <span>{{ getCurrentDate() }}</span>
+          </div>
+        </div>
+      </div>
 
-    <div class="welcome-header">
-      <div class="welcome-content">
-        <div class="welcome-icon-animated">
-          <q-icon name="dashboard" size="40px" color="white" />
-          <div class="icon-pulse"></div>
+      <!-- Quick Actions (Compact Mobile Grid) -->
+      <div class="section-container">
+        <div class="section-header">
+          <q-icon name="bolt" size="20px" color="primary" class="section-icon" />
+          <h2 class="section-title">Quick Actions</h2>
         </div>
-        <div class="welcome-text">
-          <h1 class="welcome-title"> Welcome to BACUAV</h1>
-          <p class="welcome-subtitle">{{ getCurrentGreeting() }}</p>
-        </div>
-      </div>
-      <div class="welcome-date">
-        <q-icon name="calendar_today" size="20px" />
-        <span>{{ getCurrentDate() }}</span>
-      </div>
-    </div>
-
-    <div class="actions-section">
-      <div class="section-title">
-        <div class="title-icon-wrapper">
-          <q-icon name="bolt" size="28px" />
-        </div>
-        <span>Quick Actions</span>
-      </div>
-      <div class="row q-col-gutter-md">
-        <div
-          v-for="(card, index) in actionCards"
-          :key="index"
-          class="col-4 col-sm-4 col-md-4 col-lg-3"
-        >
-          <q-card
-            class="action-card glassmorphism"
-            flat
-            clickable
+        <div class="quick-actions-grid">
+          <div
+            v-for="(card, index) in actionCards"
+            :key="index"
+            class="action-card"
+            v-ripple
             @click="navigateTo(card.route)"
           >
-            <q-card-section>
-              <div class="action-icon" :style="{ background: card.gradient }">
-                <q-icon :name="card.icon" size="36px" />
-                <div class="action-icon-pulse"></div>
-              </div>
-              <div class="action-title">{{ card.title }}</div>
-              <div class="action-description">{{ card.description }}</div>
-              <div class="action-arrow">
-                <q-icon name="arrow_forward" size="20px" />
-              </div>
-            </q-card-section>
-          </q-card>
+            <div class="action-icon-wrapper" :style="{ background: card.gradient }">
+              <q-icon :name="card.icon" size="22px" color="white" />
+            </div>
+            <span class="action-label">{{ card.title }}</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="stats-section">
-      <div class="section-title">
-        <div class="title-icon-wrapper">
-          <q-icon name="bolt" size="28px" />
+      <!-- Overview Stats -->
+      <div class="section-container">
+        <div class="section-header">
+          <q-icon name="pie_chart_outline" size="20px" color="primary" class="section-icon" />
+          <h2 class="section-title">Overview Information</h2>
         </div>
-        <span>Info</span>
-      </div>
-      <div class="row q-col-gutter-md">
-        <div class="col-6 col-sm-6 col-md-3">
-          <q-card class="stat-card members-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="groups" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
+        
+        <div class="stats-grid">
+          <!-- Total User -->
+          <q-card class="stat-card" flat>
+            <div class="stat-header">
+              <div class="stat-icon-box bg-gradient-blue">
+                <q-icon name="groups" size="16px" color="white" />
               </div>
-              <div class="stat-content">
-                <div class="stat-label">Total User</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalMembers }}</span>
-                </div>
-                <div class="stat-change positive">
-                  <q-icon name="trending_up" size="16px" />
-                  Active User
-                </div>
-              </div>
-              <div class="card-glow members-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div>
-
-        <div class="col-6 col-sm-6 col-md-3">
-          <q-card class="stat-card commissionerate-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="business" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
-              </div>
-              <div class="stat-content">
-                <div class="stat-label">Member</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalCommissionerates }}</span>
-                </div>
-                <div class="stat-info">
-                  <q-icon name="location_city" size="16px" />
-                  Area
-                </div>
-              </div>
-              <div class="card-glow commissionerate-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div>
-
-        <div class="col-6 col-sm-6 col-md-3">
-          <q-card class="stat-card district-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="map" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
-              </div>
-              <div class="stat-content">
-                <div class="stat-label">District</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalDistricts }}</span>
-                </div>
-                <div class="stat-info">
-                  <q-icon name="location_on" size="16px" />
-                  Area
-                </div>
-              </div>
-              <div class="card-glow district-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div>
-
-        <div class="col-6 col-sm-6 col-md-3">
-          <q-card class="stat-card verified-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="verified_user" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
-              </div>
-              <div class="stat-content">
-                <div class="stat-label">Verified User</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.verifiedMembers }}</span>
-                </div>
-                <div class="stat-change positive">
-                  <q-icon name="check_circle" size="16px" />
-                  {{ verificationPercentage }}% Verified
-                </div>
-              </div>
-              <div class="card-glow verified-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div>
-
-        <div class="col-6 col-sm-6 col-md-3">
-          <q-card class="stat-card division-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="account_tree" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
-              </div>
-              <div class="stat-content">
-                <div class="stat-label">Division</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalDivisions }}</span>
-                </div>
-                <div class="stat-info">
-                  <q-icon name="hub" size="16px" />
-                  Division
-                </div>
-              </div>
-              <div class="card-glow division-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div>
-
-        <div class="col-6 col-sm-6 col-md-3">
-          <q-card class="stat-card circle-card" flat>
-            <q-card-section>
-              <div class="stat-icon-wrapper">
-                <q-icon name="workspaces" size="40px" color="white" />
-                <div class="icon-bg-circle"></div>
-              </div>
-              <div class="stat-content">
-                <div class="stat-label">Circle</div>
-                <div class="stat-value">
-                  <span class="counting-number">{{ animatedStats.totalCircles }}</span>
-                </div>
-                <div class="stat-info">
-                  <q-icon name="donut_small" size="16px" />
-                  Area
-                </div>
-              </div>
-              <div class="card-glow circle-glow"></div>
-            </q-card-section>
-          </q-card>
-        </div>
-      </div>
-    </div>
-
-    <div class="charts-section">
-      <div class="row q-col-gutter-md">
-        <div class="col-12 col-md-4">
-          <q-card class="chart-card glassmorphism" flat>
-            <div class="chart-header">
-              <div class="chart-title">
-                <q-icon name="bar_chart" size="24px" color="primary" />
-                <span>Designation Breakdown</span>
+              <div class="stat-trend positive">
+                <q-icon name="trending_up" size="10px" /> Active
               </div>
             </div>
-            <q-separator />
-            <q-card-section>
-              <div class="simple-bar-chart">
-                <div class="bar-chart-container">
-                  <div
-                    v-for="(bar, index) in barChartData"
-                    :key="bar.label"
-                    class="bar-wrapper"
-                  >
-                    <div class="bar-column">
-                      <div class="bar-value-label">{{ bar.value }}</div>
-                      <div
-                        class="bar"
-                        :style="{
-                          height: animatedBars[index] + '%',
-                          background: bar.gradient,
-                          '--target-height': bar.percentage + '%',
-                        }"
-                        @mouseenter="activeBar = index"
-                        @mouseleave="activeBar = null"
-                      >
-                        <div class="bar-shine"></div>
-                      </div>
-                      <transition name="fade">
-                        <div
-                          v-if="activeBar === index"
-                          class="bar-hover-tooltip"
-                        >
-                          {{ bar.percentage.toFixed(1) }}% of Total User
-                        </div>
-                      </transition>
-                    </div>
-                    <div class="bar-label">{{ bar.label }}</div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
+            <div class="stat-body">
+              <div class="stat-value">{{ animatedStats.totalMembers }}</div>
+              <div class="stat-label">Total User</div>
+            </div>
           </q-card>
-        </div>
 
-        <div class="col-12 col-md-4">
-          <q-card class="chart-card glassmorphism" flat>
-            <div class="chart-header">
-              <div class="chart-title">
-                <q-icon name="pie_chart" size="24px" color="primary" />
-                <span>Member Distribution</span>
+          <!-- Member Area -->
+          <q-card class="stat-card" flat>
+            <div class="stat-header">
+              <div class="stat-icon-box bg-gradient-orange">
+                <q-icon name="business" size="16px" color="white" />
               </div>
             </div>
-            <q-separator />
-            <q-card-section>
-              <div class="simple-pie-chart">
+            <div class="stat-body">
+              <div class="stat-value">{{ animatedStats.totalCommissionerates }}</div>
+              <div class="stat-label">Member Area</div>
+            </div>
+          </q-card>
+
+          <!-- District -->
+          <q-card class="stat-card" flat>
+            <div class="stat-header">
+              <div class="stat-icon-box bg-gradient-purple">
+                <q-icon name="map" size="16px" color="white" />
+              </div>
+            </div>
+            <div class="stat-body">
+              <div class="stat-value">{{ animatedStats.totalDistricts }}</div>
+              <div class="stat-label">Districts</div>
+            </div>
+          </q-card>
+
+          <!-- Verified User -->
+          <q-card class="stat-card" flat>
+            <div class="stat-header">
+              <div class="stat-icon-box bg-gradient-green">
+                <q-icon name="verified_user" size="16px" color="white" />
+              </div>
+              <div class="stat-trend positive">
+                <q-icon name="check_circle" size="10px" /> {{ verificationPercentage }}%
+              </div>
+            </div>
+            <div class="stat-body">
+              <div class="stat-value">{{ animatedStats.verifiedMembers }}</div>
+              <div class="stat-label">Verified Users</div>
+            </div>
+          </q-card>
+
+          <!-- Division -->
+          <q-card class="stat-card" flat>
+            <div class="stat-header">
+              <div class="stat-icon-box bg-gradient-teal">
+                <q-icon name="account_tree" size="16px" color="white" />
+              </div>
+            </div>
+            <div class="stat-body">
+              <div class="stat-value">{{ animatedStats.totalDivisions }}</div>
+              <div class="stat-label">Divisions</div>
+            </div>
+          </q-card>
+
+          <!-- Circle -->
+          <q-card class="stat-card" flat>
+            <div class="stat-header">
+              <div class="stat-icon-box bg-gradient-pink">
+                <q-icon name="workspaces" size="16px" color="white" />
+              </div>
+            </div>
+            <div class="stat-body">
+              <div class="stat-value">{{ animatedStats.totalCircles }}</div>
+              <div class="stat-label">Circles</div>
+            </div>
+          </q-card>
+        </div>
+      </div>
+
+      <!-- Analytics Section -->
+      <div class="section-container">
+        <div class="section-header">
+          <q-icon name="analytics" size="20px" color="primary" class="section-icon" />
+          <h2 class="section-title">Analytics</h2>
+        </div>
+        
+        <div class="charts-container">
+          
+          <!-- Designation Breakdown (Bar Chart) -->
+          <q-card class="chart-card" flat>
+            <div class="card-title-row">
+              <span class="card-title">Designation Breakdown</span>
+            </div>
+            <div class="bar-chart-wrapper">
+              <div class="bar-container" v-for="(bar, index) in barChartData" :key="bar.label">
+                <div class="bar-value">{{ bar.value }}</div>
+                <div class="bar-track">
+                  <div 
+                    class="bar-fill" 
+                    :style="{ height: animatedBars[index] + '%', background: bar.gradient }"
+                  ></div>
+                </div>
+                <div class="bar-label">{{ bar.label }}</div>
+              </div>
+            </div>
+          </q-card>
+
+          <!-- Member Distribution (Pie Chart) -->
+          <q-card class="chart-card" flat>
+            <div class="card-title-row">
+              <span class="card-title">Member Distribution</span>
+            </div>
+            <div class="pie-chart-wrapper">
+              <div class="pie-svg-container">
                 <svg viewBox="0 0 200 200" class="pie-svg">
-                  <defs>
-                    <filter id="glow">
-                      <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                      <feMerge>
-                        <feMergeNode in="coloredBlur" />
-                        <feMergeNode in="SourceGraphic" />
-                      </feMerge>
-                    </filter>
-                  </defs>
                   <circle
                     v-for="(segment, idx) in pieSegments"
                     :key="'segment-' + idx"
                     :cx="100"
                     :cy="100"
-                    :r="80"
-                    :fill="segment.color"
+                    :r="70"
+                    fill="transparent"
                     :stroke="segment.color"
-                    :stroke-width="80"
+                    :stroke-width="30"
                     :stroke-dasharray="`${segment.dashArray} ${circumference}`"
                     :stroke-dashoffset="segment.dashOffset"
                     transform="rotate(-90 100 100)"
                     class="pie-segment"
-                    :class="{ active: activeSegment === idx }"
-                    @mouseenter="activeSegment = idx"
-                    @mouseleave="activeSegment = null"
-                    filter="url(#glow)"
                   />
-                  <circle cx="100" cy="100" r="50" fill="white" />
-                  <text
-                    x="100"
-                    y="95"
-                    text-anchor="middle"
-                    class="pie-total-label"
-                  >
-                    Total
-                  </text>
-                  <text
-                    x="100"
-                    y="115"
-                    text-anchor="middle"
-                    class="pie-total-value"
-                  >
+                  <!-- Inner text -->
+                  <text x="100" y="94" text-anchor="middle" class="pie-center-label">Total</text>
+                  <text x="100" y="118" text-anchor="middle" class="pie-center-value">
                     {{ distributionData.reduce((sum, item) => sum + item.value, 0) }}
                   </text>
                 </svg>
               </div>
-              <div class="pie-legend">
-                <div
-                  class="legend-item"
-                  v-for="(item, idx) in distributionData"
-                  :key="item.label"
-                  @mouseenter="activeSegment = idx"
-                  @mouseleave="activeSegment = null"
-                  :class="{ active: activeSegment === idx }"
-                >
-                  <div
-                    class="legend-color"
-                    :style="{ background: item.color }"
-                  ></div>
-                  <div class="legend-text">
-                    <span class="legend-label">{{ item.label }}</span>
-                    <span class="legend-value"
-                      >{{ item.value }} ({{ getPercentage(item.value) }}%)</span
-                    >
+              
+              <div class="pie-legend-grid">
+                <div class="legend-item" v-for="(item, idx) in distributionData" :key="item.label">
+                  <div class="legend-dot" :style="{ backgroundColor: item.color }"></div>
+                  <div class="legend-info">
+                    <span class="l-label">{{ item.label }}</span>
+                    <span class="l-value">{{ item.value }} <span class="l-percent">({{ getPercentage(item.value) }}%)</span></span>
                   </div>
                 </div>
-              </div>
-            </q-card-section>
-          </q-card>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <q-card class="chart-card glassmorphism" flat>
-            <div class="chart-header">
-              <div class="chart-title">
-                <q-icon name="trending_up" size="24px" color="primary" />
-                <span>Growth Over Time</span>
               </div>
             </div>
-            <q-separator />
-            <q-card-section>
-              <div class="growth-stats">
-                <div class="growth-item">
-                  <div class="growth-icon">
-                    <q-icon name="person_add" size="32px" color="positive" />
-                  </div>
-                  <div class="growth-info">
-                    <div class="growth-label">New User</div>
-                    <div class="growth-value">
-                      +{{ stats.newMembers || 45 }}
-                    </div>
-                    <div class="growth-period">This Month</div>
-                  </div>
-                </div>
-                <div class="growth-item">
-                  <div class="growth-icon">
-                    <q-icon name="speed" size="32px" color="info" />
-                  </div>
-                  <div class="growth-info">
-                    <div class="growth-label">Growth Rate</div>
-                    <div class="growth-value">
-                      {{ stats.growthRate || 12.5 }}%
-                    </div>
-                    <div class="growth-period">Compared to Last Month</div>
-                  </div>
-                </div>
-                <div class="growth-item">
-                  <div class="growth-icon">
-                    <q-icon
-                      name="workspace_premium"
-                      size="32px"
-                      color="warning"
-                    />
-                  </div>
-                  <div class="growth-info">
-                    <div class="growth-label">Active Rate</div>
-                    <div class="growth-value">
-                      {{ stats.activeRate || 94.6 }}%
-                    </div>
-                    <div class="growth-period">Total User</div>
-                  </div>
-                </div>
-              </div>
-            </q-card-section>
           </q-card>
+
+          <!-- Growth Overview -->
+          <q-card class="chart-card" flat>
+            <div class="card-title-row">
+              <span class="card-title">Growth Overview</span>
+            </div>
+            <div class="growth-list">
+              <div class="growth-item">
+                <div class="g-icon-wrapper bg-light-green">
+                  <q-icon name="person_add" color="positive" size="20px" />
+                </div>
+                <div class="g-details">
+                  <span class="g-title">New Users</span>
+                  <span class="g-subtitle">This Month</span>
+                </div>
+                <div class="g-amount text-positive">+{{ stats.newMembers || 45 }}</div>
+              </div>
+
+              <div class="growth-item">
+                <div class="g-icon-wrapper bg-light-blue">
+                  <q-icon name="speed" color="primary" size="20px" />
+                </div>
+                <div class="g-details">
+                  <span class="g-title">Growth Rate</span>
+                  <span class="g-subtitle">Compared to Last Month</span>
+                </div>
+                <div class="g-amount text-primary">{{ stats.growthRate || 12.5 }}%</div>
+              </div>
+
+              <div class="growth-item">
+                <div class="g-icon-wrapper bg-light-orange">
+                  <q-icon name="workspace_premium" color="warning" size="20px" />
+                </div>
+                <div class="g-details">
+                  <span class="g-title">Active Rate</span>
+                  <span class="g-subtitle">Of Total Users</span>
+                </div>
+                <div class="g-amount text-warning">{{ stats.activeRate || 94.6 }}%</div>
+              </div>
+            </div>
+          </q-card>
+
         </div>
       </div>
+      
     </div>
   </q-page>
 </template>
@@ -402,10 +264,8 @@ import { api } from "boot/axios";
 const router = useRouter();
 const $q = useQuasar();
 
-// Loading state
 const loading = ref(true);
 
-// Stats data with real values
 const stats = ref({
   totalMembers: 0,
   totalRO: 0,
@@ -420,7 +280,6 @@ const stats = ref({
   activeRate: 0,
 });
 
-// Animated stats for counting effect
 const animatedStats = ref({
   totalMembers: 0,
   totalRO: 0,
@@ -432,37 +291,34 @@ const animatedStats = ref({
   verifiedMembers: 0,
 });
 
-// Chart state
 const activeSegment = ref(null);
 const activeBar = ref(null);
 const animatedBars = ref([]);
 
-// Enhanced action cards
 const actionCards = ref([
   {
     title: "Member List",
     icon: "people",
     route: "/member-list",
     description: "View Total Members",
-    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    gradient: "linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)",
   },
   {
-    title: "My-Profile",
+    title: "My Profile",
     icon: "person",
     route: "/my-profile",
     description: "View User Details",
-    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    gradient: "linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%)",
   },
   {
     title: "Notice",
-    icon: "settings",
+    icon: "notifications",
     route: "/notices",
     description: "View Notice",
-    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    gradient: "linear-gradient(135deg, #F59E0B 0%, #EA580C 100%)",
   },
 ]);
 
-// Computed properties
 const verificationPercentage = computed(() => {
   if (stats.value.totalMembers === 0) return 0;
   return Math.round(
@@ -470,16 +326,15 @@ const verificationPercentage = computed(() => {
   );
 });
 
-// Distribution data for pie chart
 const distributionData = ref([
-  { label: "Dhaka", value: 450, color: "#3b82f6" },
-  { label: "Chittagong", value: 320, color: "#8b5cf6" },
-  { label: "Rajshahi", value: 180, color: "#ef4444" },
-  { label: "Khulna", value: 150, color: "#f59e0b" },
-  { label: "Others", value: 147, color: "#10b981" },
+  { label: "Dhaka", value: 450, color: "#3B82F6" },
+  { label: "Chittagong", value: 320, color: "#8B5CF6" },
+  { label: "Rajshahi", value: 180, color: "#EF4444" },
+  { label: "Khulna", value: 150, color: "#F59E0B" },
+  { label: "Others", value: 147, color: "#10B981" },
 ]);
 
-const circumference = 2 * Math.PI * 80;
+const circumference = 2 * Math.PI * 70;
 
 const pieSegments = computed(() => {
   const total = distributionData.value.reduce(
@@ -502,26 +357,24 @@ const pieSegments = computed(() => {
   });
 });
 
-// Bar chart data
 const barChartData = computed(() => {
   const maxValue = Math.max(stats.value.totalRO, stats.value.totalARO, 1);
   return [
     {
       label: "RO",
       value: stats.value.totalRO,
-      gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      gradient: "linear-gradient(180deg, #3B82F6 0%, #60A5FA 100%)",
       percentage: (stats.value.totalRO / maxValue) * 100,
     },
     {
       label: "ARO",
       value: stats.value.totalARO,
-      gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      gradient: "linear-gradient(180deg, #EC4899 0%, #F472B6 100%)",
       percentage: (stats.value.totalARO / maxValue) * 100,
     },
   ];
 });
 
-// Methods
 const fetchDashboardData = async () => {
   loading.value = true;
   try {
@@ -564,17 +417,16 @@ const fetchDashboardData = async () => {
     animateBars();
   } catch (error) {
     console.error("Dashboard load error:", error);
-
     stats.value = {
       totalMembers: 1247,
-      totalRO: 17, // Changed based on your screenshot
-      totalARO: 17, // Changed based on your screenshot
-      totalCommissionerates: 8,
-      totalDistricts: 64,
-      totalDivisions: 8,
-      totalCircles: 45,
-      verifiedMembers: 1180,
-      newMembers: 1, // Changed based on your screenshot
+      totalRO: 17, 
+      totalARO: 17, 
+      totalCommissionerates: 52, 
+      totalDistricts: 65,        
+      totalDivisions: 139,       
+      totalCircles: 223,         
+      verifiedMembers: 17,       
+      newMembers: 1, 
       growthRate: 12.5,
       activeRate: 94.6,
     };
@@ -630,7 +482,6 @@ const animateBars = () => {
   });
 };
 
-// Fixed getPercentage function to show correct pie chart percentage
 const getPercentage = (value) => {
   const pieTotal = distributionData.value.reduce((sum, item) => sum + item.value, 0);
   return Math.round((value / pieTotal) * 100);
@@ -642,11 +493,22 @@ const navigateTo = (route) => {
 
 const getCurrentGreeting = () => {
   const hour = new Date().getHours();
-  if (hour < 12) return "Good morning! Wishing you a great day ahead.";
-  if (hour < 17) return "Good afternoon! Hope your work is going well.";
-  return "Good evening! Hope you had a pleasant day.";
-};
 
+  // From midnight to 4:59 AM
+  if (hour < 5) return "Wow, you're up late! Wishing you a restful night.";
+  
+  // From 5:00 AM to 11:59 AM
+  if (hour < 12) return "Good morning! Wishing you a great day.";
+  
+  // From 12:00 PM to 4:59 PM
+  if (hour < 17) return "Good afternoon! Hope your day is going well.";
+  
+  // From 5:00 PM to 8:59 PM
+  if (hour < 21) return "Good evening! Hope you had a pleasant day.";
+  
+  // From 9:00 PM to 11:59 PM
+  return "Good night! Sleep well and recharge for tomorrow.";
+};
 const getCurrentDate = () => {
   const date = new Date();
   return date.toLocaleDateString("eng", {
@@ -657,433 +519,449 @@ const getCurrentDate = () => {
   });
 };
 
-// Lifecycle hooks
 onMounted(() => {
   fetchDashboardData();
 });
 </script>
 
 <style scoped>
-/* Animated Background */
-.animated-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+/* =========================================
+   Base Variables & Mobile First Layout 
+========================================= */
+.app-dashboard {
+  background-color: #F8FAFC; 
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.dashboard-wrapper {
+  padding: 12px; 
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 1. Premium Welcome Banner */
+.welcome-banner {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+  color: white;
+  margin-top: 4px;
+}
+.banner-bg-shapes {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
   z-index: 0;
   pointer-events: none;
 }
-
-.gradient-orb {
+.shape {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.3;
-  animation: float 20s infinite ease-in-out;
+  background: rgba(255, 255, 255, 0.1);
+  filter: blur(24px);
 }
+.shape-1 { width: 120px; height: 120px; top: -30px; right: -20px; }
+.shape-2 { width: 100px; height: 100px; bottom: -40px; left: 10%; }
 
-.orb-1 { width: 400px; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); top: -100px; left: -100px; animation-delay: 0s; }
-.orb-2 { width: 500px; height: 500px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); bottom: -150px; right: -150px; animation-delay: 5s; }
-.orb-3 { width: 350px; height: 350px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 10s; }
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -30px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
-}
-
-/* Dashboard Page */
-.dashboard-page {
-  background: #f8fafc;
-  min-height: 100vh;
-  padding: 24px;
+.banner-content {
   position: relative;
-  overflow-x: hidden;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-
-/* Glassmorphism Effect */
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.7);
+.welcome-title {
+  font-size: 20px; 
+  font-weight: 800;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+.welcome-subtitle {
+  font-size: 13px;
+  margin: 0;
+  opacity: 0.9;
+  font-weight: 400;
+}
+.date-chip {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Welcome Header */
-.welcome-header {
-  background: linear-gradient(135deg, #4d7fe4 0%, #389deb 100%);
-  border-radius: 24px;
-  padding: 32px;
-  margin-bottom: 32px;
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
-  color: white;
+/* 2. Section Headers */
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; 
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+.section-icon {
+  background: #E0E7FF;
+  padding: 4px;
+  border-radius: 8px;
+}
+.section-title {
+  font-size: 16px; 
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+/* 3. Quick Actions Grid */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; 
+}
+.action-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 14px 8px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0,0,0,0.02);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.action-card:active { transform: scale(0.95); }
+.action-icon-wrapper {
+  width: 44px; 
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.action-label {
+  font-size: 11px; 
+  font-weight: 600;
+  color: #334155;
+  text-align: center;
+}
+
+/* 4. Stats Grid - MOBILE (2 columns) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 10px; 
+}
+.stat-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 12px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.stat-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 24px;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
+  align-items: flex-start;
 }
-
-.welcome-header::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-  animation: rotate 20s linear infinite;
-}
-
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-.welcome-content {
+.stat-icon-box {
+  width: 32px; 
+  height: 32px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: 24px;
-  z-index: 1;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+.bg-gradient-blue { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%); }
+.bg-gradient-orange { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+.bg-gradient-purple { background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); }
+.bg-gradient-green { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
+.bg-gradient-teal { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); }
+.bg-gradient-pink { background: linear-gradient(135deg, #EC4899 0%, #BE185D 100%); }
+
+.stat-trend {
+  font-size: 9px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #F0FDF4;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.stat-trend.positive { color: #10B981; }
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+}
+.stat-value {
+  font-size: 18px; 
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.1;
+  letter-spacing: -0.3px;
+}
+.stat-label {
+  font-size: 11px; 
+  font-weight: 500;
+  color: #64748B;
+  margin-top: 4px;
 }
 
-.welcome-icon-animated {
-  position: relative;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 20px;
+/* 5. Analytics / Charts Section (Mobile - 1 column) */
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chart-card {
+  background: #FFFFFF;
   border-radius: 16px;
+  padding: 16px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0,0,0,0.02);
+}
+.card-title-row {
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+/* Bar Chart */
+.bar-chart-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 140px; 
+  padding: 0 10px;
+}
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+}
+.bar-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+}
+.bar-track {
+  width: 100%;
+  max-width: 32px; 
+  height: 90px;
+  background: #F1F5F9;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.bar-fill {
+  width: 100%;
+  border-radius: 8px;
+  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bar-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748B;
+  margin-top: 8px;
+}
+
+/* Pie Chart */
+.pie-chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.pie-svg-container {
+  width: 150px; 
+  height: 150px;
+  position: relative;
+}
+.pie-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.pie-segment { transition: stroke-dashoffset 1s ease-out, opacity 0.3s; }
+.pie-center-label {
+  font-size: 12px;
+  fill: #64748B;
+  font-weight: 500;
+}
+.pie-center-value {
+  font-size: 22px; 
+  fill: #0F172A;
+  font-weight: 800;
+}
+.pie-legend-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.legend-info { display: flex; flex-direction: column; }
+.l-label { font-size: 11px; color: #64748B; font-weight: 500; }
+.l-value { font-size: 12px; color: #1E293B; font-weight: 700; }
+.l-percent { font-weight: 500; color: #94A3B8; font-size: 10px; }
+
+/* Growth List */
+.growth-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.growth-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #F8FAFC;
+  border-radius: 12px;
+  border: 1px solid #F1F5F9;
+}
+.g-icon-wrapper {
+  width: 38px; 
+  height: 38px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.bg-light-green { background: #DCFCE7; }
+.bg-light-blue { background: #DBEAFE; }
+.bg-light-orange { background: #FEF3C7; }
 
-.icon-pulse {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.3);
-  animation: pulse 2s infinite;
+.g-details { flex: 1; display: flex; flex-direction: column; }
+.g-title { font-size: 13px; font-weight: 700; color: #1E293B; }
+.g-subtitle { font-size: 11px; color: #64748B; margin-top: 2px; }
+.g-amount { font-size: 15px; font-weight: 800; }
+.text-positive { color: #10B981; }
+.text-primary { color: #3B82F6; }
+.text-warning { color: #F59E0B; }
+
+/* =========================================
+   Responsive Scaling (Tablet & Desktop)
+========================================= */
+
+/* Tablet (min-width: 768px) */
+@media (min-width: 768px) {
+  .dashboard-wrapper { padding: 24px; gap: 24px; }
+  .welcome-banner { padding: 24px; }
+  .welcome-title { font-size: 24px; }
+  .section-title { font-size: 18px; }
+
+  .quick-actions-grid { gap: 16px; }
+  .action-card { padding: 20px 16px; }
+  .action-icon-wrapper { width: 52px; height: 52px; }
+  .action-label { font-size: 13px; }
+
+  .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .stat-card { padding: 16px; gap: 16px; }
+  .stat-icon-box { width: 40px; height: 40px; }
+  .stat-value { font-size: 22px; }
+  .stat-label { font-size: 13px; }
+  
+  /* Tablet Analytics: 2 in a row, growth overview takes full width */
+  .charts-container { grid-template-columns: repeat(2, 1fr); display: grid; gap: 16px; }
+  .chart-card:nth-child(3) { grid-column: span 2; }
 }
 
-@keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
+/* Desktop (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .dashboard-wrapper { padding: 32px; gap: 32px; }
+  .welcome-banner { padding: 32px 40px; }
+  .welcome-title { font-size: 28px; }
+  .section-title { font-size: 20px; }
 
-.welcome-title { font-size: 32px; font-weight: 700; margin: 0; line-height: 1.2; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }
-.welcome-subtitle { font-size: 16px; margin: 8px 0 0 0; opacity: 0.95; }
-.welcome-date { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 30px; font-size: 15px; font-weight: 500; backdrop-filter: blur(10px); z-index: 1; }
+  .quick-actions-grid { gap: 24px; }
+  .action-card { padding: 24px; }
+  .action-icon-wrapper { width: 56px; height: 56px; }
+  .action-label { font-size: 14px; }
 
-/* Stats Section */
-.stats-section { margin-bottom: 32px; z-index: 1; position: relative; }
-.stat-card { border-radius: 20px; overflow: visible; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); height: 100%; background: white; position: relative; }
-.stat-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); }
-.stat-card .q-card-section { padding: 28px !important; display: flex; align-items: flex-start; gap: 20px; position: relative; z-index: 1; }
-.stat-icon-wrapper { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); position: relative; overflow: hidden; }
-.icon-bg-circle { position: absolute; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.2); border-radius: 50%; animation: ripple 2s infinite; }
+  .stats-grid { gap: 24px; }
+  .stat-card { padding: 24px; }
+  .stat-icon-box { width: 48px; height: 48px; }
+  .stat-value { font-size: 28px; }
+  
+  /* Desktop Analytics: All 3 charts side-by-side in one row! */
+  .charts-container { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .chart-card:nth-child(3) { grid-column: span 1; } /* Reset from tablet */
+  
+  .card-title { font-size: 16px; }
 
-@keyframes ripple { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+  /* Desktop Bar Chart Enhancements */
+  .bar-chart-wrapper { height: 180px; }
+  .bar-track { max-width: 48px; height: 130px; } /* Thicker and taller bars */
+  .bar-container { width: 80px; }
+  .bar-value { font-size: 16px; }
+  .bar-label { font-size: 14px; }
 
-.members-card .stat-icon-wrapper { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-.verified-card .stat-icon-wrapper { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-.commissionerate-card .stat-icon-wrapper { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
-.district-card .stat-icon-wrapper { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
-.division-card .stat-icon-wrapper { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
-.circle-card .stat-icon-wrapper { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+  /* Desktop Pie Chart Enhancements */
+  .pie-svg-container { width: 180px; height: 180px; }
+  .pie-center-value { font-size: 26px; }
+  .pie-legend-grid { grid-template-columns: repeat(2, 1fr); gap: 16px 12px; }
+  .l-label { font-size: 12px; }
+  .l-value { font-size: 14px; }
 
-.stat-content { flex: 1; }
-.stat-label { font-size: 14px; color: #64748b; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-.stat-value { font-size: 36px; font-weight: 700; color: #1e293b; margin-bottom: 10px; line-height: 1; }
-.counting-number { display: inline-block; animation: countUp 0.5s ease-out; }
-
-@keyframes countUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-.stat-change, .stat-info { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
-.stat-change.positive { color: #10b981; }
-.stat-info { color: #64748b; }
-.card-glow { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; opacity: 0; transition: opacity 0.3s; }
-.stat-card:hover .card-glow { opacity: 1; }
-.members-glow { background: linear-gradient(90deg, #667eea, #764ba2); }
-.verified-glow { background: linear-gradient(90deg, #43e97b, #38f9d7); }
-.commissionerate-glow { background: linear-gradient(90deg, #fa709a, #fee140); }
-.district-glow { background: linear-gradient(90deg, #30cfd0, #330867); }
-.division-glow { background: linear-gradient(90deg, #a8edea, #fed6e3); }
-.circle-glow { background: linear-gradient(90deg, #ff9a9e, #fecfef); }
-
-/* Charts Section */
-.charts-section { margin-bottom: 32px; z-index: 1; position: relative; }
-.chart-card { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); background: white; transition: transform 0.3s ease; }
-.chart-card:hover { transform: translateY(-4px); }
-.chart-header { padding: 24px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); display: flex; justify-content: space-between; align-items: center; }
-.chart-title { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 700; color: #1e293b; }
-
-/* Bar Chart */
-.simple-bar-chart { height: 320px; padding: 20px 0; }
-.bar-chart-container { display: flex; justify-content: space-around; align-items: flex-end; height: 100%; gap: 32px; padding: 0 24px; }
-.bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; height: 100%; }
-.bar-column { flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative; }
-.bar-value-label { position: absolute; top: -30px; font-size: 18px; font-weight: 700; color: #1e293b; z-index: 2; }
-.bar { width: 100%; max-width: 120px; border-radius: 12px 12px 0 0; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); }
-.bar-shine { position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); animation: shine 3s infinite; }
-
-@keyframes shine { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
-
-.bar:hover { transform: scaleY(1.05); filter: brightness(1.1); }
-.bar-hover-tooltip { position: absolute; top: -50px; background: #1e293b; color: white; padding: 8px 16px; border-radius: 8px; font-size: 13px; white-space: nowrap; z-index: 10; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
-.bar-hover-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 8px solid transparent; border-top-color: #1e293b; }
-.bar-label { font-size: 15px; font-weight: 600; color: #475569; text-align: center; padding: 12px 4px; }
-
-/* Pie Chart */
-.simple-pie-chart { max-width: 220px; margin: 0 auto 24px; }
-.pie-svg { width: 100%; height: auto; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1)); }
-.pie-segment { transition: all 0.3s ease; cursor: pointer; }
-.pie-segment:hover, .pie-segment.active { opacity: 0.8; filter: brightness(1.2); }
-.pie-total-label { font-size: 13px; fill: #64748b; font-weight: 600; }
-.pie-total-value { font-size: 26px; fill: #1e293b; font-weight: 700; }
-.pie-legend { display: flex; flex-direction: column; gap: 14px; }
-.legend-item { display: flex; align-items: center; gap: 14px; padding: 8px; border-radius: 8px; transition: background 0.3s ease; cursor: pointer; }
-.legend-item:hover, .legend-item.active { background: #f8fafc; }
-.legend-color { width: 18px; height: 18px; border-radius: 6px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); }
-.legend-text { display: flex; justify-content: space-between; align-items: center; flex: 1; }
-.legend-label { font-size: 14px; color: #475569; font-weight: 500; }
-.legend-value { font-size: 14px; color: #1e293b; font-weight: 700; }
-
-/* Growth Stats */
-.growth-stats { display: flex; flex-direction: column; gap: 24px; padding: 8px 0; }
-.growth-item { display: flex; align-items: center; gap: 20px; padding: 20px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 16px; transition: transform 0.3s ease; }
-.growth-item:hover { transform: translateX(8px); }
-.growth-icon { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
-.growth-info { flex: 1; }
-.growth-label { font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 4px; }
-.growth-value { font-size: 28px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
-.growth-period { font-size: 12px; color: #94a3b8; }
-
-/* Actions Section */
-.actions-section { margin-bottom: 32px; z-index: 1; position: relative; }
-.section-title { display: flex; align-items: center; gap: 16px; font-size: 26px; font-weight: 700; color: #1e293b; margin-bottom: 24px; }
-.title-icon-wrapper { background: linear-gradient(135deg, #667eea 0%, #5399d3 100%); padding: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
-.action-card { border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; background: white; height: 100%; position: relative; }
-.action-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%); opacity: 0; transition: opacity 0.3s; }
-.action-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); }
-.action-card:hover::before { opacity: 1; }
-.action-card .q-card-section { padding: 28px !important; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
-.action-icon { width: 72px; height: 72px; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: white; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); position: relative; overflow: hidden; }
-.action-icon-pulse { position: absolute; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.3); border-radius: 18px; animation: pulse 2s infinite; }
-.action-title { font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
-.action-description { font-size: 13px; color: #64748b; margin-bottom: 8px; }
-.action-arrow { position: absolute; top: 16px; right: 16px; color: #cbd5e1; transition: all 0.3s ease; }
-.action-card:hover .action-arrow { color: #667eea; transform: translateX(6px); }
-
-/* Fade Transition */
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-
-/* Tablet Responsive */
-@media (max-width: 1023px) {
-  .dashboard-page { padding: 20px; }
-  .welcome-header { padding: 24px; }
-  .welcome-title { font-size: 26px; }
-  .stat-value { font-size: 32px; }
+  /* Desktop Growth Enhancements */
+  .growth-list { gap: 16px; }
+  .growth-item { padding: 16px; gap: 16px; }
+  .g-icon-wrapper { width: 44px; height: 44px; }
+  .g-title { font-size: 14px; }
+  .g-subtitle { font-size: 12px; }
+  .g-amount { font-size: 18px; }
 }
 
-/* Responsive Mobile App View (Optimized for Space) */
-@media (max-width: 599px) {
-  .dashboard-page {
-    padding: 10px;
-  }
-
-  /* Welcome Header Compact */
-  .welcome-header {
-    padding: 16px;
-    margin-bottom: 16px;
-    flex-direction: column;
-    align-items: flex-start;
-    border-radius: 16px;
-  }
-  .welcome-content {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    gap: 10px;
-  }
-  .welcome-icon-animated {
-    padding: 10px;
-  }
-  .welcome-icon-animated .q-icon {
-    font-size: 28px !important;
-  }
-  .welcome-title {
-    font-size: 18px;
-  }
-  .welcome-subtitle {
-    font-size: 12px;
-    margin-top: 4px;
-  }
-  .welcome-date {
-    width: 100%;
-    justify-content: center;
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  /* Section Titles */
-  .section-title {
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  .title-icon-wrapper {
-    padding: 6px;
-  }
-  .title-icon-wrapper .q-icon {
-    font-size: 18px !important;
-  }
-
-  /* Quick Actions - 3 in a Row App Style */
-  .action-card .q-card-section {
-    padding: 12px 4px !important; 
-    justify-content: center;
-  }
-  .action-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    margin-bottom: 8px;
-  }
-  .action-icon .q-icon {
-    font-size: 20px !important; 
-  }
-  .action-title {
-    font-size: 10px;
-    font-weight: 600;
-    white-space: normal;
-    line-height: 1.2;
-    text-align: center;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0;
-  }
-  .action-description, 
-  .action-arrow {
-    display: none; 
-  }
-
-  /* Info Stats Cards - 2 in a Row App Style */
-  .stat-card .q-card-section {
-    padding: 12px !important;
-    flex-direction: column; 
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-  }
-  .stat-icon-wrapper {
-    padding: 10px;
-    border-radius: 10px;
-  }
-  .stat-icon-wrapper .q-icon {
-    font-size: 24px !important;
-  }
-  .stat-label {
-    font-size: 11px;
-    margin-bottom: 2px;
-  }
-  .stat-value {
-    font-size: 20px;
-    margin-bottom: 2px;
-  }
-  .stat-change, 
-  .stat-info {
-    font-size: 10px;
-    justify-content: center;
-  }
-
-  /* Gutter adjustments */
-  .q-col-gutter-md {
-    margin-left: -10px;
-  }
-  .q-col-gutter-md > * {
-    padding-left: 10px;
-    padding-top: 10px;
-  }
-
-  /* Charts Mobile Adjustment */
-  .chart-header {
-    padding: 12px 16px;
-  }
-  .chart-title {
-    font-size: 14px;
-  }
-  .chart-title .q-icon {
-    font-size: 18px !important;
-  }
-  .chart-card .q-card-section {
-    padding: 12px !important;
-  }
-
-  /* Bar Chart - Height Reduced */
-  .simple-bar-chart {
-    height: 180px;
-    padding: 10px 0;
-  }
-  .bar-value-label {
-    font-size: 14px;
-    top: -22px;
-  }
-  .bar-label {
-    font-size: 12px;
-    padding: 8px 4px 4px;
-  }
-
-  /* Pie Chart - Scaled Down */
-  .simple-pie-chart {
-    max-width: 160px;
-    margin: 0 auto 16px;
-  }
-  .pie-total-value {
-    font-size: 22px;
-  }
-  .legend-item {
-    padding: 6px;
-    gap: 10px;
-  }
-  .legend-color {
-    width: 14px;
-    height: 14px;
-  }
-  .legend-label, .legend-value {
-    font-size: 12px;
-  }
-
-  /* Growth Stats - Made Compact */
-  .growth-stats {
-    gap: 10px;
-    padding: 0;
-  }
-  .growth-item {
-    padding: 12px;
-    gap: 12px;
-    border-radius: 12px;
-  }
-  .growth-icon {
-    padding: 10px;
-    border-radius: 10px;
-  }
-  .growth-icon .q-icon {
-    font-size: 20px !important;
-  }
-  .growth-label {
-    font-size: 11px;
-    margin-bottom: 2px;
-  }
-  .growth-value {
-    font-size: 18px;
-    margin-bottom: 2px;
-  }
-  .growth-period {
-    font-size: 10px;
-  }
+/* Very Small Mobile Devices Layout Adjustments */
+@media (max-width: 350px) {
+  .quick-actions-grid { gap: 6px; }
+  .action-card { padding: 10px 4px; }
+  .stat-card { padding: 10px; gap: 8px; }
+  .stat-icon-box { width: 28px; height: 28px; }
+  .stat-value { font-size: 16px; }
+  .stat-label { font-size: 10px; }
 }
 </style>
