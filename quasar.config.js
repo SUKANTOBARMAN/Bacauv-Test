@@ -10,6 +10,9 @@
 
 const { configure } = require("quasar/wrappers");
 const path = require("path");
+const dotenv = require("dotenv");
+
+const env = dotenv.config().parsed || {};
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -52,7 +55,7 @@ module.exports = configure(function (/* ctx */) {
       // vueOptionsAPI: false,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
-      env: require("dotenv").config().parsed,
+      env: env,
       // publicPath: '/',
       // analyze: true,
       // env: {},
@@ -163,8 +166,11 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true,
+      androidStatusBarPadding: true,
     },
-
+    bin: {
+      linuxAndroidStudio: process.env.ANDROID_STUDIO_PATH
+    },
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
       // extendElectronMainConf (esbuildConf)

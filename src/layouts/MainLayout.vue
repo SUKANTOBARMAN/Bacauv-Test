@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <!-- Enhanced Header -->
-    <q-header class="bg-gradient-header">
+    <q-header class="bg-gradient-header app-header">
       <q-toolbar class="glassy-toolbar">
         <q-btn
           flat
@@ -811,12 +811,24 @@ watch(
 
 <style scoped>
 /* Header Styles */
+/* Android/iOS safe area */
+body.body--capacitor {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.app-header {
+  padding-top: var(
+    --safe-area-inset-top,
+    env(safe-area-inset-top, 0px)
+  );
+}
+
 .bg-gradient-header {
   background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .glassy-toolbar {
+  min-height: 50px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   background: rgba(25, 118, 210, 0.95);
@@ -911,7 +923,7 @@ watch(
 }
 
 .scroll-area {
-  height: calc(100vh - 200px);
+  height: calc(100% - 120px);
 }
 
 /* Fix for active route hover issue */
@@ -1006,8 +1018,12 @@ watch(
 
 /* Main Content */
 .main-content {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    #f8f9fa 0%,
+    #e9ecef 100%
+  );
+  min-height: 100%;
 }
 
 /* Animations */
